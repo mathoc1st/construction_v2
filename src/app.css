@@ -1,0 +1,23 @@
+@import 'tailwindcss';
+
+@theme {
+	--color-dark-olive: #283618;
+	--color-light-olive: #606c38;
+	--color-off-white: #fefae0;
+	--color-light-brown: #dda15e;
+	--color-dark-brown: #bc6c25;
+}
+
+@plugin 'flowbite/plugin';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@source '../node_modules/flowbite-svelte/dist';
+@source '../node_modules/flowbite-svelte-icons/dist';
+
+@layer base {
+	/* disable chrome cancel button */
+	input[type='search']::-webkit-search-cancel-button {
+		display: none;
+	}
+}
