@@ -1,5 +1,4 @@
 <script lang="ts">
-	import hero from '$lib/assets/hero-image-upscale.jpg';
 </script>
 
 <section
@@ -43,6 +42,10 @@
 		</div>
 	</div>
 	<div class="h-[475px] max-h-full max-w-[660px] basis-1/2">
-		<img src={hero} alt="" class="h-full w-full rounded-2xl object-cover object-center" />
+		<img
+			src="images/hero-image-upscale.jpg"
+			alt=""
+			class="h-full w-full rounded-2xl object-cover object-center"
+		/>
 	</div>
 </section>

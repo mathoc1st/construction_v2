@@ -1,9 +1,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-	import leaf from '$lib/assets/Leaf.svg';
-	import logo from '$lib/assets/logo.jpg';
 	import { tv } from 'tailwind-variants';
-	import { Drawer, Drawerhead } from 'flowbite-svelte';
+	import { Drawer } from 'flowbite-svelte';
 
 	let isDrawerOpen = $state(false);
 
@@ -26,7 +24,7 @@
 		class="mx-auto flex h-full max-w-[1440px] justify-around overflow-hidden px-5 max-[1200px]:justify-between"
 	>
 		<a href="/" class="flex h-full items-center gap-2">
-			<img src={logo} alt="" class="w-14" />
+			<img src="images/logo.jpg" alt="" class="w-14" />
 			<span class="text-off-white text-lg font-semibold">СК РУС ДОМ</span>
 		</a>
 		<nav class="h-full max-[1200px]:hidden">
@@ -63,7 +61,7 @@
 			>
 		</div>
 	</div>
-	<img src={leaf} alt="" class="absolute top-5 -z-10" />
+	<img src="images/leaf.svg" alt="" class="absolute top-5 -z-10" />
 </header>
 <Drawer placement="top" bind:open={isDrawerOpen} class="backdrop:bg-off-white bg-dark-olive py-8">
 	<nav class="h-full">
