@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Action from '$lib/components/Action.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 	import Hero from '$lib/components/Hero.svelte';
 	import Showcase from '$lib/components/Showcase.svelte';
 	import Support from '$lib/components/Support.svelte';
@@ -13,3 +14,4 @@
 <Testimonies />
 <Action />
 <Support />
+<Footer />

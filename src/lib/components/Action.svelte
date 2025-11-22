@@ -37,7 +37,7 @@
 				<img src="images/bang.svg" alt="" class="absolute -top-12 -right-15 transition" />
 				<button
 					type="submit"
-					class="bg-dark-brown text-off-white hover:bg-dark-olive relative z-10 rounded-2xl px-16 py-6 text-2xl font-medium transition hover:scale-105 max-[600px]:text-xl"
+					class="bg-dark-brown text-off-white hover:bg-dark-olive relative z-10 rounded-2xl px-16 py-6 text-2xl font-medium transition hover:scale-105 max-[600px]:px-8 max-[600px]:text-xl"
 				>
 					Получить бесплатную смету
 				</button>
