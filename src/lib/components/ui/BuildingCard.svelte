@@ -5,7 +5,7 @@
 <div
 	class="border-light-olive bg-off-white flex w-[clamp(300px,100%,400px)] min-w-0 shrink flex-col items-center rounded-2xl border-2 p-4 transition hover:scale-105"
 >
-	<img src="images/hero-image-upscale.jpg" alt="" height="230" class="rounded-2xl" />
+	<img src="/images/hero-image-upscale.jpg" alt="" height="230" class="rounded-2xl" />
 	<h4 class="mt-6 text-xl font-medium max-[600px]:text-lg">Дом 8,5х11,5 Виталина</h4>
 	<div class="border-light-olive mt-2 h-px w-24 border"></div>
 	<div class="mt-6 grid grid-cols-2 gap-2.5 gap-x-8 px-4">

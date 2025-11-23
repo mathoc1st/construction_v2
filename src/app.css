@@ -21,3 +21,9 @@
 		display: none;
 	}
 }
+
+.paginator li:not(:first-child):not(:last-child) button {
+	background: transparent;
+	border: 1px solid #606c38 !important;
+	color: #283618;
+}

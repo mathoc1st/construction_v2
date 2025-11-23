@@ -1,13 +1,16 @@
 <script lang="ts">
-	let { src, type }: { src: string; type: string } = $props();
+	import type { BuildingType } from '$lib/types';
+	import { getBuildingTypeName } from '$lib/utils';
+
+	let { src, type }: { src: string; type: BuildingType } = $props();
 </script>
 
 <a
 	href={`/catalog/${type}`}
 	class="border-light-olive group block rounded-2xl border-2 p-1 transition hover:scale-105"
 >
-	<h3 class="text-dark-olive mt-4 text-center text-3xl font-medium max-[600px]:text-2xl">
-		Каркасные дома
+	<h3 class="text-dark-olive mt-4 text-center text-3xl max-[600px]:text-2xl">
+		{getBuildingTypeName(type)}
 	</h3>
 	<div class="border-light-olive mx-auto mt-4 h-px w-28 border transition group-hover:w-32"></div>
 	<img

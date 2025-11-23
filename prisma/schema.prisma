@@ -18,3 +18,9 @@ enum BuildingType {
   BARN
   CONTAINER
 }
+
+enum FinishType {
+  COLD
+  WARM
+  ALL_YEAR
+}
