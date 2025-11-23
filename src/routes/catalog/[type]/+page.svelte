@@ -56,6 +56,8 @@
 			{currentPage}
 			{totalPages}
 			onPageChange={handlePageChange}
+			previousLabel="Пред."
+			nextLabel="След."
 		/>
 	</div>
 </section>
