@@ -2,7 +2,7 @@
 	<img src="images/leaf-2.svg" alt="" class="absolute top-0 left-0" />
 	<div class="mx-auto mb-12 max-w-[1440px] px-5">
 		<h1
-			class="text-off-white relative z-10 mt-20 text-center text-5xl font-medium max-[600px]:text-3xl"
+			class="text-off-white relative z-10 mt-20 text-center text-5xl font-medium max-[600px]:text-4xl"
 		>
 			Этапы работы
 		</h1>

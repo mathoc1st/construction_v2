@@ -81,7 +81,11 @@
 		<div
 			class="border-light-olive relative mb-15 flex flex-col gap-3 self-end rounded-2xl border-2 py-8 pr-24 pl-6 max-[600px]:pr-10"
 		>
-			<img src="images/leaf6.svg" alt="" class="absolute top-0 -right-28" />
+			<img
+				src="images/leaf6.svg"
+				alt=""
+				class="absolute top-0 -right-28 max-[600px]:top-15 max-[600px]:-right-16 max-[600px]:size-20 max-[450px]:hidden"
+			/>
 			<div>
 				<h3 class="text-3xl max-[600px]:text-2xl">Наши контакты</h3>
 				<div class="border-light-olive mt-4 h-px w-24 border"></div>

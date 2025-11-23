@@ -4,7 +4,11 @@
 
 <div class="border-light-olive group relative flex flex-col items-center rounded-2xl border-2 p-6">
 	<img src="images/flower3.svg" alt="" class="absolute -top-8 -left-5 group-not-first:hidden" />
-	<img src="images/flower4.svg" alt="" class="absolute -right-15 bottom-0 group-not-last:hidden" />
+	<img
+		src="images/flower4.svg"
+		alt=""
+		class="absolute -right-15 bottom-0 group-not-last:hidden max-[600px]:-right-5 max-[600px]:size-20"
+	/>
 	<img
 		src="https://randomuser.me/api/portraits/men/41.jpg"
 		alt=""

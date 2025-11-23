@@ -7,14 +7,13 @@
 	function handleTypeChange(event: Event, type: BuildingType) {
 		selectedType = type;
 	}
-	$inspect(selectedType);
 </script>
 
 <section class="mt-36 mb-12">
-	<h1 class="text-dark-olive mb-18 text-center text-4xl font-medium max-[600px]:text-3xl">
+	<h1 class="text-dark-olive mb-18 text-center text-5xl font-medium max-[600px]:text-4xl">
 		Популярные проекты
 	</h1>
-	<h2 class="mb-8 text-center text-3xl max-[600px]:text-2xl">Тип строения</h2>
+	<h3 class="mb-8 text-center text-3xl max-[600px]:text-2xl">Тип строения</h3>
 	<ul class="mx-auto flex max-w-max flex-wrap items-center justify-center gap-2">
 		<li
 			class={[

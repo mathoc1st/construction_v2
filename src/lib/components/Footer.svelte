@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Icon from '@iconify/svelte';
 </script>
 
@@ -7,7 +7,7 @@
 		class="relative mx-auto flex max-w-[1440px] items-center justify-between px-5 max-[600px]:flex-col max-[600px]:gap-8"
 	>
 		<img src="images/grass2.svg" alt="" class="absolute -top-12 left-5" />
-		<img src="images/leaf7.svg" alt="" class="absolute -top-5 left-175" />
+		<img src="images/leaf7.svg" alt="" class="absolute -top-5 left-175 max-[760px]:hidden" />
 		<img src="images/grass.svg" alt="" class="absolute -top-15 right-20" />
 		<a href="/" class="flex h-full items-center gap-2 max-[600px]:mt-10">
 			<img src="images/logo.jpg" alt="" class="w-14" />

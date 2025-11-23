@@ -2,6 +2,7 @@
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import Header from '$lib/components/Header.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 
 	let { children } = $props();
 </script>
@@ -12,9 +13,11 @@
 
 <Header></Header>
 
-<div class="mx-auto flex max-w-[1440px] flex-col items-center overflow-clip px-5">
+<div class="mx-auto flex max-w-[1440px] flex-col items-center px-5">
 	{@render children()}
 </div>
+
+<Footer />
 
 <style>
 	:global(html) {

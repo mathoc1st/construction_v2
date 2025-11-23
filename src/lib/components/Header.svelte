@@ -67,19 +67,19 @@
 	<nav class="h-full">
 		<ul class="flex h-full flex-col items-center gap-6">
 			<li class={navLi({ device: 'mobile' })}>
-				<a href="/" class={navLink()}>Главная</a>
+				<a href="/" class={navLink()} onclick={() => (isDrawerOpen = false)}>Главная</a>
 			</li>
 			<li class={navLi({ device: 'mobile' })}>
-				<a href="/catalog" class={navLink()}>Каталог</a>
+				<a href="/catalog" class={navLink()} onclick={() => (isDrawerOpen = false)}>Каталог</a>
 			</li>
 			<li class={navLi({ device: 'mobile' })}>
-				<a href="/works" class={navLink()}>Наши работы</a>
+				<a href="/works" class={navLink()} onclick={() => (isDrawerOpen = false)}>Наши работы</a>
 			</li>
 			<li class={navLi({ device: 'mobile' })}>
-				<a href="/about" class={navLink()}>О нас</a>
+				<a href="/about" class={navLink()} onclick={() => (isDrawerOpen = false)}>О нас</a>
 			</li>
 			<li class={navLi({ device: 'mobile' })}>
-				<a href="/contacts" class={navLink()}>Контакты</a>
+				<a href="/contacts" class={navLink()} onclick={() => (isDrawerOpen = false)}>Контакты</a>
 			</li>
 		</ul>
 	</nav>

@@ -9,9 +9,9 @@
 		<h1 class="text-off-white mt-26 text-center text-5xl font-medium max-[600px]:text-4xl">
 			Готовы построить дом вашей мечты?
 		</h1>
-		<h3 class="text-off-white mx-auto mt-12 max-w-3xl text-center text-2xl max-[600px]:text-xl">
+		<h4 class="text-off-white mx-auto mt-12 max-w-3xl text-center text-2xl max-[600px]:text-xl">
 			Свяжитесь с нами сегодня, чтобы получить бесплатную смету и профессиональную консультацию.
-		</h3>
+		</h4>
 		<form action="" class="mt-18 flex flex-col items-center">
 			<div class="flex w-max max-w-full items-stretch">
 				<label for="phone" class="sr-only">Телефон</label>

@@ -14,4 +14,3 @@
 <Testimonies />
 <Action />
 <Support />
-<Footer />
