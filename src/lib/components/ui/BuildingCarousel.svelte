@@ -17,12 +17,12 @@
 </script>
 
 <div
-	class="mx-auto max-w-2xl space-y-4 max-[800px]:max-w-lg max-[600px]:max-w-96 max-[400px]:max-w-72"
+	class="mx-auto max-w-2xl space-y-4 max-[800px]:max-w-lg max-[600px]:max-w-96 max-[400px]:max-w-90"
 >
 	<Carousel
 		{images}
 		bind:index
-		class="mx-auto h-[400px]!  w-[650px] max-w-full  object-contain object-center max-[600px]:h-86! max-[400px]:h-64!"
+		class="mx-auto h-[400px]!  w-[650px] max-w-full  object-contain object-center max-[600px]:h-86! max-[400px]:h-86!"
 	>
 		<CarouselIndicators hidden={images.length <= 1}>
 			{#snippet children({ selected, index })}

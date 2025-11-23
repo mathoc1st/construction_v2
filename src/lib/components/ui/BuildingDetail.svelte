@@ -6,7 +6,7 @@
 
 <div class="flex flex-col justify-center max-[1300px]:items-center">
 	<h2
-		class="text-dark-olive text-4xl font-medium max-[1300px]:mt-14 max-[1300px]:text-center max-[600px]:text-3xl"
+		class="text-dark-olive text-4xl font-medium max-[1300px]:mt-4 max-[1300px]:text-center max-[600px]:text-3xl"
 	>
 		Дом 8,5х11,5 Виталина
 	</h2>
@@ -66,66 +66,81 @@
 			{/snippet}
 			<div>
 				<p class="flex items-center gap-2 text-lg">
-					<Icon icon="ic:round-check-circle-outline" class="text-dark-brown size-6" />Размер: 8х12,5
-				</p>
-				<p class="flex items-center gap-2 text-lg">
-					<Icon icon="ic:round-check-circle-outline" class="text-dark-brown size-6" />Каркас: брус
-					40×100 мм
-				</p>
-				<p class="flex items-center gap-2 text-lg">
-					<Icon icon="ic:round-check-circle-outline" class="text-dark-brown size-6" />Наружная
-					отделка: вагонка АВ
+					<Icon
+						icon="ic:round-check-circle-outline"
+						class="text-dark-brown size-6 shrink-0"
+					/>Размер: 8х12,5
 				</p>
 				<p class="flex items-center gap-2 text-lg">
 					<Icon
 						icon="ic:round-check-circle-outline"
-						class="text-dark-brown size-6"
+						class="text-dark-brown size-6 shrink-0"
+					/>Каркас: брус 40×100 мм
+				</p>
+				<p class="flex items-center gap-2 text-lg">
+					<Icon
+						icon="ic:round-check-circle-outline"
+						class="text-dark-brown size-6 shrink-0"
+					/>Наружная отделка: вагонка АВ
+				</p>
+				<p class="flex items-center gap-2 text-lg">
+					<Icon
+						icon="ic:round-check-circle-outline"
+						class="text-dark-brown size-6 shrink-0"
 					/>Ветро-влагозащита: есть
 				</p>
 				<p class="flex items-center gap-2 text-lg">
-					<Icon icon="ic:round-check-circle-outline" class="text-dark-brown size-6" />Входная дверь:
-					металлическая (РФ), 1 шт
+					<Icon
+						icon="ic:round-check-circle-outline"
+						class="text-dark-brown size-6 shrink-0"
+					/>Входная дверь: металлическая (РФ), 1 шт
 				</p>
 				<p class="flex items-center gap-2 text-lg">
-					<Icon icon="ic:round-check-circle-outline" class="text-dark-brown size-6" />Кровля:
-					профнастил цветной 0,4 мм
+					<Icon
+						icon="ic:round-check-circle-outline"
+						class="text-dark-brown size-6 shrink-0"
+					/>Кровля: профнастил цветной 0,4 мм
 				</p>
 				<p class="flex items-center gap-2 text-lg">
-					<Icon icon="ic:round-check-circle-outline" class="text-dark-brown size-6" />Обрешетки и
-					черновой пол: доска 100×25 мм
+					<Icon
+						icon="ic:round-check-circle-outline"
+						class="text-dark-brown size-6 shrink-0"
+					/>Обрешетки и черновой пол: доска 100×25 мм
 				</p>
 				<p class="flex items-center gap-2 text-lg">
-					<Icon icon="ic:round-check-circle-outline" class="text-dark-brown size-6" />Обвязка: брус
-					150×100 мм
+					<Icon
+						icon="ic:round-check-circle-outline"
+						class="text-dark-brown size-6 shrink-0"
+					/>Обвязка: брус 150×100 мм
 				</p>
 				<p class="flex items-center gap-2 text-lg">
 					<Icon
 						icon="material-symbols:cancel-outline-rounded"
-						class="text-light-olive size-6"
+						class="text-light-olive size-6 shrink-0"
 					/>Утеплитель: отсутствует
 				</p>
 				<p class="flex items-center gap-2 text-lg">
 					<Icon
 						icon="material-symbols:cancel-outline-rounded"
-						class="text-light-olive size-6"
+						class="text-light-olive size-6 shrink-0"
 					/>Внутренняя отделка: отсутствует
 				</p>
 				<p class="flex items-center gap-2 text-lg">
 					<Icon
 						icon="material-symbols:cancel-outline-rounded"
-						class="text-light-olive size-6"
+						class="text-light-olive size-6 shrink-0"
 					/>Парогидроизоляция: отсутствует
 				</p>
 				<p class="flex items-center gap-2 text-lg">
 					<Icon
 						icon="material-symbols:cancel-outline-rounded"
-						class="text-light-olive size-6"
+						class="text-light-olive size-6 shrink-0"
 					/>Окна: отсутствуют
 				</p>
 				<p class="flex items-center gap-2 text-lg">
 					<Icon
 						icon="material-symbols:cancel-outline-rounded"
-						class="text-light-olive size-6"
+						class="text-light-olive size-6 shrink-0"
 					/>Полы: отсутствуют
 				</p>
 				<div class="mt-6 flex flex-col gap-4 max-[1300px]:items-center">
