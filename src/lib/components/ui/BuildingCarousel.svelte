@@ -1,28 +1,23 @@
-<script>
+<script lang="ts">
 	import { Carousel, Controls, CarouselIndicators, Thumbnails, Indicator } from 'flowbite-svelte';
-	let index = $state(0);
 
-	const images = [
-		{ src: '/images/hero-image-upscale.jpg' },
-		{ src: '/images/logo.jpg' },
-		{ src: '/images/barnhouse.jpg' },
-		{ src: '/images/logo.jpg' },
-		{ src: '/images/hero-image-upscale.jpg' },
-		{ src: '/images/logo.jpg' },
-		{ src: '/images/barnhouse.jpg' },
-		{ src: '/images/logo.jpg' },
-		{ src: '/images/barnhouse.jpg' },
-		{ src: '/images/hero-image-upscale.jpg' }
-	];
+	let index = $state(0);
+	let selectedMain = $state(0);
+
+	let images = [{ src: '/images/placeholder.jpg' }];
+
+	function onSelectedMain(event: Event, index: number) {
+		selectedMain = index;
+	}
 </script>
 
 <div
-	class="mx-auto max-w-2xl space-y-4 max-[800px]:max-w-lg max-[600px]:max-w-96 max-[400px]:max-w-86"
+	class="mx-auto max-w-2xl space-y-4 max-[800px]:max-w-lg max-[600px]:max-w-96 max-[400px]:max-w-84"
 >
 	<Carousel
 		{images}
 		bind:index
-		class="mx-auto h-[400px]!  w-[650px] max-w-full  object-contain object-center max-[600px]:h-86! max-[400px]:h-80!"
+		class="mx-auto h-[400px]! w-[650px] max-w-full  object-contain object-center max-[600px]:h-86! max-[400px]:h-78!"
 	>
 		<CarouselIndicators hidden={images.length <= 1}>
 			{#snippet children({ selected, index })}

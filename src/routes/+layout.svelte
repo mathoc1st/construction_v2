@@ -21,6 +21,10 @@
 <Footer />
 
 <style>
+	:global([role='tabpanel']) {
+		background-color: transparent;
+		width: 100%;
+	}
 	:global(html) {
 		box-sizing: border-box;
 	}

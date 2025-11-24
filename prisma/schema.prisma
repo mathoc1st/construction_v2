@@ -24,3 +24,64 @@ enum FinishType {
   WARM
   ALL_YEAR
 }
+
+model Building {
+  id Int @id @default(autoincrement())
+  type BuildingType
+  name String
+  startingPrice Int
+  size String
+  length Int
+  width Int
+  floors Int
+  bathrooms Int
+  bedrooms Int
+  veranda Boolean
+
+  views Int @default(0)
+
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  pictures Picture[]
+  finishes Finish[]
+}
+
+model Picture {
+  id Int @id @default(autoincrement())
+  filename String
+  isMain Boolean
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  building Building @relation(fields: [buildingId], references: [id])
+  buildingId Int
+}
+
+model Finish {
+  id Int @id @default(autoincrement())
+  type FinishType
+  oldPrice Int?
+  price Int
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  options FinishOption[]
+
+  building Building @relation(fields: [buildingId], references: [id])
+  buildingId Int
+}
+model FinishOption {
+  id Int @id @default(autoincrement())
+  description String 
+  isAvailable Boolean 
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  finish Finish @relation(fields: [finishId], references: [id])
+  finishId Int
+}
