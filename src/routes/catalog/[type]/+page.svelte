@@ -5,12 +5,11 @@
 	import type { Snapshot } from '@sveltejs/kit';
 	import { PaginationNav } from 'flowbite-svelte';
 	import type { PageProps } from './$types';
-	import type { FinishType } from '$lib/types';
+	import { SortBy, type FinishType } from '$lib/types';
 	import type {
 		getBuildingDetailsByType,
 		getBuildingsByType
 	} from '$lib/server/db/queries/building';
-	import { url } from 'inspector';
 
 	let { data, params }: PageProps = $props();
 
@@ -33,6 +32,7 @@
 		const urlParams = new URLSearchParams();
 		urlParams.append('page', currentPage.toString());
 		urlParams.append('type', params.type);
+		urlParams.append('sortBy', sortByFilter);
 		floorsFilter.forEach((f) => {
 			urlParams.append('floor', f.toString());
 		});
@@ -67,6 +67,7 @@
 		floorsFilter;
 		finishesFilter;
 		sizesFilter;
+		sortByFilter;
 		refetch();
 	});
 
@@ -74,6 +75,7 @@
 	let finishesFilter: FinishType[] = $state([]);
 	let sizesFilter: string[] = $state([]);
 	let verandaFilter: boolean | null = $state(null);
+	let sortByFilter: SortBy = $state(SortBy.POPULARITY_DESC);
 
 	export const snapshot: Snapshot<{
 		currentPage: number;
@@ -102,7 +104,7 @@
 			bind:sizesFilter
 			bind:verandaFilter
 		/>
-		<Sorting />
+		<Sorting bind:sortBy={sortByFilter} />
 	</div>
 	<div
 		class="mt-12 grid grid-cols-3 gap-y-18 max-[1440px]:grid-cols-2 max-[900px]:grid-cols-1 max-[900px]:place-items-center"

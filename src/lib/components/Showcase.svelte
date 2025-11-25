@@ -1,6 +1,16 @@
 <script lang="ts">
-	import { BuildingType } from '$lib/types';
+	import { BuildingType, type Building, type Image } from '$lib/types';
 	import BuildingCard from './ui/BuildingCard.svelte';
+
+	let {
+		popularFrame,
+		popularBarn,
+		popularContainer
+	}: {
+		popularFrame: (Building & { images: Image[] })[];
+		popularBarn: (Building & { images: Image[] })[];
+		popularContainer: (Building & { images: Image[] })[];
+	} = $props();
 
 	let selectedType: BuildingType = $state(BuildingType.FRAME);
 
@@ -50,8 +60,20 @@
 		</li>
 	</ul>
 	<div class="mt-12 flex flex-wrap justify-center gap-4">
-		<BuildingCard />
-		<BuildingCard />
-		<BuildingCard />
+		{#if selectedType === BuildingType.FRAME}
+			{#each popularFrame as building, i (building.id)}
+				<BuildingCard {building} />
+			{/each}
+		{/if}
+		{#if selectedType === BuildingType.BARN}
+			{#each popularBarn as building, i (building.id)}
+				<BuildingCard {building} />
+			{/each}
+		{/if}
+		{#if selectedType === BuildingType.CONTAINER}
+			{#each popularContainer as building, i (building.id)}
+				<BuildingCard {building} />
+			{/each}
+		{/if}
 	</div>
 </section>

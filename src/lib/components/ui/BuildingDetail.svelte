@@ -11,6 +11,14 @@
 </script>
 
 <div class="flex flex-col justify-center max-[1300px]:items-center">
+	<a
+		href={`/admin/edit/${building.id}`}
+		class="hover:bg-light-brown hover:text-dark-olive group bg-dark-olive text-off-white flex max-w-max items-center gap-2 rounded-2xl p-2 text-lg"
+		><Icon
+			icon="solar:pen-linear"
+			class="text-off-white group-hover:text-dark-olive size-6"
+		/>Редактировать</a
+	>
 	<h2
 		class="text-dark-olive text-4xl font-medium max-[1300px]:mt-4 max-[1300px]:text-center max-[600px]:text-3xl"
 	>

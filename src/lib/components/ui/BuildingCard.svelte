@@ -7,7 +7,7 @@
 </script>
 
 <div
-	class="border-light-olive bg-off-white flex w-[clamp(300px,100%,400px)] min-w-0 shrink flex-col items-center rounded-2xl border-2 p-4 transition hover:scale-105"
+	class="border-light-olive bg-off-white flex w-[clamp(300px,100%,400px)] min-w-0 shrink flex-col items-center justify-between rounded-2xl border-2 p-4 transition hover:scale-105"
 >
 	<img
 		src={building.images && building.images.length > 0
@@ -18,8 +18,7 @@
 			const img = e.target as HTMLImageElement;
 			img.src = '/images/placeholder.jpg';
 		}}
-		height="230"
-		class="rounded-2xl"
+		class="h-[230px]! rounded-2xl"
 	/>
 	<h4 class="mt-6 text-xl font-medium max-[600px]:text-lg">{building?.name || 'Untitled'}</h4>
 	<div class="border-light-olive mt-2 h-px w-24 border"></div>

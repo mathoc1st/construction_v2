@@ -3,6 +3,7 @@ import type { RequestHandler } from './$types';
 import {
 	BuildingType,
 	FinishType,
+	SortBy,
 	type Building,
 	type BuildingDto,
 	type Finish,
@@ -15,7 +16,7 @@ import { getBuildingsByType } from '$lib/server/db/queries/building';
 export const GET: RequestHandler = async ({ url }) => {
 	const type = url.searchParams.get('type');
 	const page = url.searchParams.get('page');
-	//const sortBy = url.searchParams.get('sortby');
+	const sortBy = url.searchParams.get('sortBy') as SortBy;
 	const floors = url.searchParams.getAll('floor');
 	const finishes = url.searchParams.getAll('finish');
 	const sizes = url.searchParams.getAll('size');
@@ -36,7 +37,8 @@ export const GET: RequestHandler = async ({ url }) => {
 		finishes: parsedFinishes,
 		sizes,
 		page: pageResult.data,
-		veranda
+		veranda,
+		sortBy
 	});
 
 	return json({ buildings, totalCount });

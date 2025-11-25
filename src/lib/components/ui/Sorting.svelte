@@ -3,7 +3,8 @@
 	import Icon from '@iconify/svelte';
 	import { Dropdown, DropdownItem } from 'flowbite-svelte';
 
-	let sortBy: SortBy = $state<SortBy>(SortBy.POPULARITY_DESC);
+	let { sortBy = $bindable() }: { sortBy: SortBy } = $props();
+
 	let isOpen: boolean = $state(false);
 </script>
 

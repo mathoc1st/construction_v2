@@ -48,7 +48,6 @@ export async function getBuildingsByType(buildingType: BuildingType, options: fi
 		if (options.sortBy === SortBy.PRICE_ASC) orderBy.startingPrice = 'asc';
 	}
 
-	orderBy.views = 'desc';
 	const [buildings, totalCount] = await Promise.all([
 		prisma.building.findMany({
 			where,
