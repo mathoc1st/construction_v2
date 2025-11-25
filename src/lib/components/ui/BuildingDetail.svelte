@@ -4,10 +4,12 @@
 	import { getFinishTypeName } from '$lib/utils';
 	import Icon from '@iconify/svelte';
 
-	import { Tabs, TabItem } from 'flowbite-svelte';
+	import { Tabs, TabItem, Modal } from 'flowbite-svelte';
 
 	const { building }: { building: NonNullable<Awaited<ReturnType<typeof getBuildingById>>> } =
 		$props();
+
+	let isModalOpen = $state(false);
 </script>
 
 <div class="flex flex-col justify-center max-[1300px]:items-center">
@@ -99,6 +101,7 @@
 					<div class="mt-6 flex flex-col gap-4 max-[1300px]:items-center">
 						<h4 class="w-max rounded-2xl text-xl font-medium">Цена: {finish.price} ₽</h4>
 						<button
+							onclick={() => (isModalOpen = !isModalOpen)}
 							class="bg-dark-brown text-off-white hover:bg-dark-olive h-max w-max rounded-2xl px-8 py-4 text-xl font-medium"
 							>Заказать</button
 						>
@@ -108,6 +111,19 @@
 		{/each}
 	</Tabs>
 </div>
+
+<Modal
+	title="Позвоните нам!"
+	class="bg-dark-brown divide-none"
+	headerClass="text-off-white"
+	bind:open={isModalOpen}
+>
+	<h2 class="text-off-white text-xl">
+		Номер данного проекта <span class="text-dark-olive">{building.id}</span>. <br /> Позвоните на номер
+		указаный ниже и назовите номер этого проекта оператору.
+	</h2>
+	<h3 class="text-off-white text-lg font-medium">+7 (926) 656-94-25</h3>
+</Modal>
 
 <style>
 	:global([role='tabpanel']) {
