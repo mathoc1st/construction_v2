@@ -6,50 +6,69 @@ import type {
 } from '../../../../../prisma/src/generated/prisma/models';
 import prisma from '../prisma';
 
-export async function getBuildingsByType(
-	buildingType: BuildingType,
-	floors: Array<number> = [],
-	finishes: Array<FinishType> = [],
-	dimensions: Array<string> = [],
-	sortBy: SortBy = SortBy.POPULARITY_DESC,
-	limit = 10,
-	page = 0
-) {
+type filterOptions = {
+	floors?: Array<number>;
+	finishes?: Array<FinishType>;
+	sizes?: Array<string>;
+	sortBy?: SortBy;
+	limit?: number;
+	page?: number;
+	veranda?: string | null;
+};
+
+export async function getBuildingsByType(buildingType: BuildingType, options: filterOptions = {}) {
 	const where: BuildingWhereInput = { type: buildingType };
 
-	if (floors.length > 0) {
-		where.floors = { in: floors };
+	if (options.floors && options.floors.length > 0) {
+		where.floors = { in: options.floors };
 	}
 
-	if (finishes.length > 0) {
+	if (options.finishes && options.finishes.length > 0) {
 		where.finishes = {
 			some: {
-				type: { in: finishes }
+				type: { in: options.finishes }
 			}
 		};
 	}
 
-	if (dimensions.length > 0) {
-		where.size = { in: dimensions };
+	if (options.sizes && options.sizes.length > 0) {
+		where.size = { in: options.sizes };
+	}
+
+	if (options.veranda) {
+		where.veranda = options.veranda === 'true';
 	}
 
 	const orderBy: BuildingOrderByWithRelationInput = {};
 
-	if (sortBy === SortBy.POPULARITY_DESC) orderBy.views = 'desc';
-	if (sortBy === SortBy.POPULARITY_ASC) orderBy.views = 'asc';
-	if (sortBy === SortBy.PRICE_DESC) orderBy.startingPrice = 'desc';
-	if (sortBy === SortBy.PRICE_ASC) orderBy.startingPrice = 'asc';
+	if (options.sortBy) {
+		if (options.sortBy === SortBy.POPULARITY_DESC) orderBy.views = 'desc';
+		if (options.sortBy === SortBy.POPULARITY_ASC) orderBy.views = 'asc';
+		if (options.sortBy === SortBy.PRICE_DESC) orderBy.startingPrice = 'desc';
+		if (options.sortBy === SortBy.PRICE_ASC) orderBy.startingPrice = 'asc';
+	}
 
-	return prisma.building.findMany({
-		where,
-		include: {
-			finishes: { include: { options: true } },
-			images: true
-		},
-		orderBy,
-		take: limit,
-		skip: page * limit
-	});
+	orderBy.views = 'desc';
+	const [buildings, totalCount] = await Promise.all([
+		prisma.building.findMany({
+			where,
+			include: {
+				finishes: { include: { options: true } },
+				images: true
+			},
+			orderBy,
+			take: options.limit || 12,
+			skip: options.page ? (options.page - 1) * (options.limit || 12) : 0
+		}),
+		prisma.building.count({
+			where
+		})
+	]);
+	return { buildings, totalCount };
+}
+
+export async function getBuildingsCountByType(type: BuildingType) {
+	return prisma.building.count({ where: { type } });
 }
 
 export async function getBuildingById(id: number) {
@@ -62,12 +81,13 @@ export async function getBuildingById(id: number) {
 	});
 }
 
-export async function getBuildingDetails() {
+export async function getBuildingDetailsByType(type: BuildingType) {
 	return prisma.building.findMany({
+		where: { type },
 		select: {
 			floors: true,
-			length: true,
-			width: true
+			size: true,
+			finishes: true
 		}
 	});
 }
@@ -115,22 +135,6 @@ export async function createBuilding(
 		return { building: null, error: (error as Error).message };
 	}
 }
-
-// export async function getPopularBuildingsByType(buildingType: BuildingType) {
-// 	return prisma.building.findMany({
-// 		where: {
-// 			type: buildingType
-// 		},
-// 		orderBy: {
-// 			views: 'desc'
-// 		},
-// 		take: 3,
-// 		include: {
-// 			finishes: { include: { options: true } },
-// 			images: true
-// 		}
-// 	});
-// }
 
 export async function updateBuildingById(
 	id: number,

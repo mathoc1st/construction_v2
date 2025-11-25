@@ -37,8 +37,6 @@
 		uploadError = null;
 		uploadSuccess = true;
 	}
-
-	$inspect(images);
 </script>
 
 <section class="mt-26 mb-26">

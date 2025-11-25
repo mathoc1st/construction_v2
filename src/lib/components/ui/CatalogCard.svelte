@@ -6,7 +6,7 @@
 </script>
 
 <a
-	href={`/catalog/${type}`}
+	href={`/catalog/${type.toLowerCase()}`}
 	class="border-light-olive group block rounded-2xl border-2 p-1 transition hover:scale-105"
 >
 	<h3 class="text-dark-olive mt-4 text-center text-3xl max-[600px]:text-2xl">

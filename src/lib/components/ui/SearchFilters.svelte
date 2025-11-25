@@ -1,15 +1,51 @@
 <script lang="ts">
-	import { FinishType } from '$lib/types';
+	import type { getBuildingDetailsByType } from '$lib/server/db/queries/building';
+	import { FinishType, type Building, type Finish } from '$lib/types';
 	import { getFinishTypeName } from '$lib/utils';
 	import type { Snapshot } from '@sveltejs/kit';
 	import { Drawer, AccordionItem, Accordion } from 'flowbite-svelte';
 
-	let isDrawerOpen = $state(false);
+	let {
+		details,
+		floorsFilter = $bindable(),
+		finishesFilter = $bindable(),
+		sizesFilter = $bindable(),
+		verandaFilter = $bindable()
+	}: {
+		details: Awaited<ReturnType<typeof getBuildingDetailsByType>>;
+		floorsFilter: number[];
+		finishesFilter: FinishType[];
+		sizesFilter: string[];
+		verandaFilter: boolean | null;
+	} = $props();
 
-	let floors: number[] = $state([]);
-	let finishes: FinishType[] = $state([]);
-	let sizes: string[] = $state([]);
-	let veranda: boolean | null = $state(null);
+	let isDrawerOpen = $state(false);
+	let floors = $derived([
+		...new Set(
+			details.map((b) => {
+				return b.floors;
+			})
+		)
+	]);
+
+	let finishes = $derived.by(() => {
+		const foundFinishes: FinishType[] = [];
+		for (const detail of details) {
+			for (const finish of detail.finishes) {
+				foundFinishes.push(finish.type);
+			}
+		}
+
+		return [...new Set(foundFinishes)];
+	});
+
+	let sizes = $derived([
+		...new Set(
+			details.map((b) => {
+				return b.size;
+			})
+		)
+	]);
 
 	function onToggle<T>(event: Event, value: T, list: T[]) {
 		const checkbox = event.target as HTMLInputElement;
@@ -30,22 +66,22 @@
 	}
 
 	function onFloorsChanged(event: Event, floor: number) {
-		onToggle(event, floor, floors);
+		onToggle(event, floor, floorsFilter);
 	}
 
 	function onFinishesChanged(event: Event, finish: FinishType) {
-		onToggle(event, finish, finishes);
+		onToggle(event, finish, finishesFilter);
 	}
 
 	function onSizesChanged(event: Event, size: string) {
-		onToggle(event, size, sizes);
+		onToggle(event, size, sizesFilter);
 	}
 
 	function onResetFilters() {
-		floors = [];
-		finishes = [];
-		sizes = [];
-		veranda = null;
+		floorsFilter = [];
+		finishesFilter = [];
+		sizesFilter = [];
+		verandaFilter = null;
 	}
 
 	export const snapshot: Snapshot<{
@@ -54,16 +90,19 @@
 		sizes: string[];
 		veranda: boolean | null;
 	}> = {
-		capture: () => ({ floors, finishes, sizes, veranda }),
+		capture: () => ({
+			floors: floorsFilter,
+			finishes: finishesFilter,
+			sizes: sizesFilter,
+			veranda: verandaFilter
+		}),
 		restore: (value) => {
-			floors = value.floors;
-			finishes = value.finishes;
-			sizes = value.sizes;
-			veranda = value.veranda;
+			floorsFilter = value.floors;
+			finishesFilter = value.finishes;
+			sizesFilter = value.sizes;
+			verandaFilter = value.veranda;
 		}
 	};
-
-	$inspect(floors);
 </script>
 
 <button
@@ -86,94 +125,49 @@
 		<AccordionItem>
 			{#snippet header()}<p class="text-dark-olive">Этажность</p>{/snippet}
 			<div class="flex flex-col gap-2">
-				<label
-					><input
-						type="checkbox"
-						class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
-						onchange={(e) => onFloorsChanged(e, 1)}
-						checked={isSelected(1, floors)}
-					/>
-					1</label
-				>
-				<label
-					><input
-						type="checkbox"
-						class="text-dark-brown border-light-brown bg-off-white form-checkbox rounded"
-						onchange={(e) => onFloorsChanged(e, 2)}
-						checked={isSelected(2, floors)}
-					/>
-					2</label
-				>
-				<label
-					><input
-						type="checkbox"
-						class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
-						onchange={(e) => onFloorsChanged(e, 3)}
-						checked={isSelected(3, floors)}
-					/>
-					3</label
-				>
+				{#each floors as floor, i (i)}
+					<label
+						><input
+							type="checkbox"
+							class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
+							onchange={(e) => onFloorsChanged(e, floor)}
+							checked={isSelected(floor, floorsFilter)}
+						/>
+						{floor}</label
+					>
+				{/each}
 			</div>
 		</AccordionItem>
 		<AccordionItem>
 			{#snippet header()}<p class="text-dark-olive">Комплектация</p>{/snippet}
 			<div class="flex flex-col gap-2">
-				<label
-					><input
-						type="checkbox"
-						class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
-						onchange={(e) => onFinishesChanged(e, FinishType.COLD)}
-						checked={isSelected(FinishType.COLD, finishes)}
-					/>
-					{getFinishTypeName(FinishType.COLD)}</label
-				>
-				<label
-					><input
-						type="checkbox"
-						class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
-						onchange={(e) => onFinishesChanged(e, FinishType.WARM)}
-						checked={isSelected(FinishType.WARM, finishes)}
-					/>
-					{getFinishTypeName(FinishType.WARM)}</label
-				>
-				<label
-					><input
-						type="checkbox"
-						class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
-						onchange={(e) => onFinishesChanged(e, FinishType.ALL_YEAR)}
-						checked={isSelected(FinishType.ALL_YEAR, finishes)}
-					/>
-					{getFinishTypeName(FinishType.ALL_YEAR)}</label
-				>
+				{#each finishes as finish, i (i)}
+					<label
+						><input
+							type="checkbox"
+							class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
+							onchange={(e) => onFinishesChanged(e, finish)}
+							checked={isSelected(finish, finishesFilter)}
+						/>
+						{getFinishTypeName(finish)}</label
+					>
+				{/each}
 			</div>
 		</AccordionItem>
 		<AccordionItem>
 			{#snippet header()}<p class="text-dark-olive">Размер</p>{/snippet}
 			<div class="flex flex-col gap-2">
-				<label
-					><input
-						type="checkbox"
-						class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
-						onchange={(e) => onSizesChanged(e, '5x4')}
-						checked={isSelected('5x4', sizes)}
-					/> 5х4</label
-				>
-				<label
-					><input
-						type="checkbox"
-						class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
-						onchange={(e) => onSizesChanged(e, '5x3')}
-						checked={isSelected('5x3', sizes)}
-					/> 5х3</label
-				>
-				<label
-					><input
-						type="checkbox"
-						class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
-						onchange={(e) => onSizesChanged(e, '4x3')}
-						checked={isSelected('4x3', sizes)}
-					/> 4х3</label
-				>
+				{#each sizes as size, i (i)}
+					<label
+						><input
+							type="checkbox"
+							class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
+							onchange={(e) => onSizesChanged(e, size)}
+							checked={isSelected(size, sizesFilter)}
+						/>
+						{size}</label
+					>
+				{/each}
 			</div>
 		</AccordionItem>
 		<AccordionItem>
@@ -182,28 +176,28 @@
 				<label
 					><input
 						type="radio"
-						bind:group={veranda}
+						bind:group={verandaFilter}
 						value={true}
 						class="text-dark-brown bg-off-white form-radia"
-						checked={veranda === true}
+						checked={verandaFilter === true}
 					/> Есть</label
 				>
 				<label
 					><input
 						type="radio"
-						bind:group={veranda}
+						bind:group={verandaFilter}
 						value={false}
 						class="text-dark-brown bg-off-white form-radia"
-						checked={veranda === false}
+						checked={verandaFilter === false}
 					/> Нет</label
 				>
 				<label
 					><input
 						type="radio"
-						bind:group={veranda}
+						bind:group={verandaFilter}
 						value={null}
 						class="text-dark-brown bg-off-white form-radia"
-						checked={veranda === null}
+						checked={verandaFilter === null}
 					/> Без разницы</label
 				>
 			</div>

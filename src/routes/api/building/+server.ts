@@ -1,7 +1,46 @@
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import type { Building, BuildingDto, Finish, FinishDto } from '$lib/types';
+import {
+	BuildingType,
+	FinishType,
+	type Building,
+	type BuildingDto,
+	type Finish,
+	type FinishDto
+} from '$lib/types';
 import { addBuilding, updateBuilding } from '$lib/server/services/building';
+import z from 'zod';
+import { getBuildingsByType } from '$lib/server/db/queries/building';
+
+export const GET: RequestHandler = async ({ url }) => {
+	const type = url.searchParams.get('type');
+	const page = url.searchParams.get('page');
+	//const sortBy = url.searchParams.get('sortby');
+	const floors = url.searchParams.getAll('floor');
+	const finishes = url.searchParams.getAll('finish');
+	const sizes = url.searchParams.getAll('size');
+	const veranda = url.searchParams.get('veranda');
+
+	const typeResult = z.enum(BuildingType).safeParse(type?.toUpperCase());
+	if (!typeResult.success) return error(404);
+
+	const pageResult = z.coerce.number().safeParse(page);
+
+	const parsedFloors = floors.map((f) => Number(f)).filter((f) => !isNaN(f));
+	const parsedFinishes = finishes.filter(
+		(f) => f == FinishType.WARM || f == FinishType.COLD || f == FinishType.ALL_YEAR
+	);
+
+	const { buildings, totalCount } = await getBuildingsByType(typeResult.data, {
+		floors: parsedFloors,
+		finishes: parsedFinishes,
+		sizes,
+		page: pageResult.data,
+		veranda
+	});
+
+	return json({ buildings, totalCount });
+};
 
 export const POST: RequestHandler = async ({ request }) => {
 	const formData = await request.formData();

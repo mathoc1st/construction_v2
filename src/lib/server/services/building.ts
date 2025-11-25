@@ -162,8 +162,6 @@ export async function updateBuilding(
 		parsedFinishesResult.finishes
 	);
 
-	console.log(updateBuildingError);
-
 	if (updateBuildingError) return { error: { code: 400, message: 'Не удалось обновить!' } };
 
 	return { error: null };
