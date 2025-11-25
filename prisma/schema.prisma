@@ -44,14 +44,13 @@ model Building {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  pictures Picture[]
+  images Image[]
   finishes Finish[]
 }
 
-model Picture {
+model Image {
   id Int @id @default(autoincrement())
   filename String
-  isMain Boolean
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -82,6 +81,6 @@ model FinishOption {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  finish Finish @relation(fields: [finishId], references: [id])
+  finish Finish @relation(fields: [finishId], references: [id], onDelete: Cascade)
   finishId Int
 }

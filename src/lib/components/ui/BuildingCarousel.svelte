@@ -1,10 +1,17 @@
 <script lang="ts">
+	import type { Image } from '$lib/types';
 	import { Carousel, Controls, CarouselIndicators, Thumbnails, Indicator } from 'flowbite-svelte';
+
+	const { buildingImages }: { buildingImages: Image[] } = $props();
 
 	let index = $state(0);
 	let selectedMain = $state(0);
 
-	let images = [{ src: '/images/placeholder.jpg' }];
+	let images = $derived(
+		buildingImages.map((i) => {
+			return { src: `/api/images/${i.filename}` };
+		})
+	);
 
 	function onSelectedMain(event: Event, index: number) {
 		selectedMain = index;
@@ -15,9 +22,9 @@
 	class="mx-auto max-w-2xl space-y-4 max-[800px]:max-w-lg max-[600px]:max-w-96 max-[400px]:max-w-84"
 >
 	<Carousel
-		{images}
+		images={images.length === 0 ? [{ src: '/images/placeholder.jpg' }] : images}
 		bind:index
-		class="mx-auto h-[400px]! w-[650px] max-w-full  object-contain object-center max-[600px]:h-86! max-[400px]:h-78!"
+		class="mx-auto h-[500px]! w-[650px] max-w-full  object-contain object-center max-[600px]:h-86! max-[400px]:h-78!"
 	>
 		<CarouselIndicators hidden={images.length <= 1}>
 			{#snippet children({ selected, index })}

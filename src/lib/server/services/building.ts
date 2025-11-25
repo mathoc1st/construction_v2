@@ -1,12 +1,12 @@
 import {
-	createBuildingSchema,
-	createFinishSchema,
-	FinishType,
-	type CreateBuildingDto,
-	type CreateFinishDto,
-	type CreateImageDto
+	buildingSchema,
+	finishSchema,
+	type BuildingDto,
+	type FinishDto,
+	type ParsedBuilding,
+	type ParsedFinish
 } from '$lib/types';
-import { createBuilding } from '../db/queries/building';
+import { createBuilding, updateBuildingById } from '../db/queries/building';
 
 import path from 'path';
 import fs from 'fs';
@@ -20,144 +20,98 @@ type ServiceError = {
 
 const IMAGES_DIR = path.join(process.cwd(), 'uploads', 'images');
 
-function parseBuilding(formData: FormData): {
-	building: CreateBuildingDto | null;
-	error: ServiceError | null;
-} {
-	const type = formData.get('type');
-	const name = formData.get('name');
-	const width = formData.get('width');
-	const length = formData.get('length');
-	const bedrooms = formData.get('bedrooms');
-	const bathrooms = formData.get('bathrooms');
-	const floors = formData.get('floors');
-	const roof = formData.get('roof');
-	const veranda = formData.has('veranda');
+export async function addBuilding(
+	building: BuildingDto,
+	images: File[],
+	finishes: FinishDto[]
+): Promise<{ error: ServiceError | null }> {
+	const parseBuildingResult = parseBuilding(building);
 
-	const result = createBuildingSchema.safeParse({
-		type,
-		name,
-		width,
-		length,
-		bedrooms,
-		bathrooms,
-		floors,
-		roof,
-		veranda
-	});
+	if (!parseBuildingResult.ok) return { error: parseBuildingResult.error };
 
-	if (result.error)
-		return {
-			building: null,
-			error: {
-				code: 404,
-				message: result.error.message
-			}
-		};
+	const parseImagesError = parseImages(images);
 
-	return { building: result.data, error: null };
-}
+	if (parseImagesError) return { error: parseImagesError };
 
-function parseImages(formData: FormData): {
-	images: File[] | null;
-	error: ServiceError | null;
-} {
-	const files = (formData.getAll('images') as File[]).filter((f) => f.size > 0);
+	const savedImages = await saveImagesToDisk(images);
 
-	console.log(files);
+	const parsedFinishesResult = parseFinishes(finishes);
 
-	if (!files || files.length === 0)
-		return {
-			images: null,
-			error: { code: 400, message: 'В записи здания должно быть минимум одно изображение!' }
-		};
-
-	return { images: files, error: null };
-}
-
-function parseFinish(
-	formData: FormData,
-	type: FinishType
-): {
-	finish: CreateFinishDto | null;
-	error: ServiceError | null;
-} {
-	const data = formData.get(type) as string;
-
-	if (!data) return { finish: null, error: null };
-
-	let finish: unknown;
-
-	try {
-		finish = JSON.parse(data);
-
-		const result = createFinishSchema.safeParse(finish);
-
-		if (!result.success)
-			return { finish: null, error: { code: 400, message: result.error.message } };
-
-		return { finish: result.data, error: null };
-	} catch {
-		return {
-			finish: null,
-			error: { code: 400, message: 'Некорректный JSON в поле комплектации' }
-		};
-	}
-}
-
-export async function addBuilding(formData: FormData): Promise<{ error: ServiceError | null }> {
-	const { building, error: parseBuildingError } = parseBuilding(formData);
-
-	if (!building || parseBuildingError) return { error: parseBuildingError };
-
-	const { images: imageFiles, error: parseImagesError } = parseImages(formData);
-
-	if (!imageFiles || parseImagesError) return { error: parseImagesError };
-
-	const savedImages = await saveImagesToDisk(imageFiles);
-
-	const { finish: coldFinish, error: parseColdFinishError } = parseFinish(
-		formData,
-		FinishType.COLD
-	);
-
-	if (!coldFinish || parseColdFinishError) return { error: parseColdFinishError };
-
-	const { finish: warmFinish, error: parseWarmFinishError } = parseFinish(
-		formData,
-		FinishType.WARM
-	);
-
-	if (!warmFinish || parseWarmFinishError) return { error: parseWarmFinishError };
-
-	const { finish: allYearFinish, error: parseAllYearFinishError } = parseFinish(
-		formData,
-		FinishType.ALL_YEAR
-	);
-
-	if (!allYearFinish || parseAllYearFinishError) return { error: parseAllYearFinishError };
-
-	if (!coldFinish && !warmFinish && !allYearFinish)
-		return { error: { code: 400, message: 'Должна присутствовать хотябы одна комплектация!' } };
+	if (!parsedFinishesResult.ok) return { error: parsedFinishesResult.error };
 
 	const { building: newBuilding, error: createBuildingError } = await createBuilding(
-		building,
+		parseBuildingResult.building,
 		savedImages,
-		[coldFinish, warmFinish, allYearFinish]
+		parsedFinishesResult.finishes
 	);
 
 	if (!newBuilding || createBuildingError)
-		return { error: { code: 400, message: 'Не удалось домавить новое здание!' } };
+		return { error: { code: 400, message: 'Не удалось добавить новое здание!' } };
 
 	return { error: null };
 }
 
-async function saveImagesToDisk(imageFiles: File[]): Promise<CreateImageDto[]> {
+function parseBuilding(building: BuildingDto) {
+	const result = buildingSchema.safeParse(building);
+
+	if (!result.success) {
+		return {
+			ok: false as const,
+			error: { code: 400, message: result.error.message } as ServiceError
+		};
+	}
+
+	return {
+		ok: true as const,
+		building: result.data as ParsedBuilding
+	};
+}
+
+function parseImages(images: File[]): ServiceError | null {
+	if (!images || images.length === 0)
+		return { code: 400, message: 'В записи должно быть минимум одно изображение!' };
+
+	return null;
+}
+
+function parseFinishes(finishes: FinishDto[]) {
+	const parsedFinishes: ParsedFinish[] = [];
+
+	for (const finish of finishes) {
+		if (!finish.price || !finish.options) continue;
+
+		const result = finishSchema.safeParse(finish);
+		if (!result.success) {
+			return {
+				ok: false as const,
+				error: { code: 404, message: result.error.message } as ServiceError
+			};
+		}
+
+		parsedFinishes.push(result.data);
+	}
+
+	if (parsedFinishes.length === 0)
+		return {
+			ok: false as const,
+			error: {
+				code: 400,
+				message: 'Должна присутствовать хотя бы одна комплектация!'
+			} as ServiceError
+		};
+
+	return {
+		ok: true as const,
+		finishes: parsedFinishes as ParsedFinish[]
+	};
+}
+
+async function saveImagesToDisk(imageFiles: File[]): Promise<string[]> {
 	if (!fs.existsSync(IMAGES_DIR)) {
 		fs.mkdirSync(IMAGES_DIR, { recursive: true });
 	}
 
-	const images: CreateImageDto[] = [];
+	const images: string[] = [];
 
 	for (const image of imageFiles) {
 		if (!(image instanceof File) || image.name === '' || image.size <= 0) continue;
@@ -173,8 +127,57 @@ async function saveImagesToDisk(imageFiles: File[]): Promise<CreateImageDto[]> {
 		const filePath = path.join(IMAGES_DIR, newName);
 		fs.writeFileSync(filePath, buffer);
 
-		images.push({ isMain: false, filename: newName });
+		images.push(newName);
 	}
 
 	return images;
+}
+
+export async function updateBuilding(
+	id: number,
+	building: BuildingDto,
+	images: File[],
+	finishes: FinishDto[]
+): Promise<{ error: ServiceError | null }> {
+	const parseBuildingResult = parseBuilding(building);
+
+	if (!parseBuildingResult.ok) return { error: parseBuildingResult.error };
+
+	const parseImagesError = parseImages(images);
+
+	if (parseImagesError) return { error: parseImagesError };
+
+	const savedImages = await saveImagesToDisk(images);
+
+	delteImagesFromDisk(images);
+
+	const parsedFinishesResult = parseFinishes(finishes);
+
+	if (!parsedFinishesResult.ok) return { error: parsedFinishesResult.error };
+
+	const { error: updateBuildingError } = await updateBuildingById(
+		id,
+		parseBuildingResult.building,
+		savedImages,
+		parsedFinishesResult.finishes
+	);
+
+	console.log(updateBuildingError);
+
+	if (updateBuildingError) return { error: { code: 400, message: 'Не удалось обновить!' } };
+
+	return { error: null };
+}
+
+function delteImagesFromDisk(imageFiles: File[]) {
+	if (!fs.existsSync(IMAGES_DIR)) {
+		return;
+	}
+
+	for (const image of imageFiles) {
+		if (!(image instanceof File) || image.name === '' || image.size <= 0) continue;
+
+		const filePath = path.join(IMAGES_DIR, image.name);
+		fs.rmSync(filePath, { force: true });
+	}
 }

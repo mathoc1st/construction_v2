@@ -4,6 +4,12 @@ import { BuildingType, FinishType } from '../../../prisma/src/generated/prisma/e
 export { BuildingType } from '../../../prisma/src/generated/prisma/enums';
 export { FinishType } from '../../../prisma/src/generated/prisma/enums';
 export type { FinishOption } from '../../../prisma/src/generated/prisma/client';
+export type { Building as BuildingSchema } from '../../..//prisma/src/generated/prisma/client';
+export type { Finish } from '../../../prisma/src/generated/prisma/client';
+export type { Image } from '../../../prisma/src/generated/prisma/client';
+export type { Building } from '../../../prisma/src/generated/prisma/client';
+
+type PartialWithRequired<T, K extends keyof T> = { [P in K]-?: T[P] } & Partial<Omit<T, K>>;
 
 export enum SortBy {
 	PRICE_ASC = 'PRICE_ASC',
@@ -17,49 +23,48 @@ export type FinishOptionDto = {
 	description: string;
 };
 
-export type FinishDto = {
-	type: FinishType;
-	oldPrice?: number;
-	price: number;
-	options: FinishOptionDto[];
+export type ImageDto = {
+	file: File;
 };
 
-export const createBuildingSchema = z.object({
-	type: z.enum(BuildingType),
-	name: z
-		.string('Название не является строкой!')
-		.nonempty('Поле "название" не должно быть пустым!'),
-	width: z.coerce.number('Ширина не является числом!').min(1, 'Ширина обязательна!'),
-	length: z.coerce.number('Длина не является числом!').min(1, 'Длина обязательна!'),
-	bedrooms: z.coerce.number('Комнаты не является числом!').min(1, 'Количество комнат обязательно!'),
-	bathrooms: z.coerce
-		.number('Санузлы не является числом!')
-		.min(1, 'Количество санузлов обязательно!'),
-	floors: z.coerce.number('Эажность не является числом!').min(1, 'Этажность обязательна!'),
-	veranda: z.boolean('Веранда не является булевым значение!')
+export const imageSchema = z.object({
+	filename: z.string('Название картинки не является строкой!').nonempty()
 });
 
-export type CreateBuildingDto = z.infer<typeof createBuildingSchema>;
-
-export const createImageSchema = z.object({
-	filename: z.string('Название картинки не является строкой!').nonempty(),
-	isMain: z.boolean('Главное изображение не булево значение!')
-});
-
-export type CreateImageDto = z.infer<typeof createImageSchema>;
-
-export const createOptionSchema = z.object({
+export const finishOptionSchema = z.object({
 	isAvailable: z.boolean('Присутствие не булево значение!'),
 	description: z.string('Описание не является строкой!')
 });
 
-export type CreateOptionDto = z.infer<typeof createOptionSchema>;
-
-export const createFinishSchema = z.object({
+export const finishSchema = z.object({
 	type: z.enum(FinishType),
-	price: z.coerce.number('Цена не является числом!').min(1, 'Цена обязательна!'),
-	oldPrice: z.coerce.number('Старая цена не является числом!').optional(),
-	options: z.array(createOptionSchema)
+	price: z.number('Цена не является числом!').min(1, 'Цена обязательна!'),
+	oldPrice: z.number('Старая цена не является числом!').optional().nullable(),
+	options: z
+		.array(finishOptionSchema)
+		.nonempty('Должна присутствовать хотябы одна опция в комплектации!')
 });
 
-export type CreateFinishDto = z.infer<typeof createFinishSchema>;
+export const buildingSchema = z.object({
+	type: z.enum(BuildingType),
+	name: z
+		.string('Название не является строкой!')
+		.nonempty('Поле "название" не должно быть пустым!'),
+	width: z.number('Ширина не является числом!').min(1, 'Ширина обязательна!'),
+	length: z.number('Длина не является числом!').min(1, 'Длина обязательна!'),
+	bedrooms: z.number('Комнаты не является числом!').min(1, 'Количество комнат обязательно!'),
+	bathrooms: z.number('Санузлы не является числом!').min(1, 'Количество санузлов обязательно!'),
+	floors: z.number('Эажность не является числом!').min(1, 'Этажность обязательна!'),
+	veranda: z.boolean('Веранда не является булевым значение!')
+	// finishes: z.array(finishSchema),
+	// images: z.array(imageSchema)
+});
+
+export type ParsedBuilding = z.infer<typeof buildingSchema>;
+export type BuildingDto = Partial<ParsedBuilding>;
+
+export type ParsedFinish = z.infer<typeof finishSchema>;
+export type FinishDto = PartialWithRequired<ParsedFinish, 'type'>;
+
+export type ParsedFinishOption = z.infer<typeof finishOptionSchema>;
+export type OptionDto = PartialWithRequired<ParsedFinish, 'type'>;

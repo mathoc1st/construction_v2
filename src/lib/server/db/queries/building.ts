@@ -1,9 +1,4 @@
-import {
-	SortBy,
-	type CreateBuildingDto,
-	type CreateFinishDto,
-	type CreateImageDto
-} from '$lib/types/';
+import { SortBy, type ParsedBuilding, type ParsedFinish } from '$lib/types/';
 import type { BuildingType, FinishType } from '../../../../../prisma/src/generated/prisma/enums';
 import type {
 	BuildingOrderByWithRelationInput,
@@ -49,7 +44,7 @@ export async function getBuildingsByType(
 		where,
 		include: {
 			finishes: { include: { options: true } },
-			pictures: true
+			images: true
 		},
 		orderBy,
 		take: limit,
@@ -62,7 +57,7 @@ export async function getBuildingById(id: number) {
 		where: { id },
 		include: {
 			finishes: { include: { options: true } },
-			pictures: true
+			images: true
 		}
 	});
 }
@@ -77,9 +72,9 @@ export async function getBuildingDetails() {
 	});
 }
 export async function createBuilding(
-	building: CreateBuildingDto,
-	images: CreateImageDto[],
-	finishes: CreateFinishDto[]
+	building: ParsedBuilding,
+	images: string[],
+	finishes: ParsedFinish[]
 ) {
 	try {
 		const createdBuilding = await prisma.building.create({
@@ -87,8 +82,10 @@ export async function createBuilding(
 				...building,
 				size: `${building.length}x${building.width}`,
 				startingPrice: Math.min(...finishes.map((f) => f.price)),
-				pictures: {
-					create: images
+				images: {
+					create: images.map((i) => {
+						return { filename: i };
+					})
 				},
 				finishes: {
 					create: finishes.map((finish) => {
@@ -104,7 +101,7 @@ export async function createBuilding(
 				}
 			},
 			include: {
-				pictures: true,
+				images: true,
 				finishes: {
 					include: {
 						options: true
@@ -119,18 +116,68 @@ export async function createBuilding(
 	}
 }
 
-export async function getPopularBuildingsByType(buildingType: BuildingType) {
-	return prisma.building.findMany({
-		where: {
-			type: buildingType
-		},
-		orderBy: {
-			views: 'desc'
-		},
-		take: 3,
-		include: {
-			finishes: { include: { options: true } },
-			pictures: true
-		}
-	});
+// export async function getPopularBuildingsByType(buildingType: BuildingType) {
+// 	return prisma.building.findMany({
+// 		where: {
+// 			type: buildingType
+// 		},
+// 		orderBy: {
+// 			views: 'desc'
+// 		},
+// 		take: 3,
+// 		include: {
+// 			finishes: { include: { options: true } },
+// 			images: true
+// 		}
+// 	});
+// }
+
+export async function updateBuildingById(
+	id: number,
+	building: ParsedBuilding,
+	images: string[],
+	finishes: ParsedFinish[]
+) {
+	try {
+		await prisma.$transaction([
+			prisma.image.deleteMany({ where: { buildingId: id } }),
+			prisma.finish.deleteMany({ where: { buildingId: id } }),
+			prisma.building.update({
+				where: { id },
+				data: {
+					...building,
+					size: `${building.length}x${building.width}`,
+					startingPrice: Math.min(...finishes.map((f) => f.price)),
+					images: {
+						create: images.map((i) => {
+							return { filename: i };
+						})
+					},
+					finishes: {
+						create: finishes.map((finish) => {
+							return {
+								type: finish.type,
+								price: finish.price,
+								oldPrice: finish.oldPrice,
+								options: {
+									create: finish.options
+								}
+							};
+						})
+					}
+				},
+				include: {
+					images: true,
+					finishes: {
+						include: {
+							options: true
+						}
+					}
+				}
+			})
+		]);
+		return { error: null };
+	} catch (error) {
+		return { error: (error as Error).message };
+	}
 }

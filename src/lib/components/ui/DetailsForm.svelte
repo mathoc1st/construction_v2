@@ -4,13 +4,26 @@
 	import { Tabs } from 'flowbite-svelte';
 	import { tv } from 'tailwind-variants';
 	import AddFinishTabItem from './AddFinishTabItem.svelte';
-	import { BuildingType, type FinishDto } from '$lib/types';
+	import {
+		BuildingType,
+		type BuildingSchema,
+		type BuildingDto,
+		type Finish,
+		type FinishDto,
+		type FinishOption
+	} from '$lib/types';
 
 	let {
 		coldFinish = $bindable(),
 		warmFinish = $bindable(),
-		allYearFinish = $bindable()
-	}: { coldFinish: FinishDto; warmFinish: FinishDto; allYearFinish: FinishDto } = $props();
+		allYearFinish = $bindable(),
+		building = $bindable()
+	}: {
+		coldFinish: FinishDto;
+		warmFinish: FinishDto;
+		allYearFinish: FinishDto;
+		building: BuildingDto;
+	} = $props();
 
 	const inputLable = tv({
 		base: 'text-dark-olive flex w-full max-w-[70%] items-center justify-between gap-1 max-[1300px]:max-w-full max-[450px]:flex-col'
@@ -31,6 +44,7 @@
 		class="text-dark-olive placeholder:text-light-olive border-light-olive caret-dark-olive focus:border-dark-brown focus:ring-dark-brown form-input rounded-2xl bg-transparent text-2xl font-medium max-[1300px]:mt-4 max-[1300px]:text-center max-[600px]:text-xl"
 		placeholder="Название"
 		name="name"
+		bind:value={building.name}
 		required
 	/>
 	<div class="relative flex max-w-max flex-col">
@@ -39,7 +53,13 @@
 			class="text-dark-olive mt-7 text-2xl font-medium max-[1300px]:mt-4 max-[1300px]:text-center max-[600px]:text-xl"
 			>Тип сроения</label
 		>
-		<select class="text-dark-olive rounded-2xl bg-transparent" id="type" name="type" required>
+		<select
+			class="text-dark-olive rounded-2xl bg-transparent"
+			id="type"
+			name="type"
+			bind:value={building.type}
+			required
+		>
 			<option value={BuildingType.FRAME}>Каркасный дом</option>
 			<option value={BuildingType.BARN}>Барнхаус</option>
 			<option value={BuildingType.CONTAINER}>Бытовка</option>
@@ -55,7 +75,15 @@
 					class="max-[600px]:text-md text-lg">Длинна:</span
 				>
 			</p>
-			<input type="number" name="length" id="length" placeholder="0" class={inputText()} required />
+			<input
+				type="number"
+				name="length"
+				id="length"
+				placeholder="0"
+				class={inputText()}
+				bind:value={building.length}
+				required
+			/>
 		</lable>
 		<lable class={inputLable()}>
 			<p class="flex">
@@ -63,7 +91,15 @@
 					class="max-[600px]:text-md text-lg">Ширина:</span
 				>
 			</p>
-			<input type="number" name="width" id="width" placeholder="0" class={inputText()} required />
+			<input
+				type="number"
+				name="width"
+				id="width"
+				placeholder="0"
+				class={inputText()}
+				bind:value={building.width}
+				required
+			/>
 		</lable>
 		<lable class={inputLable()}>
 			<p class="flex">
@@ -77,16 +113,9 @@
 				id="bathrooms"
 				placeholder="0"
 				class={inputText()}
+				bind:value={building.bathrooms}
 				required
 			/>
-		</lable>
-		<lable class={inputLable()}>
-			<p class="flex">
-				<Icon icon="bx:area" class="size-8 min-w-6" /><span class="max-[600px]:text-md text-lg"
-					>Площадь:</span
-				>
-			</p>
-			<input type="number" name="area" id="area" placeholder="0" class={inputText()} required />
 		</lable>
 		<lable class={inputLable()}>
 			<p class="flex">
@@ -100,6 +129,7 @@
 				id="bedrooms"
 				placeholder="0"
 				class={inputText()}
+				bind:value={building.bedrooms}
 				required
 			/>
 		</lable>
@@ -109,7 +139,15 @@
 					class="max-[600px]:text-md text-lg">Этажность:</span
 				>
 			</p>
-			<input type="number" name="floors" id="floors" placeholder="0" class={inputText()} required />
+			<input
+				type="number"
+				name="floors"
+				id="floors"
+				placeholder="0"
+				class={inputText()}
+				required
+				bind:value={building.floors}
+			/>
 		</lable>
 		<lable class={checkBoxLable()}>
 			<p class="flex">
@@ -117,7 +155,13 @@
 					>Веранда:</span
 				>
 			</p>
-			<input type="checkbox" name="veranda" id="veranda" class={inputCheckbox()} />
+			<input
+				type="checkbox"
+				name="veranda"
+				id="veranda"
+				class={inputCheckbox()}
+				bind:checked={building.veranda}
+			/>
 		</lable>
 	</div>
 

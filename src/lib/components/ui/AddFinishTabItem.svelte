@@ -1,13 +1,22 @@
 <script lang="ts">
-	import { type FinishDto } from '$lib/types';
+	import { type Finish, type FinishDto, type FinishOption } from '$lib/types';
 	import { getFinishTypeName } from '$lib/utils';
 	import Icon from '@iconify/svelte';
 
 	import { TabItem } from 'flowbite-svelte';
 	import { tv } from 'tailwind-variants';
 
-	let { finish = $bindable<FinishDto>(), isOpen = false }: { finish: FinishDto; isOpen?: boolean } =
-		$props();
+	let {
+		finish = $bindable(),
+		isOpen = false
+	}: {
+		finish: FinishDto;
+		isOpen?: boolean;
+	} = $props();
+
+	$effect(() => {
+		finish.options?.sort();
+	});
 
 	const inputText = tv({
 		base: 'text-dark-olive placeholder:text-light-olive caret-dark-olive border-light-olive focus:border-dark-brown focus:ring-dark-brown form-input w-fit rounded-2xl bg-transparent'
@@ -21,6 +30,8 @@
 
 	function onOptionAdd() {
 		if (optionDescription.length === 0) return;
+
+		if (!finish.options) finish.options = [];
 
 		finish.options.push({ isAvailable: isOptionAvailable, description: optionDescription });
 
@@ -54,16 +65,37 @@
 			>
 		</div>
 		<h4 class="mb-2 flex w-max flex-col rounded-2xl text-xl font-medium">Описание</h4>
-		{#each finish.options as option, i (i)}
+		{#each finish.options?.toSorted((a, _) => {
+			if (a.isAvailable) {
+				return -1;
+			} else return 1;
+		}) as option, i (i)}
 			<lable class="flex items-center gap-2 text-lg">
 				<Icon
 					icon={option.isAvailable
 						? 'ic:round-check-circle-outline'
 						: 'material-symbols:cancel-outline-rounded'}
 					class=" size-6 shrink-0 {option.isAvailable ? 'text-dark-brown' : 'text-light-olive'}"
-				/>{option.description}
+				/>{option.description}<button
+					type="button"
+					onclick={(e) => {
+						if (!finish.options) return;
+						const sorted = finish.options.toSorted((a, _) => {
+							if (a.isAvailable) {
+								return -1;
+							} else return 1;
+						});
+
+						sorted.splice(i, 1);
+
+						finish.options = sorted;
+					}}
+					class="hover:text-dark-brown transition"
+					><Icon icon="tabler:trash" class="size-8" /></button
+				>
 			</lable>
 		{/each}
+
 		<div class="flex w-full flex-col gap-4">
 			<label>
 				<input

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import type { ImageDto } from '$lib/types';
 	import Icon from '@iconify/svelte';
 	import {
 		Carousel,
@@ -12,7 +13,7 @@
 	} from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 
-	let { selectedFiles = $bindable<File[]>() }: { selectedFiles: File[] } = $props();
+	let { images = $bindable() }: { images: File[] } = $props();
 
 	// onMount(() => {
 	// 	selectedFiles = [];
@@ -20,27 +21,16 @@
 
 	let imageIndex = $state(0);
 
-	let images = $derived.by(() => {
-		if (!selectedFiles || selectedFiles.length === 0) {
+	let previews = $derived.by(() => {
+		if (!images || images.length === 0) {
 			return [{ src: '/images/placeholder.jpg' }];
 		}
 
-		return selectedFiles.map((f) => {
+		return images.map((f) => {
 			return {
 				src: URL.createObjectURL(f)
 			};
 		});
-	});
-
-	$effect(() => {
-		images;
-		const elements = document.querySelectorAll('[aria-label="Click to view image"]');
-
-		for (const element of elements) {
-			if (element instanceof HTMLButtonElement) {
-				element.type = 'button';
-			}
-		}
 	});
 
 	function handleImages(event: Event) {
@@ -48,35 +38,34 @@
 
 		if (!input.files) return;
 
-		let images = Array.from(input.files);
-
-		selectedFiles.push(...images);
+		images.push(...Array.from(input.files));
 
 		input.value = '';
 	}
 
 	function onImageDelete(_: Event, index: number) {
-		selectedFiles = selectedFiles.filter((_, i) => i !== index);
+		if (!images) return;
+		images = images.filter((_, i) => i !== index);
 		imageIndex = Math.max(0, index - 1);
 	}
 
 	function onSelectedMain(event: Event, index: number) {
-		const oldMain = selectedFiles[0];
-		selectedFiles[0] = selectedFiles[index];
-		selectedFiles[index] = oldMain;
+		if (!images) return;
 
-		const checkbox = event.target as HTMLInputElement;
+		const oldMain = images[0];
+		images[0] = images[index];
+		images[index] = oldMain;
 
-		checkbox.checked = false;
 		imageIndex = 0;
 	}
 
-	function fileArrayToFileList(files: File[]): FileList | null {
-		if (!browser) return null;
+	function fileArrayToFileList(images: File[] | undefined): FileList | null {
+		if (!browser || !images) return null;
+
 		const dataTransfer = new DataTransfer();
 
-		for (const file of files) {
-			dataTransfer.items.add(file);
+		for (const image of images) {
+			dataTransfer.items.add(image);
 		}
 
 		return dataTransfer.files;
@@ -87,15 +76,15 @@
 	class="mx-auto max-w-2xl space-y-4 max-[800px]:max-w-lg max-[600px]:max-w-96 max-[400px]:max-w-84"
 >
 	<Carousel
-		{images}
+		images={previews}
 		bind:index={imageIndex}
 		class="mx-auto h-[400px]! w-[650px] max-w-full object-contain object-center max-[600px]:h-86! max-[400px]:h-78!"
 	>
 		{#snippet slide({ index, Slide })}
 			<div class="relative">
 				<p
-					class="bg-dark-olive text-off-white absolute top-5 left-5 z-50 hidden rounded-2xl p-3 text-sm {selectedFiles &&
-					selectedFiles.length > 0 &&
+					class="bg-dark-olive text-off-white absolute top-5 left-5 z-50 hidden rounded-2xl p-3 text-sm {images &&
+					images.length > 0 &&
 					index === 0
 						? 'block!'
 						: ''}"
@@ -109,12 +98,12 @@
 						onclick={(e) => onSelectedMain(e, index)}
 						class={[
 							'text-dark-olive hover:text-dark-brown  transition ',
-							{ hidden: !selectedFiles || selectedFiles.length === 0 || index === 0 }
+							{ hidden: !images || images.length === 0 || index === 0 }
 						]}><Icon icon="material-symbols:image-outline" class="size-8" /></button
 					>
 				</div>
 
-				<Slide image={images[index]} />
+				<Slide image={previews[index]} />
 
 				<div class="absolute right-5 bottom-5 z-50">
 					<Tooltip class="bg-dark-olive text-off-white">Удалить картинку</Tooltip>
@@ -123,24 +112,24 @@
 						onclick={(e) => onImageDelete(e, index)}
 						class={[
 							'hover:text-dark-brown  transition',
-							{ hidden: !selectedFiles || selectedFiles.length === 0 }
+							{ hidden: !images || images.length === 0 }
 						]}><Icon icon="tabler:trash" class="size-8" /></button
 					>
 				</div>
 			</div>
 		{/snippet}
-		<CarouselIndicators hidden={images.length <= 1}>
+		<CarouselIndicators hidden={previews.length <= 1}>
 			{#snippet children({ selected, index })}
 				<Indicator class="bg-dark-brown h-3 w-3  {selected ? 'opacity-100' : 'opacity-30'}"
 				></Indicator>
 			{/snippet}
 		</CarouselIndicators>
-		<Controls hidden={images.length <= 1} class="max-[600px]:hidden" />
+		<Controls hidden={previews.length <= 1} class="max-[600px]:hidden" />
 	</Carousel>
-	{#if images.length > 1}
+	{#if previews.length > 1}
 		<Thumbnails
 			class="mt-4 max-w-full flex-wrap gap-2 bg-transparent max-[800px]:hidden"
-			{images}
+			images={previews}
 			bind:index={imageIndex}
 		>
 			{#snippet children({ image, selected, Thumbnail })}
@@ -156,13 +145,13 @@
 	{/if}
 	<Fileupload
 		clearableOnClick={() => {
-			selectedFiles = [];
+			images = [];
 		}}
 		classes={{
 			wrapper: 'flex',
 			close: [
 				'text-off-white relative hover:text-dark-olive hidden bg-light-brown rounded-r-2xl',
-				{ block: selectedFiles && selectedFiles.length > 0 }
+				{ block: images && images.length > 0 }
 			]
 		}}
 		clearable
@@ -170,14 +159,9 @@
 		multiple
 		class={[
 			'bg-dark-olive text-off-white max-w-max rounded-2xl border-0 pr-8!',
-			{ 'rounded-r-none pr-2': selectedFiles && selectedFiles.length > 0 }
+			{ 'rounded-r-none pr-2': images && images.length > 0 }
 		]}
 		accept="image/*"
-		files={fileArrayToFileList(selectedFiles)}
+		files={fileArrayToFileList(images)}
 	/>
-	<!-- <Helper
-		color="emerald"
-		class={['text-dark-olive mt-2', { hidden: !selectedFiles || selectedFiles.length === 0 }]}
-		>Выбранные фото: {fileNames}</Helper
-	> -->
 </div>
