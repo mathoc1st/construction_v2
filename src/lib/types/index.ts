@@ -18,11 +18,6 @@ export enum SortBy {
 	POPULARITY_DESC = 'POPULARITY_DESC'
 }
 
-export type FinishOptionDto = {
-	isAvailable: boolean;
-	description: string;
-};
-
 export type ImageDto = {
 	file: File;
 };
@@ -66,5 +61,4 @@ export type BuildingDto = Partial<ParsedBuilding>;
 export type ParsedFinish = z.infer<typeof finishSchema>;
 export type FinishDto = PartialWithRequired<ParsedFinish, 'type'>;
 
-export type ParsedFinishOption = z.infer<typeof finishOptionSchema>;
-export type OptionDto = PartialWithRequired<ParsedFinish, 'type'>;
+export type FinishOptionDto = z.infer<typeof finishOptionSchema>;

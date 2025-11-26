@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import type { getBuildingById } from '$lib/server/db/queries/building';
-	import { FinishType } from '$lib/types';
 	import { getFinishTypeName, getTabIcon, prettyPrice } from '$lib/utils';
 	import Icon from '@iconify/svelte';
-	import { redirect } from '@sveltejs/kit';
 
 	import { Tabs, TabItem, Modal } from 'flowbite-svelte';
 
