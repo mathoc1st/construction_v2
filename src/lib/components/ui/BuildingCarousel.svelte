@@ -9,7 +9,13 @@
 
 	let images = $derived(
 		buildingImages.map((i) => {
-			return { src: `/api/images/${i.filename}` };
+			return {
+				src: `/api/images/${i.filename}`,
+				onerror: (l: Event) => {
+					const img = l.target as HTMLImageElement;
+					img.src = '/images/placeholder.jpg';
+				}
+			};
 		})
 	);
 
@@ -22,7 +28,7 @@
 	class="mx-auto max-w-2xl space-y-4 max-[800px]:max-w-lg max-[600px]:max-w-96 max-[400px]:max-w-84"
 >
 	<Carousel
-		images={images.length === 0 ? [{ src: '/images/placeholder.jpg' }] : images}
+		images={!images || images.length === 0 ? [{ src: '/images/placeholder.jpg' }] : images}
 		bind:index
 		class="mx-auto h-[500px]! w-[650px] max-w-full  object-contain object-center max-[600px]:h-86! max-[400px]:h-78!"
 	>

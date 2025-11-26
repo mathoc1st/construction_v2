@@ -8,5 +8,5 @@
 
 <section class="mt-26 mb-26 flex gap-6 max-[1300px]:flex-col">
 	<BuildingCarousel buildingImages={building.images} />
-	<BuildingDetail {building} />
+	<BuildingDetail {building} isAdmin={building.isAdmin} />
 </section>

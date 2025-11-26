@@ -52,11 +52,11 @@
 			class="bg-dark-brown hover:bg-dark-olive hover:text-primary-text w-36 rounded-3xl px-4 py-2 text-white transition"
 			>Login</button
 		>
-		<button
+		<!-- <button
 			formaction="?/register"
 			class="bg-light-brown hover:text-dark-olive hover:text-primary-text w-36 rounded-3xl px-4 py-2 text-white transition"
 			>Register</button
-		>
+		> -->
 	</div>
 	<p style="color: red">{form?.message ?? ''}</p>
 </form>

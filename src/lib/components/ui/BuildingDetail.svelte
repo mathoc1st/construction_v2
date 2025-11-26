@@ -8,7 +8,10 @@
 
 	import { Tabs, TabItem, Modal } from 'flowbite-svelte';
 
-	const { building }: { building: NonNullable<Awaited<ReturnType<typeof getBuildingById>>> } =
+	const {
+		building,
+		isAdmin
+	}: { building: NonNullable<Awaited<ReturnType<typeof getBuildingById>>>; isAdmin: boolean } =
 		$props();
 
 	let isModalOpen = $state(false);
@@ -33,29 +36,32 @@
 </script>
 
 <div class="flex flex-col justify-center max-[1300px]:items-center">
-	<div class="flex flex-wrap justify-between">
-		<a
-			href={`/admin/edit/${building.id}`}
-			class="hover:bg-light-brown hover:text-dark-olive group bg-dark-olive text-off-white flex max-w-max items-center gap-2 rounded-2xl p-2 text-lg"
-			><Icon
-				icon="solar:pen-linear"
-				class="text-off-white group-hover:text-dark-olive size-6"
-			/>Редактировать</a
-		>
-		<button
-			onclick={async () => {
-				await removeBuilding(building.id);
-			}}
-			class="hover:bg-light-brown hover:text-dark-olive group bg-light-brown text-off-white flex max-w-max items-center gap-2 rounded-2xl p-2 text-lg"
-			><Icon
-				icon="material-symbols:delete-outline-rounded"
-				class="text-off-white group-hover:text-dark-olive size-6"
-			/>Удалить</button
-		>
-	</div>
-	{#if isDeleteError}
-		<p class="text-lg text-red-500">Не удалось удалить строение! <br />{deleteError}</p>
+	{#if isAdmin}
+		<div class="flex flex-wrap justify-between">
+			<a
+				href={`/admin/edit/${building.id}`}
+				class="hover:bg-light-brown hover:text-dark-olive group bg-dark-olive text-off-white flex max-w-max items-center gap-2 rounded-2xl p-2 text-lg"
+				><Icon
+					icon="solar:pen-linear"
+					class="text-off-white group-hover:text-dark-olive size-6"
+				/>Редактировать</a
+			>
+			<button
+				onclick={async () => {
+					await removeBuilding(building.id);
+				}}
+				class="hover:bg-light-brown hover:text-dark-olive group bg-light-brown text-off-white flex max-w-max items-center gap-2 rounded-2xl p-2 text-lg"
+				><Icon
+					icon="material-symbols:delete-outline-rounded"
+					class="text-off-white group-hover:text-dark-olive size-6"
+				/>Удалить</button
+			>
+		</div>
+		{#if isDeleteError}
+			<p class="text-lg text-red-500">Не удалось удалить строение! <br />{deleteError}</p>
+		{/if}
 	{/if}
+
 	<h2
 		class="text-dark-olive text-4xl font-medium max-[1300px]:mt-4 max-[1300px]:text-center max-[600px]:text-3xl"
 	>
