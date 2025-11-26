@@ -108,7 +108,7 @@
 		<lable class={inputLable()}>
 			<p class="flex">
 				<Icon icon="mdi:bathroom" class="size-8 min-w-6" /><span class="max-[600px]:text-md text-lg"
-					>Санузелов:</span
+					>Санузлов:</span
 				>
 			</p>
 			<input

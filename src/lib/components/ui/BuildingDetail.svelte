@@ -84,7 +84,7 @@
 		</p>
 		<p class="text-dark-olive flex items-center gap-1">
 			<Icon icon="mdi:bathroom" class="size-8 min-w-6" /><span class="max-[600px]:text-md text-lg"
-				>Санузелов: {building.bathrooms || 'Unknown'}</span
+				>Санузлов: {building.bathrooms || 'Unknown'}</span
 			>
 		</p>
 
