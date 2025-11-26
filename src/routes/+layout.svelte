@@ -25,6 +25,7 @@
 	:global([role='tabpanel']) {
 		background-color: transparent;
 		width: 100%;
+		padding: 0;
 	}
 	:global(html) {
 		box-sizing: border-box;

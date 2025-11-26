@@ -1,33 +1,26 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-
-	import { Tabs } from 'flowbite-svelte';
 	import { tv } from 'tailwind-variants';
-	import AddFinishTabItem from './FinishTabEditor.svelte';
 	import { BuildingType, FinishType, type BuildingDto, type FinishDto } from '$lib/types';
-	import { getFinishTypeName } from '$lib/utils';
 
-	let {
-		finishes = $bindable(),
-		building = $bindable()
-	}: {
-		finishes: FinishDto[];
-		building: BuildingDto;
-	} = $props();
+	let building: BuildingDto = $state({});
 
-	let selectedFinish = $state(FinishType.COLD);
-
-	const inputLable = tv({
-		base: 'text-dark-olive flex w-full flex-col justify-between gap-1 max-[1300px]:max-w-full max-[600px]:max-w-[70%] max-[450px]:flex-col'
+	const lable = tv({
+		variants: {
+			input: {
+				checkbox: 'text-dark-olive flex w-full items-center gap-1 max-[450px]:flex-col',
+				text: 'text-dark-olive flex w-full flex-col justify-between gap-1 max-[1300px]:max-w-full max-[600px]:max-w-[70%] max-[450px]:flex-col'
+			}
+		}
 	});
-	const checkBoxLable = tv({
-		base: 'text-dark-olive flex w-full items-center gap-1 max-[450px]:flex-col'
-	});
-	const inputText = tv({
-		base: 'text-dark-olive placeholder:text-light-olive caret-dark-olive border-light-olive focus:border-dark-brown focus:ring-dark-brown form-input w-fit rounded-2xl bg-transparent'
-	});
-	const inputCheckbox = tv({
-		base: 'text-dark-brown border-light-brown focus:border-dark-brown focus:ring-dark-brown bg-off-white form-checkbox size-5 rounded'
+	const input = tv({
+		variants: {
+			type: {
+				text: 'text-dark-olive placeholder:text-light-olive caret-dark-olive border-light-olive focus:border-dark-brown focus:ring-dark-brown form-input w-fit rounded-2xl bg-transparent',
+				checkbox:
+					'text-dark-brown border-light-brown focus:border-dark-brown focus:ring-dark-brown bg-off-white form-checkbox size-5 rounded'
+			}
+		}
 	});
 </script>
 
@@ -66,30 +59,30 @@
 			<p class="max-[600px]:text-md flex gap-1 text-lg">
 				<Icon icon="radix-icons:dimensions" class="size-8 min-w-6" />Габариты
 			</p>
-			<lable class={inputLable()}>
+			<lable class={lable({ input: 'text' })}>
 				<input
 					type="number"
 					name="length"
 					id="length"
 					placeholder="Длинна"
-					class={inputText()}
+					class={input({ type: 'text' })}
 					bind:value={building.length}
 					required
 				/>
 			</lable>
-			<lable class={inputLable()}>
+			<lable class={lable({ input: 'text' })}>
 				<input
 					type="number"
 					name="width"
 					id="width"
 					placeholder="Ширина"
-					class={inputText()}
+					class={input({ type: 'text' })}
 					bind:value={building.width}
 					required
 				/>
 			</lable>
 		</div>
-		<lable class={inputLable()}>
+		<lable class={lable({ input: 'text' })}>
 			<p class="flex items-center gap-1">
 				<Icon icon="mdi:bathroom" class="size-8 min-w-6" /><span class="max-[600px]:text-md text-lg"
 					>Санузлы</span
@@ -100,12 +93,12 @@
 				name="bathrooms"
 				id="bathrooms"
 				placeholder="0"
-				class={inputText()}
+				class={input({ type: 'text' })}
 				bind:value={building.bathrooms}
 				required
 			/>
 		</lable>
-		<lable class={inputLable()}>
+		<lable class={lable()}>
 			<p class="flex items-center gap-1">
 				<Icon icon="uil:bed" class="size-8 min-w-6" /><span class="max-[600px]:text-md text-lg"
 					>Комнат</span
@@ -116,12 +109,12 @@
 				name="bedrooms"
 				id="bedrooms"
 				placeholder="0"
-				class={inputText()}
+				class={input({ type: 'text' })}
 				bind:value={building.bedrooms}
 				required
 			/>
 		</lable>
-		<lable class={inputLable()}>
+		<lable class={lable()}>
 			<p class="flex items-center gap-1">
 				<Icon icon="ri:stairs-line" class="size-8 min-w-6" /><span
 					class="max-[600px]:text-md text-lg">Этажность</span
@@ -132,12 +125,12 @@
 				name="floors"
 				id="floors"
 				placeholder="0"
-				class={inputText()}
+				class={input({ type: 'text' })}
 				required
 				bind:value={building.floors}
 			/>
 		</lable>
-		<lable class={checkBoxLable()}>
+		<lable class={lable({ input: 'checkbox' })}>
 			<p class="flex items-center gap-1">
 				<Icon icon="mdi:veranda" class="size-8 min-w-6" /><span class="max-[600px]:text-md text-lg"
 					>Веранда</span
@@ -147,56 +140,9 @@
 				type="checkbox"
 				name="veranda"
 				id="veranda"
-				class={inputCheckbox()}
+				class={input({ type: 'checkbox' })}
 				bind:checked={building.veranda}
 			/>
 		</lable>
 	</div>
-
-	<div class="relative mt-4 flex max-w-max flex-col">
-		<label
-			for="finish"
-			class="text-dark-olive mt-7 text-2xl font-medium max-[1300px]:mt-4 max-[1300px]:text-center max-[600px]:text-xl"
-			>Комплектация</label
-		>
-		<select
-			class="text-dark-olive mt-4 rounded-2xl bg-transparent"
-			id="type"
-			name="type"
-			bind:value={selectedFinish}
-			required
-		>
-			{#each Object.values(FinishType) as finishType}
-				<option disabled={finishes.some((f) => f.type === finishType)} value={finishType}
-					>{getFinishTypeName(finishType)}</option
-				>
-			{/each}
-		</select>
-
-		<button
-			type="button"
-			onclick={() => {
-				if (!finishes.some((f) => f.type === selectedFinish))
-					finishes.push({ type: selectedFinish });
-			}}
-			class="bg-dark-olive text-off-white hover:bg-light-brown mt-4 h-max w-max rounded-2xl px-4 py-2 text-lg"
-			>Добавить</button
-		>
-	</div>
-
-	{#if finishes && finishes.length > 0}
-		<Tabs
-			class="mt-8"
-			tabStyle="underline"
-			classes={{
-				active: 'bg-light-brown max-[650px]:w-full border-light-olive',
-				divider: 'bg-light-olive'
-			}}
-			ulClass="max-[650px]:flex-col max-[650px]:w-full flex-wrap "
-		>
-			{#each finishes, i}
-				<AddFinishTabItem isOpen={i === 0} />
-			{/each}
-		</Tabs>
-	{/if}
 </div>

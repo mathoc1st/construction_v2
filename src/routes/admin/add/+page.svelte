@@ -1,18 +1,17 @@
 <script lang="ts">
-	import DetailsForm from '$lib/components/ui/DetailsForm.svelte';
+	import DetailsEditor from '$lib/components/ui/DetailsEditor.svelte';
+	import FinishesEditor from '$lib/components/ui/FinishesEditor.svelte';
 	import ImageUploader from '$lib/components/ui/ImageUploader.svelte';
-	import { FinishType, type BuildingDto, type FinishDto, type ImageDto } from '$lib/types';
+	import { type BuildingDto, type FinishDto } from '$lib/types';
 
 	let building: BuildingDto = $state({});
 	let images: File[] = $state([]);
-	let coldFinish: FinishDto = $state({ type: FinishType.COLD });
-	let warmFinish: FinishDto = $state({ type: FinishType.WARM });
-	let allYearFinish: FinishDto = $state({ type: FinishType.ALL_YEAR });
-	let allYear150Finish: FinishDto = $state({ type: FinishType.ALL_YEAR_150 });
-	let allYear200Finish: FinishDto = $state({ type: FinishType.ALL_YEAR_200 });
+	let finishes: FinishDto[] = $state([]);
 
 	let uploadError: string | null = $state(null);
 	let uploadSuccess: boolean = $state(false);
+
+	function onSaveFinishes(ffinishes: FinishDto[]) {}
 
 	async function handleSubmit() {
 		const params = new URLSearchParams();
@@ -22,10 +21,10 @@
 
 		images.forEach((i) => formData.append('image', i));
 		formData.append('building', JSON.stringify(building));
-		formData.append(
-			'finishes',
-			JSON.stringify([coldFinish, warmFinish, allYearFinish, allYear150Finish, allYear200Finish])
-		);
+		// formData.append(
+		// 	'finishes',
+		// 	JSON.stringify([coldFinish, warmFinish, allYearFinish, allYear150Finish, allYear200Finish])
+		// );
 
 		const responce = await fetch(`/api/building?${params}`, {
 			method: 'POST',
@@ -47,14 +46,10 @@
 <section class="mt-26 mb-26">
 	<div class="flex gap-6 max-[1300px]:flex-col">
 		<ImageUploader bind:images />
-		<DetailsForm
-			bind:building
-			bind:coldFinish
-			bind:warmFinish
-			bind:allYearFinish
-			bind:allYear150Finish
-			bind:allYear200Finish
-		/>
+		<div>
+			<DetailsEditor />
+			<FinishesEditor {onSaveFinishes} />
+		</div>
 	</div>
 	{#if uploadError}
 		<h4 class="text-center text-lg text-red-500">Ошибка</h4>
