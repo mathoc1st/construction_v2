@@ -61,7 +61,7 @@
 					></div>
 				</div>
 			</div>
-			<div class="flex items-stretch">
+			<div class="flex items-stretch" id="contacts">
 				<label for="message" class="sr-only">Сообщение</label>
 				<div class="bg-light-olive flex items-start rounded-l-2xl pt-2 pl-3">
 					<Icon icon="solar:pen-linear" class="text-off-white size-10" />
