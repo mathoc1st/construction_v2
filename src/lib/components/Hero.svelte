@@ -8,7 +8,7 @@
 		class="flex max-h-full basis-1/3 flex-col justify-between max-[1200px]:mx-auto max-[1200px]:gap-12"
 	>
 		<h2
-			class="text-dark-olive max-w-[430px] text-3xl leading-10 max-[1200px]:mx-auto max-[1200px]:text-center max-[600px]:text-2xl"
+			class="text-dark-olive max-w-[430px] text-3xl leading-10 max-[1200px]:mx-auto max-[1200px]:text-center max-[600px]:text-2xl max-[600px]:leading-8"
 		>
 			Быстрое строительство каркасных домов из лучших материалов с вниманием к каждой детали.
 		</h2>
