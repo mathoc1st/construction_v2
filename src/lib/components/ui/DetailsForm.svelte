@@ -17,11 +17,15 @@
 		coldFinish = $bindable(),
 		warmFinish = $bindable(),
 		allYearFinish = $bindable(),
+		allYear150Finish = $bindable(),
+		allYear200Finish = $bindable(),
 		building = $bindable()
 	}: {
 		coldFinish: FinishDto;
 		warmFinish: FinishDto;
 		allYearFinish: FinishDto;
+		allYear150Finish: FinishDto;
+		allYear200Finish: FinishDto;
 		building: BuildingDto;
 	} = $props();
 
@@ -172,10 +176,12 @@
 			active: 'bg-light-brown max-[650px]:w-full border-light-olive',
 			divider: 'bg-light-olive'
 		}}
-		ulClass="max-[650px]:flex-col max-[650px]:w-full"
+		ulClass="max-[650px]:flex-col max-[650px]:w-full flex-wrap "
 	>
 		<AddFinishTabItem isOpen={true} bind:finish={coldFinish} />
 		<AddFinishTabItem bind:finish={warmFinish} />
 		<AddFinishTabItem bind:finish={allYearFinish} />
+		<AddFinishTabItem bind:finish={allYear150Finish} />
+		<AddFinishTabItem bind:finish={allYear200Finish} />
 	</Tabs>
 </div>

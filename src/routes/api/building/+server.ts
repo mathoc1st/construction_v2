@@ -9,9 +9,10 @@ import {
 	type Finish,
 	type FinishDto
 } from '$lib/types';
-import { addBuilding, updateBuilding } from '$lib/server/services/building';
+import { addBuilding, delteImagesFromDisk, updateBuilding } from '$lib/server/services/building';
 import z from 'zod';
-import { getBuildingsByType } from '$lib/server/db/queries/building';
+import { getBuildingsByType, removeBuilding } from '$lib/server/db/queries/building';
+import { getImagesByBuildingId } from '$lib/server/db/queries/images';
 
 export const GET: RequestHandler = async ({ url }) => {
 	const type = url.searchParams.get('type');
@@ -56,6 +57,8 @@ export const POST: RequestHandler = async ({ request }) => {
 	const finishesJson = formData.get('finishes') as string;
 	const finishes: FinishDto[] = JSON.parse(finishesJson);
 
+	console.log(finishes);
+
 	const { error: addBuildingError } = await addBuilding(building, images, finishes);
 
 	if (addBuildingError) {
@@ -86,6 +89,23 @@ export const PUT: RequestHandler = async ({ request }) => {
 	if (addBuildingError) {
 		throw error(addBuildingError.code, addBuildingError.message);
 	}
+
+	return json({ status: 200 });
+};
+
+export const DELETE: RequestHandler = async ({ url }) => {
+	const idStr = url.searchParams.get('id');
+
+	if (!idStr) throw error(400, 'id is not present');
+
+	const id = Number.parseInt(idStr);
+
+	if (Number.isNaN(id)) throw error(400, 'id is NaN');
+
+	const images = await getImagesByBuildingId(id);
+
+	delteImagesFromDisk(images);
+	await removeBuilding(id);
 
 	return json({ status: 200 });
 };

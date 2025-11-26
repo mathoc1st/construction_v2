@@ -19,5 +19,29 @@ export function getFinishTypeName(type: FinishType): string {
 			return 'Теплый контур';
 		case FinishType.ALL_YEAR:
 			return 'ПМЖ';
+		case FinishType.ALL_YEAR_150:
+			return 'ПМЖ 150мм';
+		case FinishType.ALL_YEAR_200:
+			return 'ПМЖ 200мм';
+	}
+}
+
+export const prettyPrice = new Intl.NumberFormat('ru-RU', {
+	style: 'currency',
+	currency: 'rub'
+});
+
+export function getTabIcon(type: FinishType) {
+	switch (type) {
+		case FinishType.COLD:
+			return 'hugeicons:thermometer-cold';
+		case FinishType.WARM:
+			return 'hugeicons:thermometer-warm';
+		case FinishType.ALL_YEAR:
+			return 'lsicon:house-outline';
+		case FinishType.ALL_YEAR_150:
+			return 'lsicon:house-outline';
+		case FinishType.ALL_YEAR_200:
+			return 'lsicon:house-outline';
 	}
 }

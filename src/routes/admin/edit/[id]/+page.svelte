@@ -60,6 +60,14 @@
 		data.building.finishes.find((f) => f.type === FinishType.ALL_YEAR) ||
 			({ type: FinishType.ALL_YEAR } as FinishDto)
 	);
+	let allYear150Finish: FinishDto = $state(
+		data.building.finishes.find((f) => f.type === FinishType.ALL_YEAR_150) ||
+			({ type: FinishType.ALL_YEAR_150 } as FinishDto)
+	);
+	let allYear200Finish: FinishDto = $state(
+		data.building.finishes.find((f) => f.type === FinishType.ALL_YEAR_200) ||
+			({ type: FinishType.ALL_YEAR_200 } as FinishDto)
+	);
 
 	let uploadError: string | null = $state(null);
 	let uploadSuccess: boolean = $state(false);
@@ -70,7 +78,10 @@
 		images.forEach((i) => formData.append('image', i));
 		formData.append('building', JSON.stringify(editedBuilding));
 		formData.append('id', data.building.id.toString());
-		formData.append('finishes', JSON.stringify([coldFinish, warmFinish, allYearFinish]));
+		formData.append(
+			'finishes',
+			JSON.stringify([coldFinish, warmFinish, allYearFinish, allYear150Finish, allYear200Finish])
+		);
 		formData.append('images', JSON.stringify(images));
 
 		const responce = await fetch(`/api/building`, {
@@ -100,6 +111,8 @@
 			bind:coldFinish
 			bind:warmFinish
 			bind:allYearFinish
+			bind:allYear150Finish
+			bind:allYear200Finish
 		/>
 	</div>
 	{#if uploadError}

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import type { Building, Image } from '$lib/types';
+	import { prettyPrice } from '$lib/utils';
 	import Icon from '@iconify/svelte';
 
 	let { building }: { building: Building & { images: Image[] | undefined } } = $props();
@@ -47,7 +48,9 @@
 			>
 		</p>
 	</div>
-	<p class="mt-8 text-xl font-medium max-[600px]:text-lg">От {building.startingPrice} руб.</p>
+	<p class="mt-8 text-xl font-medium max-[600px]:text-lg">
+		От {prettyPrice.format(building.startingPrice)}
+	</p>
 	<a
 		href={`/building/${building.id}`}
 		class="bg-dark-brown text-off-white hover:bg-dark-olive mt-4 inline-block rounded-2xl px-8 py-2 transition"

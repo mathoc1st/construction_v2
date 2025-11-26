@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { type Finish, type FinishDto, type FinishOption } from '$lib/types';
-	import { getFinishTypeName } from '$lib/utils';
+	import { getFinishTypeName, getTabIcon } from '$lib/utils';
 	import Icon from '@iconify/svelte';
 
 	import { TabItem } from 'flowbite-svelte';
@@ -40,14 +40,15 @@
 	}
 </script>
 
-<TabItem open={isOpen} inactiveClass="hover:bg-dark-olive rounded-t-lg h-full group w-full p-4">
+<TabItem
+	open={isOpen}
+	inactiveClass="hover:bg-dark-olive rounded-t-lg h-full group w-full p-4"
+	activeClass="h-full bg-dark-brown text-off-white! rounded-t-lg group w-full p-4"
+>
 	{#snippet titleSlot()}
 		<div class="flex items-center gap-1 max-[650px]:justify-center">
-			<Icon
-				icon="hugeicons:thermometer-cold"
-				class="text-dark-olive group-hover:text-off-white size-8"
-			/>
-			<p class="text-dark-olive group-hover:text-off-white text-lg">
+			<Icon icon={getTabIcon(finish.type)} class=" group-hover:text-off-white size-8 shrink-0" />
+			<p class=" group-hover:text-off-white text-lg">
 				{getFinishTypeName(finish.type)}
 			</p>
 		</div>
@@ -70,12 +71,14 @@
 				return -1;
 			} else return 1;
 		}) as option, i (i)}
-			<lable class="flex items-center gap-2 text-lg">
+			<lable class="flex items-start gap-2 text-lg">
 				<Icon
 					icon={option.isAvailable
 						? 'ic:round-check-circle-outline'
 						: 'material-symbols:cancel-outline-rounded'}
-					class=" size-6 shrink-0 {option.isAvailable ? 'text-dark-brown' : 'text-light-olive'}"
+					class=" mt-1 size-6 shrink-0 {option.isAvailable
+						? 'text-dark-brown'
+						: 'text-light-olive'}"
 				/>{option.description}<button
 					type="button"
 					onclick={(e) => {

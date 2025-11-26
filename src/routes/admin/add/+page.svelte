@@ -8,6 +8,8 @@
 	let coldFinish: FinishDto = $state({ type: FinishType.COLD });
 	let warmFinish: FinishDto = $state({ type: FinishType.WARM });
 	let allYearFinish: FinishDto = $state({ type: FinishType.ALL_YEAR });
+	let allYear150Finish: FinishDto = $state({ type: FinishType.ALL_YEAR_150 });
+	let allYear200Finish: FinishDto = $state({ type: FinishType.ALL_YEAR_200 });
 
 	let uploadError: string | null = $state(null);
 	let uploadSuccess: boolean = $state(false);
@@ -20,7 +22,10 @@
 
 		images.forEach((i) => formData.append('image', i));
 		formData.append('building', JSON.stringify(building));
-		formData.append('finishes', JSON.stringify([coldFinish, warmFinish, allYearFinish]));
+		formData.append(
+			'finishes',
+			JSON.stringify([coldFinish, warmFinish, allYearFinish, allYear150Finish, allYear200Finish])
+		);
 
 		const responce = await fetch(`/api/building?${params}`, {
 			method: 'POST',
@@ -42,7 +47,14 @@
 <section class="mt-26 mb-26">
 	<div class="flex gap-6 max-[1300px]:flex-col">
 		<ImageUploader bind:images />
-		<DetailsForm bind:building bind:coldFinish bind:warmFinish bind:allYearFinish />
+		<DetailsForm
+			bind:building
+			bind:coldFinish
+			bind:warmFinish
+			bind:allYearFinish
+			bind:allYear150Finish
+			bind:allYear200Finish
+		/>
 	</div>
 	{#if uploadError}
 		<h4 class="text-center text-lg text-red-500">Ошибка</h4>

@@ -23,6 +23,8 @@ enum FinishType {
   COLD
   WARM
   ALL_YEAR
+  ALL_YEAR_150
+  ALL_YEAR_200
 }
 
 model Building {
@@ -55,7 +57,7 @@ model Image {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  building Building @relation(fields: [buildingId], references: [id])
+  building Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
   buildingId Int
 }
 
@@ -70,7 +72,7 @@ model Finish {
 
   options FinishOption[]
 
-  building Building @relation(fields: [buildingId], references: [id])
+  building Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
   buildingId Int
 }
 model FinishOption {

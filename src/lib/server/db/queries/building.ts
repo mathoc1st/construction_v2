@@ -71,6 +71,10 @@ export async function getBuildingsCountByType(type: BuildingType) {
 	return prisma.building.count({ where: { type } });
 }
 
+export async function removeBuilding(id: number) {
+	return prisma.building.delete({ where: { id } });
+}
+
 export async function getBuildingById(id: number) {
 	const building = await prisma.building.findUnique({
 		where: { id },

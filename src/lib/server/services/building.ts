@@ -4,7 +4,8 @@ import {
 	type BuildingDto,
 	type FinishDto,
 	type ParsedBuilding,
-	type ParsedFinish
+	type ParsedFinish,
+	type Image
 } from '$lib/types';
 import { createBuilding, updateBuildingById } from '../db/queries/building';
 
@@ -167,15 +168,20 @@ export async function updateBuilding(
 	return { error: null };
 }
 
-function delteImagesFromDisk(imageFiles: File[]) {
+export function delteImagesFromDisk(imageFiles: File[] | Image[]) {
 	if (!fs.existsSync(IMAGES_DIR)) {
 		return;
 	}
 
 	for (const image of imageFiles) {
-		if (!(image instanceof File) || image.name === '' || image.size <= 0) continue;
+		if (image instanceof File) {
+			if (!(image instanceof File) || image.name === '' || image.size <= 0) continue;
 
-		const filePath = path.join(IMAGES_DIR, image.name);
-		fs.rmSync(filePath, { force: true });
+			const filePath = path.join(IMAGES_DIR, image.name);
+			fs.rmSync(filePath, { force: true });
+		} else {
+			const filePath = path.join(IMAGES_DIR, image.filename);
+			fs.rmSync(filePath, { force: true });
+		}
 	}
 }
