@@ -63,6 +63,7 @@ export async function getBuildingsByType(buildingType: BuildingType, options: fi
 			where
 		})
 	]);
+
 	return { buildings, totalCount };
 }
 
@@ -71,13 +72,21 @@ export async function getBuildingsCountByType(type: BuildingType) {
 }
 
 export async function getBuildingById(id: number) {
-	return prisma.building.findUnique({
+	const building = await prisma.building.findUnique({
 		where: { id },
 		include: {
 			finishes: { include: { options: true } },
 			images: true
 		}
 	});
+
+	if (building) {
+		await prisma.building.update({
+			where: { id: building.id },
+			data: { views: { increment: 1 } }
+		});
+	}
+	return building;
 }
 
 export async function getBuildingDetailsByType(type: BuildingType) {
