@@ -4,15 +4,16 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import type { LayoutProps } from './$types';
 
-	let { children } = $props();
+	let { children, data }: LayoutProps = $props();
 </script>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<Header></Header>
+<Header isAdmin={data.isAdmin}></Header>
 
 <div class="mx-auto flex max-w-[1440px] flex-col items-center px-5">
 	{@render children()}

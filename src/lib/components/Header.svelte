@@ -3,6 +3,8 @@
 	import { tv } from 'tailwind-variants';
 	import { Drawer } from 'flowbite-svelte';
 
+	let { isAdmin }: { isAdmin: boolean } = $props();
+
 	let isDrawerOpen = $state(false);
 
 	const navLink = tv({
@@ -51,6 +53,12 @@
 			<a href="tel:+79266569425" class="hover:text-light-brown">+7 (926) 656-94-25</a>
 		</div>
 
+		{#if isAdmin}
+			<div class="flex items-center max-[1200px]:hidden">
+				<p class="text-center text-lg font-medium text-red-400">Admin</p>
+			</div>
+		{/if}
+
 		<!-- Mobile -->
 		<div class="flex h-full items-center min-[1200px]:hidden">
 			<button class="group h-max" onclick={() => (isDrawerOpen = !isDrawerOpen)}
@@ -87,4 +95,7 @@
 		<Icon icon="el:phone-alt" class="size-5" />
 		<a href="tel:+79266569425" class="hover:text-light-brown">+7 (926) 656-94-25</a>
 	</div>
+	{#if isAdmin}
+		<p class="mt-8 text-center text-lg font-medium text-red-400">Admin</p>
+	{/if}
 </Drawer>
