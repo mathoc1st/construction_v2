@@ -18,7 +18,7 @@ export function getFinishTypeName(type: FinishType): string {
 		case FinishType.WARM_100:
 			return 'Теплый контур 100мм';
 		case FinishType.WARM_150:
-			return 'Теплый контур 15мм';
+			return 'Теплый контур 150мм';
 		case FinishType.WARM_200:
 			return 'Теплый контур 200мм';
 	}
