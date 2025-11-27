@@ -98,26 +98,29 @@
 			>
 		</div>
 		<h4 class="mt-6 flex w-max flex-col rounded-2xl text-xl font-medium">Описание</h4>
-
-		{#each options as option, i (i)}
-			<lable class="flex items-start gap-2 text-lg">
-				<Icon
-					icon={option.isAvailable
-						? 'ic:round-check-circle-outline'
-						: 'material-symbols:cancel-outline-rounded'}
-					class="mt-1 size-6 shrink-0 {option.isAvailable ? 'text-dark-brown' : 'text-light-olive'}"
-				/>
-				<p class="max-w-[300px]">{option.description}</p>
-				<button
-					type="button"
-					onclick={() => {
-						handleDeleteOption(finishType, i);
-					}}
-					class="hover:text-dark-brown transition"
-					><Icon icon="tabler:trash" class="size-8 pb-1" /></button
-				>
-			</lable>
-		{/each}
+		<div class="flex flex-col gap-2">
+			{#each options as option, i (i)}
+				<lable class="flex items-start gap-2 text-lg">
+					<Icon
+						icon={option.isAvailable
+							? 'ic:round-check-circle-outline'
+							: 'material-symbols:cancel-outline-rounded'}
+						class="mt-1 size-6 shrink-0 {option.isAvailable
+							? 'text-dark-brown'
+							: 'text-light-olive'}"
+					/>
+					<p class="max-w-[300px]">{option.description}</p>
+					<button
+						type="button"
+						onclick={() => {
+							handleDeleteOption(finishType, i);
+						}}
+						class="hover:text-dark-brown transition"
+						><Icon icon="tabler:trash" class="size-8 pb-1" /></button
+					>
+				</lable>
+			{/each}
+		</div>
 
 		<div class="flex w-full flex-col gap-4">
 			<label class="text-dark-olive flex gap-4">

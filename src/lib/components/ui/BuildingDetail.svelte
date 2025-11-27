@@ -4,7 +4,7 @@
 	import { getFinishTypeName, getTabIcon, prettyPrice } from '$lib/utils';
 	import Icon from '@iconify/svelte';
 
-	import { Tabs, TabItem, Modal } from 'flowbite-svelte';
+	import { Tabs, TabItem, Modal, Dropdown, DropdownItem } from 'flowbite-svelte';
 
 	const {
 		building,
@@ -33,28 +33,30 @@
 	}
 </script>
 
-<div class="flex basis-1/2 flex-col justify-center max-[1300px]:items-center">
+<div class="relative flex basis-1/2 flex-col justify-center max-[1300px]:items-center">
 	{#if isAdmin}
-		<div class="flex flex-wrap gap-6">
-			<a
-				href={`/admin/edit/${building.id}`}
-				class="hover:bg-light-brown hover:text-dark-olive group bg-dark-olive text-off-white flex max-w-max items-center gap-2 rounded-2xl p-2 text-lg"
-				><Icon
-					icon="solar:pen-linear"
-					class="text-off-white group-hover:text-dark-olive size-6"
-				/>Редактировать</a
+		<button
+			class="bg-light-brown text-off-white hover:bg-dark-olive absolute top-0 right-0 flex max-w-max items-center gap-1 self-end rounded-2xl p-2 text-lg transition"
+			><Icon icon="carbon:settings" class="size-6" /></button
+		>
+		<Dropdown simple class="bg-dark-olive ">
+			<DropdownItem class="hover:bg-light-brown transition"
+				><a
+					href={`/admin/edit/${building.id}`}
+					class="text-off-white flex items-center gap-1 text-base"
+					><Icon icon="solar:pen-linear" class="size-5" />Редактировать</a
+				></DropdownItem
 			>
-			<button
-				onclick={async () => {
-					await removeBuilding(building.id);
-				}}
-				class="hover:bg-light-brown hover:text-dark-olive group bg-light-brown text-off-white flex max-w-max items-center gap-2 rounded-2xl p-2 text-lg"
-				><Icon
-					icon="material-symbols:delete-outline-rounded"
-					class="text-off-white group-hover:text-dark-olive size-6"
-				/>Удалить</button
+			<DropdownItem class="hover:bg-light-brown group transition"
+				><button
+					class="text-off-white flex items-center gap-1 text-base"
+					onclick={async () => {
+						await removeBuilding(building.id);
+					}}><Icon icon="material-symbols:delete-outline-rounded" class="size-5" />Удалить</button
+				></DropdownItem
 			>
-		</div>
+		</Dropdown>
+		<div class="flex flex-wrap gap-6"></div>
 		{#if isDeleteError}
 			<p class="text-lg text-red-500">Не удалось удалить строение! <br />{deleteError}</p>
 		{/if}
@@ -130,16 +132,18 @@
 					</div>
 				{/snippet}
 				<div>
-					{#each finish.options as finishOption}
-						<p class="flex items-start gap-2 text-lg">
-							<Icon
-								icon={finishOption.isAvailable
-									? 'ic:round-check-circle-outline'
-									: 'material-symbols:cancel-outline-rounded'}
-								class="text-dark-brown mt-1 size-6 shrink-0"
-							/>{finishOption.description}
-						</p>
-					{/each}
+					<div class="flex flex-col gap-2">
+						{#each finish.options as finishOption}
+							<p class="flex items-start gap-2 text-lg">
+								<Icon
+									icon={finishOption.isAvailable
+										? 'ic:round-check-circle-outline'
+										: 'material-symbols:cancel-outline-rounded'}
+									class="text-dark-brown mt-1 size-6 shrink-0"
+								/>{finishOption.description}
+							</p>
+						{/each}
+					</div>
 
 					<div class="mt-6 flex flex-col gap-4 max-[1300px]:items-center">
 						<h4 class="w-max rounded-2xl text-xl font-medium">
