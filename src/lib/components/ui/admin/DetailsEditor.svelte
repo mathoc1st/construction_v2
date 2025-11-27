@@ -6,19 +6,7 @@
 	import { getBuildingTypeName, getFinishTypeName } from '$lib/utils';
 	import z from 'zod';
 
-	let {
-		onSaveBuilding
-	}: {
-		onSaveBuilding: (building: BuildingDto) =>
-			| {
-					ok: false;
-					error: z.ZodError;
-			  }
-			| {
-					ok: true;
-					error?: undefined;
-			  };
-	} = $props();
+	let { onSaveBuilding }: { onSaveBuilding: (building: BuildingDto) => void } = $props();
 
 	let building: BuildingDto = $state({});
 	let saveError: string = $state('');
@@ -106,6 +94,7 @@
 			id="name"
 			bind:value={building.name}
 			required
+			autocomplete="off"
 		/>
 		<div class="relative flex max-w-max flex-col">
 			<label
@@ -118,6 +107,7 @@
 				id="type"
 				name="type"
 				bind:value={building.type}
+				autocomplete="off"
 				required
 			>
 				<option value={BuildingType.FRAME}>Каркасный дом</option>
@@ -143,6 +133,7 @@
 						class={input({ type: 'text' })}
 						bind:value={building.length}
 						required
+						autocomplete="off"
 					/>
 				</lable>
 				<lable class={lable({ input: 'text' })}>
@@ -154,6 +145,7 @@
 						class={input({ type: 'text' })}
 						bind:value={building.width}
 						required
+						autocomplete="off"
 					/>
 				</lable>
 			</div>
@@ -171,6 +163,7 @@
 					class={input({ type: 'text' })}
 					bind:value={building.bathrooms}
 					required
+					autocomplete="off"
 				/>
 			</lable>
 			<lable class={lable()}>
@@ -187,6 +180,7 @@
 					class={input({ type: 'text' })}
 					bind:value={building.bedrooms}
 					required
+					autocomplete="off"
 				/>
 			</lable>
 			<lable class={lable()}>
@@ -203,6 +197,7 @@
 					class={input({ type: 'text' })}
 					required
 					bind:value={building.floors}
+					autocomplete="off"
 				/>
 			</lable>
 			<lable class={lable({ input: 'checkbox' })}>
@@ -217,6 +212,7 @@
 					id="veranda"
 					class={input({ type: 'checkbox' })}
 					bind:checked={building.veranda}
+					autocomplete="off"
 				/>
 			</lable>
 		</div>

@@ -77,7 +77,7 @@
 			<Icon icon="bx:area" class="size-8 min-w-6" /><span class="max-[600px]:text-md text-lg"
 				>Площадь: {!building.length || !building.width
 					? 'Unknown'
-					: `${building.length}x${building.width}`} м<sup>2</sup></span
+					: building.length * building.width} м<sup>2</sup></span
 			>
 		</p>
 		<p class="text-dark-olive flex items-center gap-1">

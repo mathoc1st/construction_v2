@@ -30,7 +30,11 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	const parsedFloors = floors.map((f) => Number(f)).filter((f) => !isNaN(f));
 	const parsedFinishes = finishes.filter(
-		(f) => f == FinishType.WARM || f == FinishType.COLD || f == FinishType.ALL_YEAR
+		(f) =>
+			f == FinishType.WARM_100 ||
+			f == FinishType.COLD ||
+			f == FinishType.WARM_150 ||
+			f == FinishType.WARM_200
 	);
 
 	const { buildings, totalCount } = await getBuildingsByType(typeResult.data, {
@@ -56,8 +60,6 @@ export const POST: RequestHandler = async ({ request }) => {
 	// Get finishes
 	const finishesJson = formData.get('finishes') as string;
 	const finishes: FinishDto[] = JSON.parse(finishesJson);
-
-	console.log(finishes);
 
 	const { error: addBuildingError } = await addBuilding(building, images, finishes);
 

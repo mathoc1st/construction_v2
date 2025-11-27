@@ -19,7 +19,7 @@
 	}
 </script>
 
-<section class="mt-36 mb-12">
+<section class="mx-auto mt-46 mb-46 max-w-[1440px] px-5">
 	<h1 class="text-dark-olive mb-18 text-center text-5xl font-medium max-[600px]:text-4xl">
 		Популярные проекты
 	</h1>

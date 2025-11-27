@@ -87,6 +87,7 @@
 					name="price"
 					id="price"
 					class={inputText()}
+					autocomplete="off"
 					onchange={(e) => {
 						handlePriceChange(e, finishType);
 					}}
@@ -102,7 +103,9 @@
 						? 'ic:round-check-circle-outline'
 						: 'material-symbols:cancel-outline-rounded'}
 					class="mt-1 size-6 shrink-0 {option.isAvailable ? 'text-dark-brown' : 'text-light-olive'}"
-				/>{option.description}<button
+				/>
+				<p class="max-w-[300px]">{option.description}</p>
+				<button
 					type="button"
 					onclick={() => {
 						handleDeleteOption(finishType, i);
@@ -127,6 +130,7 @@
 							onchange={() => {
 								isOptionAvailable = true;
 							}}
+							autocomplete="off"
 							class="text-dark-brown bg-off-white form-radia"
 						/></label
 					>
@@ -139,6 +143,7 @@
 							onchange={() => {
 								isOptionAvailable = false;
 							}}
+							autocomplete="off"
 							class="text-dark-brown bg-off-white form-radia"
 						/></label
 					>
@@ -150,6 +155,7 @@
 					rows="5"
 					bind:value={optionDescription}
 					class={[inputText(), 'resize-none']}
+					autocomplete="off"
 				></textarea>
 
 				<button

@@ -94,7 +94,7 @@
 </script>
 
 <svelte:window bind:innerWidth />
-<section class="mt-26 mb-26 w-full">
+<section class="mx-auto mt-26 mb-26 max-w-[1440px] px-5">
 	<h1 class="text-center text-5xl font-medium max-[600px]:text-4xl">Каркасные дома</h1>
 	<div class="mt-26 flex w-full gap-4 max-[900px]:justify-center">
 		<SearchFilters

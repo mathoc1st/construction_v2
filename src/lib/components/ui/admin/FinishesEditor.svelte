@@ -169,7 +169,7 @@
 				>
 			{:else}
 				<button
-					class="bg-dark-olive text-off-white mt-8 rounded-2xl p-2 text-lg"
+					class="bg-dark-olive text-off-white mt-8 block rounded-2xl p-2 text-lg max-[600px]:mx-auto"
 					onclick={() => handleEdit()}>Редактировать</button
 				>
 			{/if}

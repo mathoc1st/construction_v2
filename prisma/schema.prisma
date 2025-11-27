@@ -21,10 +21,9 @@ enum BuildingType {
 
 enum FinishType {
   COLD
-  WARM
-  ALL_YEAR
-  ALL_YEAR_150
-  ALL_YEAR_200
+  WARM_100
+  WARM_150
+  WARM_200
 }
 
 model User {

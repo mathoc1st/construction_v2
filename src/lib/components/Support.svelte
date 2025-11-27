@@ -2,7 +2,7 @@
 	import Icon from '@iconify/svelte';
 </script>
 
-<section class="mb-26">
+<section class="mx-auto mt-46 mb-46 max-w-[1440px] px-5">
 	<h1 class="text-center text-5xl max-[600px]:text-4xl">Остались вопросы?</h1>
 	<h3 class="text-center text-3xl max-[600px]:text-2xl">
 		Заполните форму ниже и мы на них ответим

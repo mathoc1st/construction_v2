@@ -46,6 +46,8 @@ export async function addBuilding(
 		parsedFinishesResult.finishes
 	);
 
+	console.log(createBuildingError);
+
 	if (!newBuilding || createBuildingError)
 		return { error: { code: 400, message: 'Не удалось добавить новое здание!' } };
 

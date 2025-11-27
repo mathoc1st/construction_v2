@@ -160,14 +160,14 @@
 			images = [];
 		}}
 		classes={{
-			wrapper: 'flex',
+			wrapper: 'flex max-[1100px]:justify-center',
 			close: [
 				'text-off-white relative hover:text-dark-olive hidden bg-light-brown rounded-r-2xl',
 				{ block: images && images.length > 0 }
 			]
 		}}
 		class={[
-			'bg-dark-olive text-off-white max-w-max rounded-2xl border-0 pr-8! max-[1100px]:mx-auto',
+			'bg-dark-olive text-off-white max-w-max rounded-2xl border-0 pr-8!',
 			{ 'rounded-r-none pr-2': images && images.length > 0 }
 		]}
 		clearable

@@ -1,13 +1,21 @@
 <script lang="ts">
+	import { goto, invalidate, invalidateAll, refreshAll } from '$app/navigation';
 	import DetailsEditor from '$lib/components/ui/admin/DetailsEditor.svelte';
 	import FinishesEditor from '$lib/components/ui/admin/FinishesEditor.svelte';
 	import ImageEditor from '$lib/components/ui/admin/ImageEditor.svelte';
-	import { buildingSchema, finishSchema, type BuildingDto, type FinishDto } from '$lib/types';
+	import {
+		buildingSchema,
+		finishSchema,
+		type BuildingDto,
+		type FinishDto,
+		type ParsedBuilding,
+		type ParsedFinish
+	} from '$lib/types';
 	import z, { ZodError } from 'zod';
 
-	let savedBuilding: BuildingDto = $state({});
-	let images: File[] = $state([]);
-	let savedFinishes: FinishDto[] = $state([]);
+	let savedBuilding: ParsedBuilding | null = $state(null);
+	let uploadedImages: File[] = $state([]);
+	let savedFinishes: ParsedFinish[] = $state([]);
 
 	let uploadError: string | null = $state(null);
 	let uploadSuccess: boolean = $state(false);
@@ -19,29 +27,29 @@
 			return;
 		}
 
-		savedBuilding = building;
+		savedBuilding = result.data;
 	}
 	function handleSaveFinishes(finishes: FinishDto[]) {
+		const parsedFinishes: ParsedFinish[] = [];
+
 		for (const finish of finishes) {
 			const result = finishSchema.safeParse(finish);
 			if (!result.success) return;
+			parsedFinishes.push(result.data);
 		}
 
-		savedFinishes = finishes;
+		savedFinishes = parsedFinishes;
 	}
 	function handleChangeImages(files: File[]) {
-		images = files;
+		uploadedImages = files;
 	}
 
 	async function handleSubmit() {
 		const formData = new FormData();
 
-		images.forEach((i) => formData.append('image', i));
+		uploadedImages.forEach((i) => formData.append('image', i));
 		formData.append('building', JSON.stringify(savedBuilding));
-		// formData.append(
-		// 	'finishes',
-		// 	JSON.stringify([coldFinish, warmFinish, allYearFinish, allYear150Finish, allYear200Finish])
-		// );
+		formData.append('finishes', JSON.stringify(savedFinishes));
 
 		const responce = await fetch(`/api/building`, {
 			method: 'POST',
@@ -54,9 +62,8 @@
 			uploadSuccess = false;
 			return;
 		}
-
-		uploadError = null;
-		uploadSuccess = true;
+		await invalidateAll();
+		window.location.reload();
 	}
 </script>
 
@@ -66,6 +73,20 @@
 		<DetailsEditor onSaveBuilding={handleSaveBuilding} />
 		<FinishesEditor onSaveFinishes={handleSaveFinishes} />
 	</div>
+	{#if uploadError}
+		<h4 class="text-center text-lg text-red-500">Ошибка</h4>
+		<p class="mt-4 text-center text-red-400">{uploadError}</p>
+	{/if}
+	{#if uploadSuccess}
+		<h4 class="text-center text-lg text-green-600">Новое строение было успешно добавлено!</h4>
+	{/if}
+	{#if savedBuilding && savedFinishes.length > 0 && uploadedImages.length > 0}
+		<button
+			onclick={handleSubmit}
+			class="bg-dark-brown text-off-white mx-auto block rounded-2xl px-6 py-2 text-xl"
+			>Готово</button
+		>
+	{/if}
 </section>
 
 <!-- <section class="mt-26 mb-26">
@@ -76,15 +97,5 @@
 			<FinishesEditor {onSaveFinishes} />
 		</div>
 	</div>
-	{#if uploadError}
-		<h4 class="text-center text-lg text-red-500">Ошибка</h4>
-		<p class="mt-4 text-center text-red-400">{uploadError}</p>
-	{/if}
-	{#if uploadSuccess}
-		<h4 class="text-center text-lg text-green-600">Новое строение было успешно добавлено!</h4>
-	{/if}
-	<button
-		onclick={handleSubmit}
-		class="bg-dark-brown text-off-white mx-auto block rounded-2xl px-6 py-2 text-xl">Готово</button
-	>
+	
 </section> -->
