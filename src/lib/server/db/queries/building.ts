@@ -1,23 +1,28 @@
-import { SortBy, type ParsedBuilding, type ParsedFinish } from '$lib/types/';
-import type { BuildingType, FinishType } from '../../../../../prisma/src/generated/prisma/enums';
+import {
+	SortBy,
+	type ParsedBuilding,
+	type ParsedBuildingOptions,
+	type ParsedFinish
+} from '$lib/types/';
+import type { BuildingType } from '../../../../../prisma/src/generated/prisma/enums';
 import type {
 	BuildingOrderByWithRelationInput,
 	BuildingWhereInput
 } from '../../../../../prisma/src/generated/prisma/models';
 import prisma from '../prisma';
 
-type filterOptions = {
-	floors?: Array<number>;
-	finishes?: Array<FinishType>;
-	sizes?: Array<string>;
-	sortBy?: SortBy;
-	limit?: number;
-	page?: number;
-	veranda?: string | null;
-};
+// type filterOptions = {
+// 	floors?: Array<number>;
+// 	finishes?: Array<FinishType>;
+// 	sizes?: Array<string>;
+// 	sortBy?: SortBy;
+// 	limit?: number;
+// 	page?: number;
+// 	veranda?: string | null;
+// };
 
-export async function getBuildingsByType(buildingType: BuildingType, options: filterOptions = {}) {
-	const where: BuildingWhereInput = { type: buildingType };
+export async function getBuildingsByType(options: ParsedBuildingOptions) {
+	const where: BuildingWhereInput = { type: options.type };
 
 	if (options.floors && options.floors.length > 0) {
 		where.floors = { in: options.floors };
@@ -32,11 +37,15 @@ export async function getBuildingsByType(buildingType: BuildingType, options: fi
 	}
 
 	if (options.sizes && options.sizes.length > 0) {
-		where.size = { in: options.sizes };
+		where.size = {
+			in: options.sizes.map((s) => {
+				return `${s.length}x${s.width}`;
+			})
+		};
 	}
 
 	if (options.veranda) {
-		where.veranda = options.veranda === 'true';
+		where.veranda = options.veranda;
 	}
 
 	const orderBy: BuildingOrderByWithRelationInput = {};

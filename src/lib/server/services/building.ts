@@ -5,9 +5,10 @@ import {
 	type FinishDto,
 	type ParsedBuilding,
 	type ParsedFinish,
-	type Image
+	type Image,
+	buildingOptionsSchema
 } from '$lib/types';
-import { createBuilding, updateBuildingById } from '../db/queries/building';
+import { createBuilding, updateBuildingById, getBuildingsByType } from '../db/queries/building';
 
 import path from 'path';
 import fs from 'fs';
@@ -20,6 +21,38 @@ type ServiceError = {
 };
 
 const IMAGES_DIR = path.join(process.cwd(), 'uploads', 'images');
+
+export async function handleGetBuildingsByType(url: URL) {
+	const type = url.searchParams.get('type');
+	const page = url.searchParams.get('page');
+	const limit = url.searchParams.get('limit');
+	const sortBy = url.searchParams.get('sortBy');
+	const floors = url.searchParams.getAll('floor');
+	const finishes = url.searchParams.getAll('finish');
+	const sizes = url.searchParams.getAll('size');
+	const veranda = url.searchParams.get('veranda');
+
+	const parsedOptions = buildingOptionsSchema.safeParse({
+		type,
+		page,
+		limit,
+		sortBy,
+		floors,
+		finishes,
+		sizes,
+		veranda
+	});
+
+	if (!parsedOptions.success)
+		return {
+			buildings: null,
+			totalCount: null,
+			error: { status: 400, message: parsedOptions.error.message }
+		};
+	const { buildings, totalCount } = await getBuildingsByType(parsedOptions.data);
+
+	return { buildings, totalCount, error: null };
+}
 
 export async function addBuilding(
 	building: BuildingDto,

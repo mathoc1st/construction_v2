@@ -22,6 +22,48 @@ export type ImageDto = {
 	file: File;
 };
 
+export const buildingOptionsSchema = z.object({
+	type: z.enum(BuildingType).nonoptional(),
+	page: z
+		.string()
+		.regex(/^\d+$/)
+		.transform((val) => parseInt(val))
+		.nullish(),
+	limit: z
+		.string()
+		.regex(/^\d+$/)
+		.transform((val) => parseInt(val))
+		.nullish(),
+	sortBy: z.enum(SortBy).nullish(),
+	floors: z
+		.array(
+			z
+				.string()
+				.regex(/^\d+$/)
+				.transform((v) => parseInt(v, 10))
+		)
+		.nullish(),
+	finishes: z.array(z.enum(FinishType)).nullish(),
+	sizes: z
+		.array(
+			z
+				.string()
+				.regex(/^\d+x\d+$/)
+				.transform((str) => {
+					const [l, w] = str.split('x').map(Number);
+					return { length: l, width: w };
+				})
+		)
+		.nullish(),
+	veranda: z
+		.string()
+		.regex(/^(true|false|1|0)$/i)
+		.transform((v) => v === 'true' || v === '1')
+		.nullish()
+});
+
+export type ParsedBuildingOptions = z.infer<typeof buildingOptionsSchema>;
+
 export const imageSchema = z.object({
 	filename: z.string('Название картинки не является строкой!').nonempty()
 });

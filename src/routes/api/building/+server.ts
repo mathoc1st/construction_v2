@@ -1,50 +1,20 @@
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import { type Building, type BuildingDto, type Finish, type FinishDto } from '$lib/types';
 import {
-	BuildingType,
-	FinishType,
-	SortBy,
-	type Building,
-	type BuildingDto,
-	type Finish,
-	type FinishDto
-} from '$lib/types';
-import { addBuilding, delteImagesFromDisk, updateBuilding } from '$lib/server/services/building';
-import z from 'zod';
-import { getBuildingsByType, removeBuilding } from '$lib/server/db/queries/building';
+	addBuilding,
+	delteImagesFromDisk,
+	handleGetBuildingsByType,
+	updateBuilding
+} from '$lib/server/services/building';
+
 import { getImagesByBuildingId } from '$lib/server/db/queries/images';
+import { removeBuilding } from '$lib/server/db/queries/building';
 
 export const GET: RequestHandler = async ({ url }) => {
-	const type = url.searchParams.get('type');
-	const page = url.searchParams.get('page');
-	const sortBy = url.searchParams.get('sortBy') as SortBy;
-	const floors = url.searchParams.getAll('floor');
-	const finishes = url.searchParams.getAll('finish');
-	const sizes = url.searchParams.getAll('size');
-	const veranda = url.searchParams.get('veranda');
+	const { buildings, totalCount, error: err } = await handleGetBuildingsByType(url);
 
-	const typeResult = z.enum(BuildingType).safeParse(type?.toUpperCase());
-	if (!typeResult.success) return error(404);
-
-	const pageResult = z.coerce.number().safeParse(page);
-
-	const parsedFloors = floors.map((f) => Number(f)).filter((f) => !isNaN(f));
-	const parsedFinishes = finishes.filter(
-		(f) =>
-			f == FinishType.WARM_100 ||
-			f == FinishType.COLD ||
-			f == FinishType.WARM_150 ||
-			f == FinishType.WARM_200
-	);
-
-	const { buildings, totalCount } = await getBuildingsByType(typeResult.data, {
-		floors: parsedFloors,
-		finishes: parsedFinishes,
-		sizes,
-		page: pageResult.data,
-		veranda,
-		sortBy
-	});
+	if (err) throw error(err.status, err.message);
 
 	return json({ buildings, totalCount });
 };
