@@ -14,12 +14,19 @@
 	import type { ClassValue } from 'svelte/elements';
 
 	let {
+		uploadedImages,
 		onChangeImages,
 		class: className
-	}: { onChangeImages: (file: File[]) => void; class?: ClassValue } = $props();
+	}: {
+		uploadedImages: File[];
+		onChangeImages: (file: File[]) => void;
+		class?: ClassValue;
+	} = $props();
 
-	let images: File[] = $state([]);
+	let images: File[] = $derived(uploadedImages);
 	let imageIndex = $state(0);
+
+	$inspect(images);
 
 	let previews = $derived.by(() => {
 		if (!images || images.length === 0) {

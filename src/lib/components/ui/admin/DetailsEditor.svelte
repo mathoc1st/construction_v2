@@ -6,9 +6,13 @@
 	import { getBuildingTypeName, getFinishTypeName } from '$lib/utils';
 	import z from 'zod';
 
-	let { onSaveBuilding }: { onSaveBuilding: (building: BuildingDto) => void } = $props();
+	let {
+		savedBuilding,
+		onSaveBuilding
+	}: { savedBuilding?: BuildingDto | null; onSaveBuilding: (building: BuildingDto) => void } =
+		$props();
 
-	let building: BuildingDto = $state({});
+	let building: BuildingDto = $state(savedBuilding || {});
 	let saveError: string = $state('');
 	let isSaved: boolean = $state(false);
 

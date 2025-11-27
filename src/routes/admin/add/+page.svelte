@@ -68,25 +68,25 @@
 </script>
 
 <section class="mx-auto flex max-w-[1440px] gap-6 px-5 py-20 max-[1100px]:flex-col">
-	<ImageEditor onChangeImages={handleChangeImages} />
+	<ImageEditor {uploadedImages} onChangeImages={handleChangeImages} />
 	<div class="flex basis-1/2 flex-col gap-8 max-[1300px]:items-center">
 		<DetailsEditor onSaveBuilding={handleSaveBuilding} />
 		<FinishesEditor onSaveFinishes={handleSaveFinishes} />
+		{#if uploadError}
+			<h4 class="text-center text-lg text-red-500">Ошибка</h4>
+			<p class="mt-4 text-center text-red-400">{uploadError}</p>
+		{/if}
+		{#if uploadSuccess}
+			<h4 class="text-center text-lg text-green-600">Новое строение было успешно добавлено!</h4>
+		{/if}
+		{#if savedBuilding && savedFinishes.length > 0 && uploadedImages.length > 0}
+			<button
+				onclick={handleSubmit}
+				class="bg-dark-brown text-off-white mx-auto mt-12 block w-[50%] rounded-2xl px-6 py-2 text-xl"
+				>Готово</button
+			>
+		{/if}
 	</div>
-	{#if uploadError}
-		<h4 class="text-center text-lg text-red-500">Ошибка</h4>
-		<p class="mt-4 text-center text-red-400">{uploadError}</p>
-	{/if}
-	{#if uploadSuccess}
-		<h4 class="text-center text-lg text-green-600">Новое строение было успешно добавлено!</h4>
-	{/if}
-	{#if savedBuilding && savedFinishes.length > 0 && uploadedImages.length > 0}
-		<button
-			onclick={handleSubmit}
-			class="bg-dark-brown text-off-white mx-auto block rounded-2xl px-6 py-2 text-xl"
-			>Готово</button
-		>
-	{/if}
 </section>
 
 <!-- <section class="mt-26 mb-26">

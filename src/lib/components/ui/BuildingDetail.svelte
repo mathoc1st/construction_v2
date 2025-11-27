@@ -33,9 +33,9 @@
 	}
 </script>
 
-<div class="flex flex-col justify-center max-[1300px]:items-center">
+<div class="flex basis-1/2 flex-col justify-center max-[1300px]:items-center">
 	{#if isAdmin}
-		<div class="flex flex-wrap justify-between">
+		<div class="flex flex-wrap gap-6">
 			<a
 				href={`/admin/edit/${building.id}`}
 				class="hover:bg-light-brown hover:text-dark-olive group bg-dark-olive text-off-white flex max-w-max items-center gap-2 rounded-2xl p-2 text-lg"

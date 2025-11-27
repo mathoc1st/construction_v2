@@ -5,9 +5,12 @@
 	import FinishTabEditor from './FinishTabEditor.svelte';
 	import Icon from '@iconify/svelte';
 
-	let { onSaveFinishes }: { onSaveFinishes: (finishes: FinishDto[]) => void } = $props();
+	let {
+		savedFinishes,
+		onSaveFinishes
+	}: { savedFinishes?: FinishDto[]; onSaveFinishes: (finishes: FinishDto[]) => void } = $props();
 
-	let finishes: FinishDto[] = $state([]);
+	let finishes: FinishDto[] = $state(savedFinishes || []);
 	let selectedFinish: FinishType = $state(FinishType.COLD);
 	let selectedTab: string | undefined = $state();
 	let isSaved: boolean = $state(false);

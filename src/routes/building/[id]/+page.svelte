@@ -6,7 +6,7 @@
 	const { data: building }: PageProps = $props();
 </script>
 
-<section class="mx-auto mt-26 mb-26 flex max-w-[1440px] justify-center px-5">
+<section class="mx-auto mt-26 mb-26 max-w-[1440px] px-5">
 	<section class="flex gap-6 max-[1300px]:flex-col">
 		<BuildingCarousel buildingImages={building.images} />
 		<BuildingDetail {building} isAdmin={building.isAdmin} />
