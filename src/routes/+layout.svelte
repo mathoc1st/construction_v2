@@ -15,9 +15,7 @@
 
 <Header isAdmin={data.isAdmin}></Header>
 
-<div class="mx-auto flex max-w-[1440px] flex-col items-center px-5">
-	{@render children()}
-</div>
+{@render children()}
 
 <Footer />
 
