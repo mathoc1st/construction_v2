@@ -23,7 +23,10 @@ export type ImageDto = {
 };
 
 export const buildingOptionsSchema = z.object({
-	type: z.enum(BuildingType).nonoptional(),
+	type: z.preprocess(
+		(val) => (typeof val === 'string' ? val.toUpperCase() : val),
+		z.enum(BuildingType)
+	),
 	page: z
 		.string()
 		.regex(/^\d+$/)

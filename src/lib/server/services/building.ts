@@ -43,6 +43,9 @@ export async function handleGetBuildingsByType(url: URL) {
 		veranda
 	});
 
+	console.log(type);
+	console.log(parsedOptions);
+
 	if (!parsedOptions.success)
 		return {
 			buildings: null,
