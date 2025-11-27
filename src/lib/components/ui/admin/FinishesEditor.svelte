@@ -12,11 +12,16 @@
 	let selectedTab: string | undefined = $state();
 	let isSaved: boolean = $state(false);
 
-	function handleSaveFinishes(finishes: FinishDto[]) {
+	function handleSaveFinishes() {
 		if (!finishes || finishes.length === 0) return;
 		for (const finish of finishes) {
-			if (!finish.options || finish.options.length === 0 || !finish.price) return;
+			if (!finish.options || finish.options.length === 0 || !finish.price || finish.price === 0) {
+				finishes = finishes.filter((f) => f !== finish);
+			}
 		}
+
+		if (finishes.length === 0) return;
+
 		onSaveFinishes(finishes);
 		isSaved = true;
 	}
@@ -64,6 +69,8 @@
 
 		finishes[index].price = price;
 	}
+
+	$inspect(finishes);
 </script>
 
 {#if !isSaved}
@@ -114,6 +121,7 @@
 						<FinishTabEditor
 							isOpen={i === 0}
 							finishType={finish.type}
+							price={finish.price}
 							options={finish.options}
 							onAddOption={handleAddOption}
 							onDeleteOption={handleDeleteOption}
@@ -165,7 +173,7 @@
 			{#if !isSaved}
 				<button
 					class="bg-dark-olive text-off-white mt-8 rounded-2xl p-2 text-lg"
-					onclick={() => handleSaveFinishes(finishes)}>Сохранить</button
+					onclick={() => handleSaveFinishes()}>Сохранить</button
 				>
 			{:else}
 				<button

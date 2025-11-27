@@ -12,6 +12,7 @@
 		onDeleteFinish,
 		onPriceChange,
 		options,
+		price,
 		finishType,
 		isOpen = false
 	}: {
@@ -20,6 +21,7 @@
 		onDeleteFinish: (finishType: FinishType) => void;
 		onPriceChange: (finishType: FinishType, price: number) => void;
 		options: FinishOptionDto[] | undefined;
+		price: number | undefined;
 		finishType: FinishType;
 		isOpen?: boolean;
 	} = $props();
@@ -86,6 +88,7 @@
 					type="number"
 					name="price"
 					id="price"
+					value={price}
 					class={inputText()}
 					autocomplete="off"
 					onchange={(e) => {
