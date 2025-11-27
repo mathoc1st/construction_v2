@@ -40,12 +40,14 @@
 				<!-- <li class={navLi()}>
 					<a href="/works" class={navLink()}>Наши работы</a>
 				</li> -->
-				<!-- <li class={navLi()}>
-					<a href="/" class={navLink()}>О нас</a>
-				</li> -->
+
 				<li class={navLi()}>
 					<a href="/#contacts" class={navLink()}>Контакты</a>
 				</li>
+				{#if isAdmin}<li class={navLi()}>
+						<a href="/admin/add" class={navLink()}>Добавить</a>
+					</li>
+				{/if}
 			</ul>
 		</nav>
 		<div class="text-off-white flex h-full items-center gap-2 max-[1200px]:hidden">
@@ -89,6 +91,10 @@
 			<li class={navLi({ device: 'mobile' })}>
 				<a href="/#contacts" class={navLink()} onclick={() => (isDrawerOpen = false)}>Контакты</a>
 			</li>
+			{#if isAdmin}<li class={navLi({ device: 'mobile' })}>
+					<a href="/admin/add" class={navLink()} onclick={() => (isDrawerOpen = false)}>Добавить</a>
+				</li>
+			{/if}
 		</ul>
 	</nav>
 	<div class="text-off-white mt-14 flex h-full items-center justify-center gap-2">
