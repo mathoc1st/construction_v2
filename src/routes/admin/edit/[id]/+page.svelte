@@ -29,7 +29,7 @@
 	let uploadSuccess: boolean = $state(false);
 
 	onMount(async () => {
-		uploadedImages = (await getImages(data.building.images)).reverse();
+		uploadedImages = await getImages(data.building.images);
 	});
 
 	async function getImages(images: Image[]) {

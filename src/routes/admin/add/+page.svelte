@@ -88,14 +88,3 @@
 		{/if}
 	</div>
 </section>
-
-<!-- <section class="mt-26 mb-26">
-	<div class="flex gap-6 max-[1300px]:flex-col">
-		
-		<div>
-			<DetailsEditor />
-			<FinishesEditor {onSaveFinishes} />
-		</div>
-	</div>
-	
-</section> -->
