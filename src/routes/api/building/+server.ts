@@ -3,8 +3,10 @@ import type { RequestHandler } from './$types';
 import { type Building, type BuildingDto, type Finish, type FinishDto } from '$lib/types';
 import {
 	addBuilding,
-	delteImagesFromDisk,
+	emptyTrash,
 	handleGetBuildingsByType,
+	recoverImages,
+	trashImages,
 	updateBuilding
 } from '$lib/server/services/building';
 
@@ -76,8 +78,15 @@ export const DELETE: RequestHandler = async ({ url }) => {
 
 	const images = await getImagesByBuildingId(id);
 
-	delteImagesFromDisk(images);
-	await removeBuilding(id);
+	trashImages(images);
+
+	try {
+		await removeBuilding(id);
+	} catch {
+		recoverImages(images);
+	}
+
+	emptyTrash();
 
 	return json({ status: 200 });
 };

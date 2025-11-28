@@ -5,7 +5,6 @@ import {
 	type FinishDto,
 	type ParsedBuilding,
 	type ParsedFinish,
-	type Image,
 	buildingOptionsSchema
 } from '$lib/types';
 import { createBuilding, updateBuildingById, getBuildingsByType } from '../db/queries/building';
@@ -14,6 +13,7 @@ import path from 'path';
 import fs from 'fs';
 
 import { v4 as uuidv4 } from 'uuid';
+import { getImagesByBuildingId } from '../db/queries/images';
 
 type ServiceError = {
 	code: number;
@@ -181,9 +181,11 @@ export async function updateBuilding(
 
 	if (parseImagesError) return { error: parseImagesError };
 
-	const savedImages = await saveImagesToDisk(images);
+	const oldImages = await getImagesByBuildingId(id);
 
-	delteImagesFromDisk(images);
+	trashImages(oldImages);
+
+	const savedImages = await saveImagesToDisk(images);
 
 	const parsedFinishesResult = parseFinishes(finishes);
 
@@ -196,25 +198,96 @@ export async function updateBuilding(
 		parsedFinishesResult.finishes
 	);
 
-	if (updateBuildingError) return { error: { code: 400, message: 'Не удалось обновить!' } };
+	if (updateBuildingError) {
+		trashImages(savedImages);
+		recoverImages(oldImages);
+		return { error: { code: 400, message: 'Не удалось обновить!' } };
+	}
 
+	emptyTrash();
 	return { error: null };
 }
 
-export function delteImagesFromDisk(imageFiles: File[] | Image[]) {
-	if (!fs.existsSync(IMAGES_DIR)) {
+type ImageLike = File | { filename: string } | string;
+
+export function trashImages(images: ImageLike[]) {
+	if (!fs.existsSync(IMAGES_DIR)) return;
+
+	const trashDir = path.join(IMAGES_DIR, '_trash');
+	if (!fs.existsSync(trashDir)) fs.mkdirSync(trashDir, { recursive: true });
+
+	for (const img of images) {
+		const filename = extractFilename(img);
+		if (!filename) continue;
+
+		const src = path.join(IMAGES_DIR, filename);
+		const dest = path.join(trashDir, filename);
+
+		if (fs.existsSync(src)) {
+			fs.renameSync(src, dest);
+		}
+	}
+}
+
+function extractFilename(img: ImageLike): string | null {
+	// <File>
+	if (img instanceof File) {
+		if (img.name && img.size > 0) return img.name;
+		return null;
+	}
+
+	// { filename: string }
+	if (typeof img === 'object' && 'filename' in img) {
+		return img.filename;
+	}
+
+	// string (the filename itself)
+	if (typeof img === 'string') {
+		return img;
+	}
+
+	return null;
+}
+
+export function recoverImages(images: ImageLike[]) {
+	if (!fs.existsSync(IMAGES_DIR)) return;
+
+	const trashDir = path.join(IMAGES_DIR, '_trash');
+	if (!fs.existsSync(trashDir)) return;
+
+	for (const img of images) {
+		const filename = extractFilename(img);
+		if (!filename) continue;
+
+		const src = path.join(trashDir, filename);
+		const dest = path.join(IMAGES_DIR, filename);
+
+		if (fs.existsSync(src)) {
+			fs.renameSync(src, dest);
+		}
+	}
+}
+
+export function emptyTrash() {
+	const trashDir = path.join(IMAGES_DIR, '_trash');
+
+	// Trash folder doesn't exist → nothing to do
+	try {
+		fs.accessSync(trashDir);
+	} catch {
 		return;
 	}
 
-	for (const image of imageFiles) {
-		if (image instanceof File) {
-			if (!(image instanceof File) || image.name === '' || image.size <= 0) continue;
+	const files = fs.readdirSync(trashDir);
 
-			const filePath = path.join(IMAGES_DIR, image.name);
-			fs.rmSync(filePath, { force: true });
+	for (const file of files) {
+		const filePath = path.join(trashDir, file);
+		const stat = fs.lstatSync(filePath);
+
+		if (stat.isDirectory()) {
+			fs.rmSync(filePath, { recursive: true, force: true });
 		} else {
-			const filePath = path.join(IMAGES_DIR, image.filename);
-			fs.rmSync(filePath, { force: true });
+			fs.unlinkSync(filePath);
 		}
 	}
 }
