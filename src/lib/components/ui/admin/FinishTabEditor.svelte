@@ -21,7 +21,12 @@
 	});
 
 	let finish: FinishDto = $derived(ffinish);
-	let isSaved: boolean = $state(ffinish !== null);
+	let isSaved: boolean = $state(
+		ffinish !== null &&
+			ffinish.options !== undefined &&
+			ffinish.price !== undefined &&
+			ffinish.options.length > 0
+	);
 	let isOptionAvailable: boolean = $state(false);
 	let optionDescription: string = $state('');
 
