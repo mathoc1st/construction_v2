@@ -37,7 +37,7 @@
 <div class="relative flex basis-1/2 flex-col justify-center max-[1300px]:items-center">
 	{#if isAdmin}
 		<button
-			class="bg-light-brown text-off-white hover:bg-dark-olive absolute top-0 right-0 flex max-w-max items-center gap-1 self-end rounded-2xl p-2 text-lg transition"
+			class="bg-light-brown text-off-white hover:bg-dark-olive absolute -top-4 right-0 flex max-w-max items-center gap-1 self-end rounded-2xl p-2 text-lg transition"
 			><Icon icon="carbon:settings" class="size-6" /></button
 		>
 		<Dropdown simple class="bg-dark-olive ">
@@ -182,7 +182,7 @@
 		Номер данного проекта <span class="text-dark-olive">{building.id}</span>. <br /> Позвоните на номер
 		указаный ниже и назовите номер этого проекта оператору.
 	</h2>
-	<h3 class="text-off-white text-lg font-medium">+7 (926) 656-94-25</h3>
+	<h3 class="text-off-white text-2xl font-medium">+7 (926) 656-94-25</h3>
 </Modal>
 
 <style>
