@@ -1,18 +1,15 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { getBuildingDetailsByType, getBuildingsByType } from '$lib/server/db/queries/building';
-import z from 'zod';
-import { BuildingType } from '$lib/types';
+import { buildingOptionsSchema } from '$lib/types';
 
 export const load: PageServerLoad = async ({ params }) => {
-	const type = params.type;
+	const parsedOptions = buildingOptionsSchema.safeParse({ type: params.type });
 
-	const result = z.enum(BuildingType).safeParse(type.toUpperCase());
+	if (!parsedOptions.success) return error(404);
 
-	if (!result.success) return error(404);
-
-	const { buildings, totalCount } = await getBuildingsByType(result.data);
-	const details = await getBuildingDetailsByType(result.data);
+	const { buildings, totalCount } = await getBuildingsByType(parsedOptions.data);
+	const details = await getBuildingDetailsByType(parsedOptions.data.type);
 
 	if (!buildings || !details) return error(404);
 
