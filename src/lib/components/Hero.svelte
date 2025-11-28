@@ -42,7 +42,7 @@
 				</h4>
 			</div>
 		</div>
-		<div class="h-[475px] max-h-full max-w-[660px] basis-1/2">
+		<div class="mx-auto h-[475px] max-h-full max-w-[660px] basis-1/2">
 			<img
 				src="images/hero-image-upscale.jpg"
 				alt=""

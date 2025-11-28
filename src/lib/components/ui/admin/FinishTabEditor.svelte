@@ -107,8 +107,6 @@
 	{/snippet}
 
 	{#if !isSaved}
-		<h3 class="mt-6 mb-3 text-2xl">Характеристика дома</h3>
-		<div class="border-light-olive bg-light-olive mb-5 h-px w-40 border"></div>
 		<div class="flex flex-col items-start gap-4">
 			<button
 				onclick={() => handleDeleteFinish(finish.type)}
@@ -130,6 +128,12 @@
 			</div>
 			<h4 class="mt-6 flex w-max flex-col rounded-2xl text-xl font-medium">Описание</h4>
 			<div class="flex flex-col gap-2">
+				<p class="flex items-start gap-2 text-lg">
+					<Icon
+						icon="ic:round-check-circle-outline"
+						class="text-dark-brown mt-1 size-6 shrink-0"
+					/>Характеристика дома
+				</p>
 				{#each finish.options as option, i (i)}
 					<lable class="flex items-start gap-2 text-lg">
 						<Icon
@@ -210,8 +214,12 @@
 		</div>
 	{:else}
 		<div>
-			<h3 class="mt-6 mb-3 text-2xl">Характеристика дома</h3>
-			<div class="border-light-olive bg-light-olive mb-5 h-px w-40 border"></div>
+			<p class="flex items-start gap-2 text-lg">
+				<Icon
+					icon="ic:round-check-circle-outline"
+					class="text-dark-brown mt-1 size-6 shrink-0"
+				/>Характеристика дома
+			</p>
 			{#each finish.options as finishOption}
 				<p class="flex items-start gap-2 text-lg">
 					<Icon
