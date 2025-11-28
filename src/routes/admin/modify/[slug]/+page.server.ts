@@ -6,12 +6,10 @@ export const load: PageServerLoad = async ({ params }) => {
 	const slug = params.slug;
 
 	if (slug === 'new') {
-		return {};
+		return { building: null };
 	}
 
 	const id = Number.parseInt(slug);
-
-	console.log(slug);
 
 	if (Number.isNaN(slug)) return error(404);
 

@@ -45,7 +45,7 @@
 					<a href="/#contacts" class={navLink()}>Контакты</a>
 				</li>
 				{#if isAdmin}<li class={navLi()}>
-						<a href="/admin/modify/new" class={navLink()}>Добавить</a>
+						<a href="/admin/modify/new" class={navLink()} data-sveltekit-reload>Добавить</a>
 					</li>
 				{/if}
 			</ul>
@@ -82,18 +82,15 @@
 			<li class={navLi({ device: 'mobile' })}>
 				<a href="/catalog" class={navLink()} onclick={() => (isDrawerOpen = false)}>Каталог</a>
 			</li>
-			<!-- <li class={navLi({ device: 'mobile' })}>
-				<a href="/works" class={navLink()} onclick={() => (isDrawerOpen = false)}>Наши работы</a>
-			</li> -->
-			<!-- <li class={navLi({ device: 'mobile' })}>
-				<a href="/about" class={navLink()} onclick={() => (isDrawerOpen = false)}>О нас</a>
-			</li> -->
 			<li class={navLi({ device: 'mobile' })}>
 				<a href="/#contacts" class={navLink()} onclick={() => (isDrawerOpen = false)}>Контакты</a>
 			</li>
 			{#if isAdmin}<li class={navLi({ device: 'mobile' })}>
-					<a href="/admin/modify/new" class={navLink()} onclick={() => (isDrawerOpen = false)}
-						>Добавить</a
+					<a
+						href="/admin/modify/new"
+						data-sveltekit-reload
+						class={navLink()}
+						onclick={() => (isDrawerOpen = false)}>Добавить</a
 					>
 				</li>
 			{/if}

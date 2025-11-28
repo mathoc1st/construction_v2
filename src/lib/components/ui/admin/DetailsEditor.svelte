@@ -14,7 +14,7 @@
 
 	let building: BuildingDto = $state(savedBuilding || {});
 	let saveError: string = $state('');
-	let isSaved: boolean = $state(false);
+	let isSaved: boolean = $state(savedBuilding !== null);
 
 	const lable = tv({
 		variants: {

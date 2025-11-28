@@ -16,12 +16,6 @@
 
 	let finishes: FinishDto[] = $derived(savedFinishes);
 
-	// let addedFinishTypes: FinishType[] = $derived.by(() => {
-	// 	if (savedFinishes) return savedFinishes.map((f) => f.type);
-	// 	let f: FinishType[] = $state([]);
-	// 	return f;
-	// });
-
 	let selectedFinish: FinishType = $state(FinishType.COLD);
 	let selectedTab: string | undefined = $state();
 
@@ -60,8 +54,6 @@
 
 		if (finishes.length > 0) selectedTab = finishes[finishes.length - 1].type;
 	}
-
-	$inspect(finishes);
 </script>
 
 <div

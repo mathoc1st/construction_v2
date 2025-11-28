@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation';
+	import { invalidateAll, refreshAll } from '$app/navigation';
 	import DetailsEditor from '$lib/components/ui/admin/DetailsEditor.svelte';
 	import FinishesEditor from '$lib/components/ui/admin/FinishesEditor.svelte';
 	import ImageEditor from '$lib/components/ui/admin/ImageEditor.svelte';
@@ -14,7 +14,7 @@
 	import { onMount } from 'svelte';
 	import type { PageProps } from './$types';
 
-	let { data }: PageProps = $props();
+	let { data, params }: PageProps = $props();
 
 	let savedBuilding: ParsedBuilding | null = $state(data.building ?? null);
 	let savedImages: File[] = $state([]);
@@ -93,6 +93,7 @@
 			uploadSuccess = false;
 			return;
 		}
+
 		await invalidateAll();
 		window.location.reload();
 	}

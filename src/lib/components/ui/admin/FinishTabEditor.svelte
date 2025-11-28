@@ -1,18 +1,10 @@
 <script lang="ts">
-	import {
-		FinishType,
-		type FinishDto,
-		type FinishOption,
-		type FinishOptionDto,
-		type ParsedFinish
-	} from '$lib/types';
+	import { FinishType, type FinishDto, type FinishOptionDto } from '$lib/types';
 	import { getFinishTypeName, getTabIcon, prettyPrice } from '$lib/utils';
 	import Icon from '@iconify/svelte';
 
 	import { TabItem, Tooltip } from 'flowbite-svelte';
-	import { onMount } from 'svelte';
 	import { tv } from 'tailwind-variants';
-	import { fi } from 'zod/locales';
 
 	let {
 		finish: ffinish,
@@ -29,7 +21,7 @@
 	});
 
 	let finish: FinishDto = $derived(ffinish);
-	let isSaved: boolean = $state(false);
+	let isSaved: boolean = $state(ffinish !== null);
 	let isOptionAvailable: boolean = $state(false);
 	let optionDescription: string = $state('');
 
