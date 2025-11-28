@@ -1,187 +1,115 @@
 <script lang="ts">
-	import { divider, TabItem, Tabs } from 'flowbite-svelte';
-	import { FinishType, type FinishDto, type FinishOptionDto } from '$lib/types';
-	import { getFinishTypeName, getTabIcon, prettyPrice } from '$lib/utils';
+	import { Tabs } from 'flowbite-svelte';
+	import { finishSchema, FinishType, type FinishDto, type ParsedFinish } from '$lib/types';
+	import { getFinishTypeName } from '$lib/utils';
 	import FinishTabEditor from './FinishTabEditor.svelte';
-	import Icon from '@iconify/svelte';
 
 	let {
 		savedFinishes,
-		onSaveFinishes
-	}: { savedFinishes?: FinishDto[]; onSaveFinishes: (finishes: FinishDto[]) => void } = $props();
+		onDeleteFinish,
+		onSaveFinish
+	}: {
+		savedFinishes: FinishDto[];
+		onDeleteFinish: (finishType: FinishType) => void;
+		onSaveFinish: (finish: ParsedFinish) => void;
+	} = $props();
 
-	let finishes: FinishDto[] = $state(savedFinishes || []);
+	let finishes: FinishDto[] = $derived(savedFinishes);
+
+	// let addedFinishTypes: FinishType[] = $derived.by(() => {
+	// 	if (savedFinishes) return savedFinishes.map((f) => f.type);
+	// 	let f: FinishType[] = $state([]);
+	// 	return f;
+	// });
+
 	let selectedFinish: FinishType = $state(FinishType.COLD);
 	let selectedTab: string | undefined = $state();
-	let isSaved: boolean = $state(false);
 
-	function handleSaveFinishes() {
-		if (!finishes || finishes.length === 0) return;
-		for (const finish of finishes) {
-			if (!finish.options || finish.options.length === 0 || !finish.price || finish.price === 0) {
-				finishes = finishes.filter((f) => f !== finish);
-			}
-		}
+	function handleAddFinish() {
+		if (finishes.some((f) => f.type === selectedFinish)) return;
 
-		if (finishes.length === 0) return;
+		finishes.push({ type: selectedFinish });
+		selectedTab = selectedFinish;
 
-		onSaveFinishes(finishes);
-		isSaved = true;
-	}
-
-	function handleEdit() {
-		isSaved = false;
-	}
-
-	function handleAddOption(finishType: FinishType, option: FinishOptionDto) {
-		const index = finishes.findIndex((f) => f.type === finishType);
-		if (index < 0) return;
-
-		finishes[index].options ??= [];
-
-		finishes[index].options.push(option);
-
-		finishes[index].options.sort((a, _) => {
-			if (a.isAvailable) {
-				return -1;
-			} else return 1;
+		finishes.sort((a, b) => {
+			const order = Object.keys(FinishType);
+			return order.indexOf(a.type) - order.indexOf(b.type);
 		});
 	}
 
-	function handleDeleteOption(finishType: FinishType, optionIndex: number) {
-		const index = finishes.findIndex((f) => f.type === finishType);
-		if (index < 0 || !finishes[index].options) return;
+	function handleSaveFinish(finish: FinishDto) {
+		const parsedFinishResult = finishSchema.safeParse(finish);
 
-		if (index < 0 && index >= finishes[index].options.length) return;
+		if (!parsedFinishResult.success) return;
 
-		finishes[index].options.splice(optionIndex, 1);
+		const index = finishes.findIndex((f) => f.type === parsedFinishResult.data.type);
+
+		if (index < 0) {
+			finishes.push(parsedFinishResult.data);
+		} else {
+			finishes[index] = parsedFinishResult.data;
+		}
+
+		onSaveFinish(parsedFinishResult.data);
 	}
 
 	function handleDeleteFinish(finishType: FinishType) {
-		const index = finishes.findIndex((f) => f.type === finishType);
-		if (index < 0) return;
+		finishes = finishes.filter((f) => f.type !== finishType);
 
-		finishes.splice(index, 1);
+		onDeleteFinish(finishType);
 
-		if (index > 0) selectedTab = finishes[index - 1].type;
+		if (finishes.length > 0) selectedTab = finishes[finishes.length - 1].type;
 	}
 
-	function handlePriceChange(finishType: FinishType, price: number) {
-		const index = finishes.findIndex((f) => f.type === finishType);
-		if (index < 0) return;
-
-		finishes[index].price = price;
-	}
+	$inspect(finishes);
 </script>
 
-{#if !isSaved}
-	<div
-		class="relative mt-4 flex max-w-max flex-col max-[1300px]:items-center
+<div
+	class="relative mt-4 flex max-w-max flex-col max-[1300px]:items-center
 	"
+>
+	<label
+		for="finish"
+		class="text-dark-olive mt-7 text-2xl font-medium max-[1300px]:mt-4 max-[1300px]:text-center max-[600px]:text-xl"
+		>Комплектация</label
 	>
-		<label
-			for="finish"
-			class="text-dark-olive mt-7 text-2xl font-medium max-[1300px]:mt-4 max-[1300px]:text-center max-[600px]:text-xl"
-			>Комплектация</label
-		>
-		<select
-			class="text-dark-olive mt-4 rounded-2xl bg-transparent"
-			id="type"
-			name="type"
-			bind:value={selectedFinish}
-			required
-		>
-			{#each Object.values(FinishType) as finishType}
-				<option disabled={finishes.some((f) => f.type === finishType)} value={finishType}
-					>{getFinishTypeName(finishType)}</option
-				>
-			{/each}
-		</select>
-
-		<button
-			type="button"
-			onclick={() => {
-				if (!finishes.some((f) => f.type === selectedFinish))
-					finishes.push({ type: selectedFinish });
-			}}
-			class="bg-dark-olive text-off-white hover:bg-light-brown mt-4 h-max w-max rounded-2xl px-4 py-2 text-lg"
-			>Добавить</button
-		>
-	</div>
-{/if}
-<div class="w-max">
-	{#key isSaved}
-		{#if finishes && finishes.length > 0}
-			<Tabs
-				selected={selectedTab}
-				class="group grid w-max grid-cols-2 max-[600px]:mx-auto max-[600px]:grid-cols-1"
-				classes={{ divider: 'bg-light-olive w-full' }}
+	<select
+		class="text-dark-olive mt-4 rounded-2xl bg-transparent disabled:cursor-not-allowed!"
+		id="type"
+		name="type"
+		disabled={Object.values(FinishType).length === finishes.length}
+		bind:value={selectedFinish}
+		required
+	>
+		{#each Object.values(FinishType) as finishType}
+			<option hidden={finishes.some((f) => f.type === finishType)} value={finishType}
+				>{getFinishTypeName(finishType)}</option
 			>
-				{#if !isSaved}
-					{#each finishes as finish, i (i)}
-						<FinishTabEditor
-							isOpen={i === 0}
-							finishType={finish.type}
-							price={finish.price}
-							options={finish.options}
-							onAddOption={handleAddOption}
-							onDeleteOption={handleDeleteOption}
-							onDeleteFinish={handleDeleteFinish}
-							onPriceChange={handlePriceChange}
-						/>
-					{/each}
-				{:else}
-					{#each finishes as finish, i (i)}
-						<TabItem
-							open
-							inactiveClass="hover:bg-dark-olive rounded-t-lg h-full group w-full p-4"
-							activeClass="h-full bg-dark-brown text-off-white! rounded-t-lg group w-full p-4"
-						>
-							{#snippet titleSlot()}
-								<div class="flex items-center gap-1 max-[650px]:justify-center">
-									<Icon
-										icon={getTabIcon(finish.type)}
-										class=" group-hover:text-off-white size-8 shrink-0"
-									/>
-									<p class=" group-hover:text-off-white text-lg">
-										{getFinishTypeName(finish.type)}
-									</p>
-								</div>
-							{/snippet}
-							<div>
-								{#each finish.options as finishOption}
-									<p class="flex items-start gap-2 text-lg">
-										<Icon
-											icon={finishOption.isAvailable
-												? 'ic:round-check-circle-outline'
-												: 'material-symbols:cancel-outline-rounded'}
-											class="text-dark-brown mt-1 size-6 shrink-0"
-										/>{finishOption.description}
-									</p>
-								{/each}
+		{/each}
+	</select>
 
-								<div class="mt-6 flex flex-col gap-4 max-[1300px]:items-center">
-									<h4 class="w-max rounded-2xl text-xl font-medium">
-										Цена: {prettyPrice.format(finish.price!)}
-									</h4>
-								</div>
-							</div>
-						</TabItem>
-					{/each}
-				{/if}
-			</Tabs>
-
-			{#if !isSaved}
-				<button
-					class="bg-dark-olive text-off-white mt-8 rounded-2xl p-2 text-lg"
-					onclick={() => handleSaveFinishes()}>Сохранить</button
-				>
-			{:else}
-				<button
-					class="bg-dark-olive text-off-white mt-8 block rounded-2xl p-2 text-lg max-[600px]:mx-auto"
-					onclick={() => handleEdit()}>Редактировать</button
-				>
-			{/if}
-		{/if}
-	{/key}
+	<button
+		type="button"
+		onclick={handleAddFinish}
+		disabled={Object.values(FinishType).length === finishes.length}
+		class="bg-dark-olive text-off-white hover:bg-light-brown disabled:bg-off-white disabled:border-light-olive disabled:text-dark-olive mt-4 h-max w-max rounded-2xl px-4 py-2 text-lg disabled:cursor-not-allowed! disabled:border"
+		>Добавить</button
+	>
+</div>
+<div class="w-max">
+	{#if finishes && finishes.length > 0}
+		<Tabs
+			selected={selectedTab}
+			class="group grid w-max grid-cols-2 max-[600px]:mx-auto max-[600px]:grid-cols-1"
+			classes={{ divider: 'bg-light-olive w-full' }}
+		>
+			{#each finishes as finish, i (finish.type)}
+				<FinishTabEditor
+					{finish}
+					onSaveFinish={handleSaveFinish}
+					onDeleteFinish={handleDeleteFinish}
+				/>
+			{/each}
+		</Tabs>
+	{/if}
 </div>

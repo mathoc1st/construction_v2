@@ -45,7 +45,7 @@
 					<a href="/#contacts" class={navLink()}>Контакты</a>
 				</li>
 				{#if isAdmin}<li class={navLi()}>
-						<a href="/admin/add" class={navLink()}>Добавить</a>
+						<a href="/admin/modify/new" class={navLink()}>Добавить</a>
 					</li>
 				{/if}
 			</ul>
@@ -92,7 +92,9 @@
 				<a href="/#contacts" class={navLink()} onclick={() => (isDrawerOpen = false)}>Контакты</a>
 			</li>
 			{#if isAdmin}<li class={navLi({ device: 'mobile' })}>
-					<a href="/admin/add" class={navLink()} onclick={() => (isDrawerOpen = false)}>Добавить</a>
+					<a href="/admin/modify/new" class={navLink()} onclick={() => (isDrawerOpen = false)}
+						>Добавить</a
+					>
 				</li>
 			{/if}
 		</ul>

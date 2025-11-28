@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import type { getBuildingById } from '$lib/server/db/queries/building';
+	import { FinishType } from '$lib/types';
 	import { getFinishTypeName, getTabIcon, prettyPrice } from '$lib/utils';
 	import Icon from '@iconify/svelte';
 
@@ -42,7 +43,7 @@
 		<Dropdown simple class="bg-dark-olive ">
 			<DropdownItem class="hover:bg-light-brown transition"
 				><a
-					href={`/admin/edit/${building.id}`}
+					href={`/admin/modify/${building.id}`}
 					class="text-off-white flex items-center gap-1 text-base"
 					><Icon icon="solar:pen-linear" class="size-5" />Редактировать</a
 				></DropdownItem
@@ -105,60 +106,68 @@
 		</p>
 	</div>
 
-	<h4 class="text-dark-olive mt-14 mb-8 text-3xl">Комплектация</h4>
-	<Tabs
-		tabStyle="underline"
-		classes={{
-			active: 'bg-light-brown max-[650px]:w-full border-light-olive',
-			divider: 'bg-light-olive'
-		}}
-		ulClass="max-[650px]:flex-col max-[650px]:w-full"
-	>
-		{#each building.finishes as finish}
-			<TabItem
-				open
-				inactiveClass="hover:bg-dark-olive rounded-t-lg h-full group w-full p-4"
-				activeClass="h-full bg-dark-brown text-off-white! rounded-t-lg group w-full p-4"
-			>
-				{#snippet titleSlot()}
-					<div class="flex items-center gap-1 max-[650px]:justify-center">
-						<Icon
-							icon={getTabIcon(finish.type)}
-							class=" group-hover:text-off-white size-8 shrink-0"
-						/>
-						<p class=" group-hover:text-off-white text-lg">
-							{getFinishTypeName(finish.type)}
-						</p>
-					</div>
-				{/snippet}
-				<div>
-					<div class="flex flex-col gap-2">
-						{#each finish.options as finishOption}
-							<p class="flex items-start gap-2 text-lg">
-								<Icon
-									icon={finishOption.isAvailable
-										? 'ic:round-check-circle-outline'
-										: 'material-symbols:cancel-outline-rounded'}
-									class="text-dark-brown mt-1 size-6 shrink-0"
-								/>{finishOption.description}
+	<h4 class="text-dark-olive mt-18 mb-6 text-3xl">Комплектация</h4>
+	<div class="w-max">
+		<Tabs
+			tabStyle="underline"
+			class=" grid w-max grid-cols-2 max-[600px]:mx-auto max-[600px]:grid-cols-1"
+			classes={{ divider: 'bg-light-olive w-full' }}
+		>
+			{#each building.finishes.toSorted((a, b) => {
+				const order = Object.keys(FinishType);
+				return order.indexOf(a.type) - order.indexOf(b.type);
+			}) as finish}
+				<TabItem
+					class="w-full"
+					classes={{
+						button:
+							'w-full p-4 flex justify-start max-[600px]:justify-center hover:bg-dark-olive hover:text-off-white rounded-t-2xl'
+					}}
+					inactiveClass="text-dark-olive"
+					activeClass="w-full h-full text-off-white bg-light-brown"
+				>
+					{#snippet titleSlot()}
+						<div class="flex items-center gap-1 max-[650px]:justify-center">
+							<Icon
+								icon={getTabIcon(finish.type)}
+								class=" group-hover:text-off-white size-8 shrink-0"
+							/>
+							<p class=" group-hover:text-off-white text-lg">
+								{getFinishTypeName(finish.type)}
 							</p>
-						{/each}
-					</div>
+						</div>
+					{/snippet}
+					<div>
+						<div class="flex flex-col gap-2">
+							{#each finish.options as finishOption}
+								<p class="flex items-start gap-2 text-lg">
+									<Icon
+										icon={finishOption.isAvailable
+											? 'ic:round-check-circle-outline'
+											: 'material-symbols:cancel-outline-rounded'}
+										class="mt-1 size-6 shrink-0 {finishOption.isAvailable
+											? 'text-dark-brown'
+											: 'text-light-olive'}"
+									/>{finishOption.description}
+								</p>
+							{/each}
+						</div>
 
-					<div class="mt-6 flex flex-col gap-4 max-[1300px]:items-center">
-						<h4 class="w-max rounded-2xl text-xl font-medium">
-							Цена: {prettyPrice.format(finish.price)}
-						</h4>
-						<button
-							onclick={() => (isModalOpen = !isModalOpen)}
-							class="bg-dark-brown text-off-white hover:bg-dark-olive h-max w-max rounded-2xl px-8 py-4 text-xl font-medium"
-							>Заказать</button
-						>
+						<div class="mt-6 flex flex-col gap-4 max-[1300px]:items-center">
+							<h4 class="w-max rounded-2xl text-xl font-medium">
+								Цена: {prettyPrice.format(finish.price)}
+							</h4>
+							<button
+								onclick={() => (isModalOpen = !isModalOpen)}
+								class="bg-dark-brown text-off-white hover:bg-dark-olive h-max w-max rounded-2xl px-8 py-4 text-xl font-medium"
+								>Заказать</button
+							>
+						</div>
 					</div>
-				</div>
-			</TabItem>
-		{/each}
-	</Tabs>
+				</TabItem>
+			{/each}
+		</Tabs>
+	</div>
 </div>
 
 <Modal

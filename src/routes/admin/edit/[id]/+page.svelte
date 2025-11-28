@@ -1,30 +1,23 @@
 <script lang="ts">
-	import { goto, invalidate, invalidateAll, refreshAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import DetailsEditor from '$lib/components/ui/admin/DetailsEditor.svelte';
 	import FinishesEditor from '$lib/components/ui/admin/FinishesEditor.svelte';
 	import ImageEditor from '$lib/components/ui/admin/ImageEditor.svelte';
 	import {
 		buildingSchema,
-		finishSchema,
 		type BuildingDto,
-		type FinishDto,
 		type ParsedBuilding,
 		type ParsedFinish,
 		type Image
 	} from '$lib/types';
-	import z, { ZodError } from 'zod';
 	import type { PageProps } from './$types';
 	import { onMount } from 'svelte';
-	import { building } from '$app/environment';
 
 	let { data }: PageProps = $props();
 
 	let savedBuilding: ParsedBuilding | null = $state(data.building);
 	let uploadedImages: File[] = $state([]);
 	let savedFinishes: ParsedFinish[] = $state(data.building.finishes);
-
-	let buildingSaved: boolean = $state(false);
-	let finishesSaved: boolean = $state(false);
 
 	let uploadError: string | null = $state(null);
 	let uploadSuccess: boolean = $state(false);
@@ -52,19 +45,9 @@
 			return;
 		}
 
-		buildingSaved = true;
 		savedBuilding = result.data;
 	}
-	function handleSaveFinishes(finishes: FinishDto[]) {
-		const parsedFinishes: ParsedFinish[] = [];
-
-		for (const finish of finishes) {
-			const result = finishSchema.safeParse(finish);
-			if (!result.success) return;
-			parsedFinishes.push(result.data);
-		}
-
-		finishesSaved = true;
+	function handleSaveFinishes(parsedFinishes: ParsedFinish[]) {
 		savedFinishes = parsedFinishes;
 	}
 	function handleChangeImages(files: File[]) {
@@ -107,7 +90,7 @@
 		{#if uploadSuccess}
 			<h4 class="text-center text-lg text-green-600">Новое строение было успешно добавлено!</h4>
 		{/if}
-		{#if savedBuilding && savedFinishes.length > 0 && uploadedImages.length > 0 && buildingSaved && finishesSaved}
+		{#if savedBuilding && savedFinishes.length > 0 && uploadedImages.length > 0}
 			<button
 				onclick={handleSubmit}
 				class="bg-dark-brown text-off-white mx-auto mt-12 block w-[50%] rounded-2xl px-6 py-2 text-xl"

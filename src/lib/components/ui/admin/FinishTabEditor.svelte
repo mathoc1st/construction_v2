@@ -1,65 +1,99 @@
 <script lang="ts">
-	import { FinishType, type FinishDto, type FinishOption, type FinishOptionDto } from '$lib/types';
-	import { getFinishTypeName, getTabIcon } from '$lib/utils';
+	import {
+		FinishType,
+		type FinishDto,
+		type FinishOption,
+		type FinishOptionDto,
+		type ParsedFinish
+	} from '$lib/types';
+	import { getFinishTypeName, getTabIcon, prettyPrice } from '$lib/utils';
 	import Icon from '@iconify/svelte';
 
 	import { TabItem, Tooltip } from 'flowbite-svelte';
+	import { onMount } from 'svelte';
 	import { tv } from 'tailwind-variants';
+	import { fi } from 'zod/locales';
 
 	let {
-		onAddOption,
-		onDeleteOption,
-		onDeleteFinish,
-		onPriceChange,
-		options,
-		price,
-		finishType,
-		isOpen = false
+		finish: ffinish,
+		onSaveFinish,
+		onDeleteFinish
 	}: {
-		onAddOption: (finishType: FinishType, option: FinishOptionDto) => void;
-		onDeleteOption: (finishType: FinishType, index: number) => void;
+		finish: FinishDto;
+		onSaveFinish: (finish: FinishDto) => void;
 		onDeleteFinish: (finishType: FinishType) => void;
-		onPriceChange: (finishType: FinishType, price: number) => void;
-		options: FinishOptionDto[] | undefined;
-		price: number | undefined;
-		finishType: FinishType;
-		isOpen?: boolean;
 	} = $props();
 
 	const inputText = tv({
 		base: 'text-dark-olive placeholder:text-light-olive caret-dark-olive border-light-olive focus:border-dark-brown focus:ring-dark-brown form-input w-fit rounded-2xl bg-transparent'
 	});
 
+	let finish: FinishDto = $derived(ffinish);
+	let isSaved: boolean = $state(false);
 	let isOptionAvailable: boolean = $state(false);
 	let optionDescription: string = $state('');
 
-	function handleAddOption(finishType: FinishType) {
+	function handleAddOption() {
 		if (optionDescription.length === 0) return;
 
-		onAddOption(finishType, { isAvailable: isOptionAvailable, description: optionDescription });
+		if (!finish.options) finish.options = [];
 
-		isOptionAvailable = false;
+		finish.options.push({ isAvailable: isOptionAvailable, description: optionDescription });
+		finish.options.sort((a, _) => {
+			return a.isAvailable === false ? 1 : -1;
+		});
+
 		optionDescription = '';
 	}
 
-	function handleDeleteOption(finishType: FinishType, index: number) {
-		onDeleteOption(finishType, index);
+	function handleSaveFinish() {
+		const priceInput = document.getElementById('price') as HTMLInputElement;
+		const optionInput = document.getElementById('option') as HTMLInputElement;
+
+		if ((!finish.options || finish.options.length === 0) && (!finish.price || finish.price === 0)) {
+			priceInput.classList.add('border-red-500');
+			optionInput.classList.add('border-red-500');
+			priceInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			return;
+		}
+
+		if (finish.options && finish.options.length > 0 && (!finish.price || finish.price === 0)) {
+			priceInput.classList.add('border-red-500');
+			priceInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			return;
+		}
+
+		priceInput.classList.remove('border-red-500');
+
+		if (finish.price && finish.price > 0 && (!finish.options || finish.options.length === 0)) {
+			optionInput.classList.add('border-red-500');
+			optionInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			return;
+		}
+
+		optionInput.classList.remove('border-red-500');
+
+		onSaveFinish(finish);
+		isSaved = true;
+	}
+
+	function handleEditFinish() {
+		isSaved = false;
+	}
+
+	function handleDeleteOption(option: FinishOptionDto) {
+		if (!finish.options) return;
+
+		finish.options = finish.options.filter((o) => o !== option);
 	}
 
 	function handleDeleteFinish(finishType: FinishType) {
 		onDeleteFinish(finishType);
 	}
-
-	function handlePriceChange(event: Event, finishType: FinishType) {
-		const input = event.target as HTMLInputElement;
-
-		onPriceChange(finishType, input.valueAsNumber);
-	}
 </script>
 
 <TabItem
-	open={isOpen}
-	key={finishType}
+	key={finish.type}
 	class="w-full"
 	classes={{
 		button:
@@ -69,111 +103,143 @@
 	activeClass="w-full h-full text-off-white bg-light-brown"
 >
 	{#snippet titleSlot()}
-		<Icon icon={getTabIcon(finishType)} class="size-8 shrink-0" />
+		<Icon icon={getTabIcon(finish.type)} class="size-8 shrink-0" />
 		<p class="  text-lg">
-			{getFinishTypeName(finishType)}
+			{getFinishTypeName(finish.type)}
 		</p>
 	{/snippet}
 
-	<div class="flex flex-col items-start gap-4">
-		<button
-			onclick={() => handleDeleteFinish(finishType)}
-			type="button"
-			class="bg-light-brown text-off-white flex items-center gap-1 rounded-2xl p-2"
-			>Удалить<Icon icon="tabler:trash" class="size-5" /></button
-		>
-		<div class="flex flex-col gap-4 max-[1300px]:items-center">
-			<lable class="flex w-max flex-col rounded-2xl text-xl font-medium"
-				>Цена<input
-					type="number"
-					name="price"
-					id="price"
-					value={price}
-					class={inputText()}
-					autocomplete="off"
-					onchange={(e) => {
-						handlePriceChange(e, finishType);
-					}}
-				/></lable
+	{#if !isSaved}
+		<div class="flex flex-col items-start gap-4">
+			<button
+				onclick={() => handleDeleteFinish(finish.type)}
+				type="button"
+				class="bg-light-brown text-off-white flex items-center gap-1 rounded-2xl p-2"
+				>Удалить<Icon icon="tabler:trash" class="size-5" /></button
 			>
-		</div>
-		<h4 class="mt-6 flex w-max flex-col rounded-2xl text-xl font-medium">Описание</h4>
-		<div class="flex flex-col gap-2">
-			{#each options as option, i (i)}
-				<lable class="flex items-start gap-2 text-lg">
-					<Icon
-						icon={option.isAvailable
-							? 'ic:round-check-circle-outline'
-							: 'material-symbols:cancel-outline-rounded'}
-						class="mt-1 size-6 shrink-0 {option.isAvailable
-							? 'text-dark-brown'
-							: 'text-light-olive'}"
-					/>
-					<p class="max-w-[300px]">{option.description}</p>
+			<div class="flex flex-col gap-4 max-[1300px]:items-center">
+				<lable class="flex w-max flex-col rounded-2xl text-xl font-medium"
+					>Цена<input
+						type="number"
+						name="price"
+						id="price"
+						bind:value={finish.price}
+						class={inputText()}
+						autocomplete="off"
+					/></lable
+				>
+			</div>
+			<h4 class="mt-6 flex w-max flex-col rounded-2xl text-xl font-medium">Описание</h4>
+			<div class="flex flex-col gap-2">
+				{#each finish.options as option, i (i)}
+					<lable class="flex items-start gap-2 text-lg">
+						<Icon
+							icon={option.isAvailable
+								? 'ic:round-check-circle-outline'
+								: 'material-symbols:cancel-outline-rounded'}
+							class="mt-1 size-6 shrink-0 {option.isAvailable
+								? 'text-dark-brown'
+								: 'text-light-olive'}"
+						/>
+						<p class="max-w-[300px]">{option.description}</p>
+						<button
+							type="button"
+							onclick={() => {
+								handleDeleteOption(option);
+							}}
+							class="hover:text-dark-brown transition"
+							><Icon icon="tabler:trash" class="size-8 pb-1" /></button
+						>
+					</lable>
+				{/each}
+			</div>
+
+			<div class="flex w-full flex-col gap-4">
+				<label class="text-dark-olive flex gap-4">
+					<span class="text-lg">Есть:</span>
+					<fieldset id="veranda" name="veranda" class="flex gap-2">
+						<label
+							for="
+					"
+							class="text-dark-olive flex items-center gap-1"
+							>Да<input
+								type="radio"
+								name="veranda"
+								onchange={() => {
+									isOptionAvailable = true;
+								}}
+								autocomplete="off"
+								class="text-dark-brown bg-off-white form-radia"
+							/></label
+						>
+
+						<label class="text-dark-olive flex items-center gap-1"
+							>Нет<input
+								checked
+								type="radio"
+								name="veranda"
+								onchange={() => {
+									isOptionAvailable = false;
+								}}
+								autocomplete="off"
+								class="text-dark-brown bg-off-white form-radia"
+							/></label
+						>
+					</fieldset>
+				</label>
+				<label class="flex items-center gap-2">
+					<textarea
+						name="option"
+						id="option"
+						rows="5"
+						bind:value={optionDescription}
+						class={[inputText(), 'resize-none']}
+						autocomplete="off"
+					></textarea>
+
 					<button
 						type="button"
 						onclick={() => {
-							handleDeleteOption(finishType, i);
+							handleAddOption();
 						}}
-						class="hover:text-dark-brown transition"
-						><Icon icon="tabler:trash" class="size-8 pb-1" /></button
+						class="bg-light-brown text-off-white hover:bg-dark-olive h-max w-max rounded-full p-1"
+						><Icon icon="gg:add" class="size-6" /></button
 					>
-				</lable>
+					<Tooltip class="bg-dark-olive text-off-white">Добавить описание</Tooltip>
+				</label>
+			</div>
+		</div>
+	{:else}
+		<div>
+			{#each finish.options as finishOption}
+				<p class="flex items-start gap-2 text-lg">
+					<Icon
+						icon={finishOption.isAvailable
+							? 'ic:round-check-circle-outline'
+							: 'material-symbols:cancel-outline-rounded'}
+						class="mt-1 size-6 shrink-0 {finishOption.isAvailable
+							? 'text-dark-brown'
+							: 'text-light-olive'}"
+					/>{finishOption.description}
+				</p>
 			{/each}
+
+			<div class="mt-6 flex flex-col gap-4 max-[1300px]:items-center">
+				<h4 class="w-max rounded-2xl text-xl font-medium">
+					Цена: {prettyPrice.format(finish.price!)}
+				</h4>
+			</div>
 		</div>
-
-		<div class="flex w-full flex-col gap-4">
-			<label class="text-dark-olive flex gap-4">
-				<span class="text-lg">Есть:</span>
-				<fieldset id="veranda" name="veranda" class="flex gap-2">
-					<label
-						for="
-					"
-						class="text-dark-olive flex items-center gap-1"
-						>Да<input
-							type="radio"
-							name="veranda"
-							onchange={() => {
-								isOptionAvailable = true;
-							}}
-							autocomplete="off"
-							class="text-dark-brown bg-off-white form-radia"
-						/></label
-					>
-
-					<label class="text-dark-olive flex items-center gap-1"
-						>Нет<input
-							checked
-							type="radio"
-							name="veranda"
-							onchange={() => {
-								isOptionAvailable = false;
-							}}
-							autocomplete="off"
-							class="text-dark-brown bg-off-white form-radia"
-						/></label
-					>
-				</fieldset>
-			</label>
-			<label class="flex items-center gap-2">
-				<textarea
-					name="option"
-					rows="5"
-					bind:value={optionDescription}
-					class={[inputText(), 'resize-none']}
-					autocomplete="off"
-				></textarea>
-
-				<button
-					type="button"
-					onclick={() => {
-						handleAddOption(finishType);
-					}}
-					class="bg-light-brown text-off-white hover:bg-dark-olive h-max w-max rounded-full p-1"
-					><Icon icon="gg:add" class="size-6" /></button
-				>
-				<Tooltip class="bg-dark-olive text-off-white">Добавить описание</Tooltip>
-			</label>
-		</div>
-	</div>
+	{/if}
+	{#if !isSaved}
+		<button
+			class="bg-dark-olive text-off-white mt-8 rounded-2xl p-2 text-lg"
+			onclick={() => handleSaveFinish()}>Сохранить</button
+		>
+	{:else}
+		<button
+			class="bg-dark-olive text-off-white mt-8 block rounded-2xl p-2 text-lg max-[600px]:mx-auto"
+			onclick={() => handleEditFinish()}>Редактировать</button
+		>
+	{/if}
 </TabItem>
