@@ -88,7 +88,7 @@
 		>Добавить</button
 	>
 </div>
-<div class="w-max">
+<div class="w-max max-w-full">
 	{#if finishes && finishes.length > 0}
 		<Tabs
 			selected={selectedTab}

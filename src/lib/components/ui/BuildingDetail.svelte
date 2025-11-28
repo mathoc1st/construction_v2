@@ -107,7 +107,7 @@
 	</div>
 
 	<h4 class="text-dark-olive mt-18 mb-6 text-3xl">Комплектация</h4>
-	<div class="w-max">
+	<div class="w-max max-w-full">
 		<Tabs
 			tabStyle="underline"
 			class=" grid w-max grid-cols-2 max-[600px]:mx-auto max-[600px]:grid-cols-1"
