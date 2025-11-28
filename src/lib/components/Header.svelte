@@ -96,7 +96,7 @@
 			{/if}
 		</ul>
 	</nav>
-	<div class="text-off-white mt-14 flex h-full items-center justify-center gap-2">
+	<div class="text-off-white mt-14 flex items-center justify-center gap-2">
 		<Icon icon="el:phone-alt" class="size-5" />
 		<a href="tel:+79266569425" class="hover:text-light-brown">+7 (926) 656-94-25</a>
 	</div>
