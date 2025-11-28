@@ -5,11 +5,12 @@
 	import type { Snapshot } from '@sveltejs/kit';
 	import { PaginationNav } from 'flowbite-svelte';
 	import type { PageProps } from './$types';
-	import { SortBy, type FinishType } from '$lib/types';
+	import { BuildingType, SortBy, type FinishType } from '$lib/types';
 	import type {
 		getBuildingDetailsByType,
 		getBuildingsByType
 	} from '$lib/server/db/queries/building';
+	import { getBuildingTypeName } from '$lib/utils';
 
 	let { data, params }: PageProps = $props();
 
@@ -95,7 +96,9 @@
 
 <svelte:window bind:innerWidth />
 <section class="mx-auto mt-26 mb-26 max-w-[1440px] px-5">
-	<h1 class="text-center text-5xl font-medium max-[600px]:text-4xl">Каркасные дома</h1>
+	<h1 class="text-center text-5xl font-medium max-[600px]:text-4xl">
+		{getBuildingTypeName(params.type.toUpperCase() as BuildingType)}
+	</h1>
 	<div class="mt-26 flex w-full gap-4 max-[900px]:justify-center">
 		<SearchFilters
 			details={data.details}

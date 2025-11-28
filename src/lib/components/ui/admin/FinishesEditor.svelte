@@ -72,8 +72,6 @@
 
 		finishes[index].price = price;
 	}
-
-	$inspect(finishes);
 </script>
 
 {#if !isSaved}

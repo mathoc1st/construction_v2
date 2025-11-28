@@ -3,16 +3,16 @@ import { BuildingType, SortBy } from '$lib/types';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
-	const popularFrames = await getBuildingsByType(BuildingType.FRAME, {
-		limit: 3,
+	const popularFrames = await getBuildingsByType({
+		type: BuildingType.FRAME,
 		sortBy: SortBy.POPULARITY_DESC
 	});
-	const popularBarns = await getBuildingsByType(BuildingType.BARN, {
-		limit: 3,
+	const popularBarns = await getBuildingsByType({
+		type: BuildingType.BARN,
 		sortBy: SortBy.POPULARITY_DESC
 	});
-	const popularContainers = await getBuildingsByType(BuildingType.CONTAINER, {
-		limit: 3,
+	const popularContainers = await getBuildingsByType({
+		type: BuildingType.CONTAINER,
 		sortBy: SortBy.POPULARITY_DESC
 	});
 

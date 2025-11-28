@@ -26,8 +26,6 @@
 	let images: File[] = $derived(uploadedImages);
 	let imageIndex = $state(0);
 
-	$inspect(images);
-
 	let previews = $derived.by(() => {
 		if (!images || images.length === 0) {
 			return [{ src: '/images/placeholder.jpg' }];
@@ -81,8 +79,6 @@
 
 		return dataTransfer.files;
 	}
-
-	$inspect(previews);
 </script>
 
 <div class="shrink-0 basis-1/2 max-[1100px]:basis-full">

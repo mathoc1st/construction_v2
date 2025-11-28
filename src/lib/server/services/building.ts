@@ -43,9 +43,6 @@ export async function handleGetBuildingsByType(url: URL) {
 		veranda
 	});
 
-	console.log(type);
-	console.log(parsedOptions);
-
 	if (!parsedOptions.success)
 		return {
 			buildings: null,
@@ -81,8 +78,6 @@ export async function addBuilding(
 		savedImages,
 		parsedFinishesResult.finishes
 	);
-
-	console.log(createBuildingError);
 
 	if (!newBuilding || createBuildingError)
 		return { error: { code: 400, message: 'Не удалось добавить новое здание!' } };
