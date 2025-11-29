@@ -12,7 +12,7 @@
 <div class={['flex items-stretch', className]}>
 	<label for="search" class="sr-only">Телефон</label>
 	<div class=" border-light-olive flex items-center rounded-l-2xl border-2 border-r-0 pl-2">
-		<Icon icon="material-symbols:search-rounded" class="text-light-olive  size-10" />
+		<Icon icon="material-symbols:search-rounded" class="text-light-olive  mr-2 size-10" />
 	</div>
 	<div class="relative">
 		<input

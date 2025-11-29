@@ -1,92 +1,67 @@
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { type Building, type BuildingDto, type Finish, type FinishDto } from '$lib/types';
 import {
-	addBuilding,
-	emptyTrash,
 	handleGetBuildingsByType,
-	recoverImages,
-	trashImages,
-	updateBuilding
+	handleUpdateBuilding,
+	handleAddBuilding,
+	handleDeleteBuilding
 } from '$lib/server/services/building';
 
-import { getImagesByBuildingId } from '$lib/server/db/queries/images';
-import { removeBuilding } from '$lib/server/db/queries/building';
+import { logger } from '$lib/server/logger';
+
+const log = logger.child({ module: 'BuildingApi' });
 
 export const GET: RequestHandler = async ({ url }) => {
-	const { buildings, totalCount, error: err } = await handleGetBuildingsByType(url);
+	log.info('Received building GET request: %s', url.toString());
 
-	if (err) throw error(err.status, err.message);
+	const getBuildingsResult = await handleGetBuildingsByType(url);
 
-	return json({ buildings, totalCount });
-};
-
-export const POST: RequestHandler = async ({ request }) => {
-	const formData = await request.formData();
-
-	const images = formData.getAll('image') as File[];
-	// Get building DTO
-	const buildingJson = formData.get('building') as string;
-	const building: BuildingDto = JSON.parse(buildingJson);
-
-	// Get finishes
-	const finishesJson = formData.get('finishes') as string;
-	const finishes: FinishDto[] = JSON.parse(finishesJson);
-
-	const { error: addBuildingError } = await addBuilding(building, images, finishes);
-
-	if (addBuildingError) {
-		throw error(addBuildingError.code, addBuildingError.message);
+	if (getBuildingsResult.error) {
+		log.error('Failed to process building GET request: %s', url.toString());
+		throw error(getBuildingsResult.error.status, getBuildingsResult.error.message);
 	}
 
-	return json({ status: 200 });
+	log.debug('Got following data from building GET request');
+	log.debug('%s', JSON.stringify(getBuildingsResult.result));
+
+	return json({ data: getBuildingsResult.result }, { status: 200 });
 };
 
-export const PUT: RequestHandler = async ({ request }) => {
-	const formData = await request.formData();
+export const POST: RequestHandler = async ({ request, url }) => {
+	log.info('Received building POST request: %s', url.toString());
 
-	const idStr = formData.get('id') as string;
-	const id = Number.parseInt(idStr);
-	if (Number.isNaN(id)) throw error(400, 'Id is not a number');
+	const addBuildingResult = await handleAddBuilding(request);
 
-	const images = formData.getAll('image') as File[];
-	// Get building DTO
-	const buildingJson = formData.get('building') as string;
-	const building: Building = JSON.parse(buildingJson);
-
-	// Get finishes
-	const finishesJson = formData.get('finishes') as string;
-	const finishes: Finish[] = JSON.parse(finishesJson);
-
-	const { error: addBuildingError } = await updateBuilding(id, building, images, finishes);
-
-	if (addBuildingError) {
-		throw error(addBuildingError.code, addBuildingError.message);
+	if (addBuildingResult.error) {
+		log.error('Failed to process building POST request: %s', url.toString());
+		throw error(addBuildingResult.error.status, addBuildingResult.error.message);
 	}
 
-	return json({ status: 200 });
+	return json({ data: addBuildingResult.result }, { status: 200 });
+};
+
+export const PUT: RequestHandler = async ({ request, url }) => {
+	log.info('Received building PUT request: %s', url.toString());
+
+	const updateBuildingResult = await handleUpdateBuilding(request);
+
+	if (updateBuildingResult.error) {
+		log.error('Failed to process building PUT request: %s', url.toString());
+		throw error(updateBuildingResult.error.status, updateBuildingResult.error.message);
+	}
+
+	return json({ data: updateBuildingResult.result }, { status: 200 });
 };
 
 export const DELETE: RequestHandler = async ({ url }) => {
-	const idStr = url.searchParams.get('id');
+	log.info('Received building DELETE request: %s', url.toString());
 
-	if (!idStr) throw error(400, 'id is not present');
+	const deleteBuildingResult = await handleDeleteBuilding(url);
 
-	const id = Number.parseInt(idStr);
-
-	if (Number.isNaN(id)) throw error(400, 'id is NaN');
-
-	const images = await getImagesByBuildingId(id);
-
-	trashImages(images);
-
-	try {
-		await removeBuilding(id);
-	} catch {
-		recoverImages(images);
+	if (deleteBuildingResult.error) {
+		log.error('Failed to process building DELETE request: %s', url.toString());
+		throw error(deleteBuildingResult.error.status, deleteBuildingResult.error.message);
 	}
 
-	emptyTrash();
-
-	return json({ status: 200 });
+	return json({}, { status: 200 });
 };

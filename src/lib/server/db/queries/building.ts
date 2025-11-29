@@ -80,7 +80,7 @@ export async function getBuildingsCountByType(type: BuildingType) {
 	return prisma.building.count({ where: { type } });
 }
 
-export async function removeBuilding(id: number) {
+export async function deleteBuilding(id: number) {
 	return prisma.building.delete({ where: { id } });
 }
 
@@ -117,47 +117,43 @@ export async function createBuilding(
 	images: string[],
 	finishes: ParsedFinish[]
 ) {
-	try {
-		const createdBuilding = await prisma.building.create({
-			data: {
-				...building,
-				size: `${building.length}x${building.width}`,
-				startingPrice: Math.min(...finishes.map((f) => f.price)),
-				images: {
-					create: images.map((i) => {
-						return { filename: i };
-					})
-				},
-				finishes: {
-					create: finishes.map((finish) => {
-						return {
-							type: finish.type,
-							price: finish.price,
-							oldPrice: finish.oldPrice,
-							options: {
-								create: finish.options
-							}
-						};
-					})
-				}
+	const createdBuilding = await prisma.building.create({
+		data: {
+			...building,
+			size: `${building.length}x${building.width}`,
+			startingPrice: Math.min(...finishes.map((f) => f.price)),
+			images: {
+				create: images.map((i) => {
+					return { filename: i };
+				})
 			},
-			include: {
-				images: true,
-				finishes: {
-					include: {
-						options: true
-					}
+			finishes: {
+				create: finishes.map((finish) => {
+					return {
+						type: finish.type,
+						price: finish.price,
+						oldPrice: finish.oldPrice,
+						options: {
+							create: finish.options
+						}
+					};
+				})
+			}
+		},
+		include: {
+			images: true,
+			finishes: {
+				include: {
+					options: true
 				}
 			}
-		});
+		}
+	});
 
-		return { building: createdBuilding, error: null };
-	} catch (error) {
-		return { building: null, error: (error as Error).message };
-	}
+	return { building: createdBuilding };
 }
 
-export async function updateBuildingById(
+export async function updateBuilding(
 	id: number,
 	building: ParsedBuilding,
 	images: string[],

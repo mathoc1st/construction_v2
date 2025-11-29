@@ -79,7 +79,7 @@
 			>
 		</form>
 		<div
-			class="border-light-olive relative mb-15 flex flex-col gap-3 self-end rounded-2xl border-2 py-8 pr-24 pl-6 max-[600px]:pr-10"
+			class="border-light-olive relative mb-15 flex flex-col gap-3 self-end rounded-2xl border-2 py-8 pr-16 pl-6 max-[600px]:pr-10"
 		>
 			<img
 				src="images/leaf6.svg"
@@ -92,16 +92,23 @@
 			</div>
 
 			<p class="text-dark-olive relative flex text-xl max-[600px]:text-base">
-				<Icon icon="line-md:phone" class="size-7" />Телефон: +7 999 123-45-67
+				<Icon icon="line-md:phone" class="size-7" /><span class="mr-2 font-medium">Телефон:</span> +7
+				991 620-18-67
 			</p>
 			<p class="text-dark-olive flex text-xl max-[600px]:text-base">
-				<Icon icon="mingcute:location-line" class="size-7" />Адрес: ул. Пример, д. 1
+				<Icon icon="material-symbols:mail-outline" class="size-7" /><span class="mr-2 font-medium"
+					>Почта:</span
+				> отсутствует
 			</p>
 			<p class="text-dark-olive flex text-xl max-[600px]:text-base">
-				<Icon icon="material-symbols:mail-outline" class="size-7" />Почта: info@construction.ru
+				<Icon icon="tabler:clock" class="size-7" /><span class="mr-2 font-medium">Часы работы:</span
+				> 9:00–18:00
 			</p>
-			<p class="text-dark-olive flex text-xl max-[600px]:text-base">
-				<Icon icon="tabler:clock" class="size-7" />Часы работы: 9:00–18:00
+			<p class="text-dark-olive flex max-w-[400px] text-xl max-[600px]:text-base">
+				<Icon icon="mingcute:location-line" class="size-7 shrink-0 " /><span
+					class="mr-2 font-medium">Адрес:</span
+				>Москва, Новомосковский административный округ, р-н Коммунарка, ул. Адмирала Корнилова,
+				63Б/1
 			</p>
 		</div>
 	</div>

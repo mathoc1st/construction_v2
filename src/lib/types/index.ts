@@ -1,5 +1,10 @@
 import z from 'zod';
 import { BuildingType, FinishType } from '../../../prisma/src/generated/prisma/enums';
+import type {
+	createBuilding,
+	getBuildingsByType,
+	updateBuilding
+} from '$lib/server/db/queries/building';
 
 export { BuildingType } from '../../../prisma/src/generated/prisma/enums';
 export { FinishType } from '../../../prisma/src/generated/prisma/enums';
@@ -21,6 +26,24 @@ export enum SortBy {
 export type ImageDto = {
 	file: File;
 };
+
+export type ApiResponse<T> = { success: true; data: T } | { success: false; error: string };
+
+export type GetBuildingsByTypeResponse = ApiResponse<GetBuildingsByTypeResult>;
+
+export type HandlerResult<T> = {
+	result?: T;
+	error?: ServiceError;
+};
+
+export type ServiceError = {
+	status: number;
+	message: string;
+};
+
+export type GetBuildingsByTypeResult = Awaited<ReturnType<typeof getBuildingsByType>>;
+export type AddBuildingResult = Awaited<ReturnType<typeof createBuilding>>;
+export type UpdateBuildingResult = Awaited<ReturnType<typeof updateBuilding>>;
 
 export const buildingOptionsSchema = z.object({
 	type: z.preprocess(

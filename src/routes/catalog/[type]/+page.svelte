@@ -5,11 +5,14 @@
 	import type { Snapshot } from '@sveltejs/kit';
 	import { PaginationNav } from 'flowbite-svelte';
 	import type { PageProps } from './$types';
-	import { BuildingType, SortBy, type FinishType } from '$lib/types';
-	import type {
-		getBuildingDetailsByType,
-		getBuildingsByType
-	} from '$lib/server/db/queries/building';
+	import {
+		BuildingType,
+		SortBy,
+		type ApiResponse,
+		type FinishType,
+		type GetBuildingsByTypeResponse
+	} from '$lib/types';
+	import type { getBuildingsByType } from '$lib/server/db/queries/building';
 	import { getBuildingTypeName } from '$lib/utils';
 
 	let { data, params }: PageProps = $props();
@@ -49,12 +52,14 @@
 
 		if (!response.ok) console.log(response);
 
-		const { buildings: filteredBuildings, totalCount } = (await response.json()) as Awaited<
-			ReturnType<typeof getBuildingsByType>
-		>;
+		const result = (await response.json()) as GetBuildingsByTypeResponse;
 
-		buildings = filteredBuildings;
-		totalPages = Math.ceil(totalCount / 12);
+		if (!result.success) {
+			return;
+		}
+
+		buildings = result.data.buildings;
+		totalPages = Math.ceil(result.data.totalCount / 12);
 
 		setTimeout(() => {
 			window.scrollTo({

@@ -37,6 +37,12 @@
 	:global(body) {
 		font-family: 'Roboto Slab', serif;
 		background-color: #fefae0;
+		height: 100%;
+		margin: 0;
+	}
+	:global(html) {
+		height: 100%;
+		margin: 0;
 	}
 	:global(button) {
 		cursor: pointer;
