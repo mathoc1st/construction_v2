@@ -8,6 +8,7 @@ import {
 } from '$lib/server/services/building';
 
 import { logger } from '$lib/server/logger';
+import { sessionCookieName, validateSessionToken } from '$lib/server/services/auth';
 
 const log = logger.child({ module: 'BuildingApi' });
 
@@ -27,8 +28,20 @@ export const GET: RequestHandler = async ({ url }) => {
 	return json({ data: getBuildingsResult.result }, { status: 200 });
 };
 
-export const POST: RequestHandler = async ({ request, url }) => {
+export const POST: RequestHandler = async ({ request, url, cookies }) => {
 	log.info('Received building POST request: %s', url.toString());
+
+	const sessionToken = cookies.get(sessionCookieName);
+
+	if (!sessionToken) {
+		throw error(401);
+	}
+
+	const { session, user } = await validateSessionToken(sessionToken);
+
+	if (!session || !user) {
+		throw error(401);
+	}
 
 	const addBuildingResult = await handleAddBuilding(request);
 
@@ -40,8 +53,20 @@ export const POST: RequestHandler = async ({ request, url }) => {
 	return json({ data: addBuildingResult.result }, { status: 200 });
 };
 
-export const PUT: RequestHandler = async ({ request, url }) => {
+export const PUT: RequestHandler = async ({ request, url, cookies }) => {
 	log.info('Received building PUT request: %s', url.toString());
+
+	const sessionToken = cookies.get(sessionCookieName);
+
+	if (!sessionToken) {
+		throw error(401);
+	}
+
+	const { session, user } = await validateSessionToken(sessionToken);
+
+	if (!session || !user) {
+		throw error(401);
+	}
 
 	const updateBuildingResult = await handleUpdateBuilding(request);
 
@@ -53,8 +78,20 @@ export const PUT: RequestHandler = async ({ request, url }) => {
 	return json({ data: updateBuildingResult.result }, { status: 200 });
 };
 
-export const DELETE: RequestHandler = async ({ url }) => {
+export const DELETE: RequestHandler = async ({ url, cookies }) => {
 	log.info('Received building DELETE request: %s', url.toString());
+
+	const sessionToken = cookies.get(sessionCookieName);
+
+	if (!sessionToken) {
+		throw error(401);
+	}
+
+	const { session, user } = await validateSessionToken(sessionToken);
+
+	if (!session || !user) {
+		throw error(401);
+	}
 
 	const deleteBuildingResult = await handleDeleteBuilding(url);
 
