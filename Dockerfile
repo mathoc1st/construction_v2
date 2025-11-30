@@ -5,7 +5,7 @@ FROM node:24-alpine AS builder
 WORKDIR /app
 
 # Install dependencies
-COPY package.json pnpm-lock.yaml .env prisma.config.ts ./
+COPY package.json pnpm-lock.yaml .env ./
 RUN npm install -g pnpm
 RUN pnpm install
 
@@ -25,7 +25,7 @@ FROM node:24-alpine AS runner
 WORKDIR /app
 
 # Only copy production dependencies and build output
-COPY package.json pnpm-lock.yaml prisma.config.ts ./
+COPY package.json pnpm-lock.yaml .env ./
 RUN npm install -g pnpm
 RUN pnpm install --prod
 
