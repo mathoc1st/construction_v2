@@ -12,6 +12,9 @@ RUN pnpm install
 COPY prisma ./prisma
 RUN npx prisma generate
 
+COPY prisma.config.ts ./
+RUN npx prisma migrate deploy
+
 # Copy source code
 COPY . .
 
@@ -31,9 +34,9 @@ RUN pnpm install --prod
 
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/prisma.config.ts ./
 
-RUN npx prisma migrate deploy
+
+
 
 # Expose port (SvelteKit default: 5173 for dev, your adapter may change)
 EXPOSE 3000
