@@ -5,7 +5,7 @@ FROM node:24-alpine AS builder
 WORKDIR /app
 
 # Install dependencies
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml prisma ./
 RUN npm install -g pnpm
 RUN pnpm install
 RUN npx prisma migrate deploy
