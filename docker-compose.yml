@@ -4,14 +4,11 @@ services:
     ports:
       - '3000:3000'
     environment:
+      ORIGIN: 'https://skrusdom.ru'
       DATABASE_URL: postgres://construction_user:construction_password@postgres:5432/construction
+      BODY_SIZE_LIMIT: 200000000
     networks:
       - construction
-    command: >
-      sh -c "
-        npx prisma migrate deploy &&
-        node build
-      "
 
 networks:
   construction:

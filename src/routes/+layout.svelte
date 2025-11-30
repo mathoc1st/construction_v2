@@ -10,7 +10,7 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" href="images/logo.jpg" />
 </svelte:head>
 
 <Header isAdmin={data.isAdmin}></Header>

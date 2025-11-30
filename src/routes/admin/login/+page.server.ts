@@ -8,11 +8,12 @@ import {
 import { hash, verify } from '@node-rs/argon2';
 import { createUser, getUserByUsername } from '$lib/server/db/queries/user';
 
-export const load: PageServerLoad = async (event) => {
-	if (event.locals.user) {
-		return redirect(302, '/');
-	}
-	return {};
+export const load: PageServerLoad = async () => {
+	return redirect(302, '/');
+	// if (event.locals.user) {
+	// 	return redirect(302, '/');
+	// }
+	// return {};
 };
 
 export const actions: Actions = {

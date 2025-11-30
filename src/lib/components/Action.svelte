@@ -26,6 +26,7 @@
 					</div>
 					<div class="max-w-f relative">
 						<input
+							required
 							type="tel"
 							name="phone"
 							id="phone"
