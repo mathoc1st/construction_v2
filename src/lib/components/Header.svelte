@@ -51,8 +51,12 @@
 			</ul>
 		</nav>
 		<div class="text-off-white flex h-full items-center gap-2 max-[1200px]:hidden">
-			<Icon icon="el:phone-alt" class="size-5" />
-			<a href="tel:+79266569425" class="hover:text-light-brown">+7 (926) 656-94-25</a>
+			<a
+				href="https://t.me/ckrusdom1"
+				class="text-off-white hover:text-light-brown flex items-center gap-2 transition"
+			>
+				<Icon icon="ic:baseline-telegram" class="size-7 shrink-0" />+7 991 620 18 67
+			</a>
 		</div>
 
 		{#if isAdmin}
@@ -97,8 +101,12 @@
 		</ul>
 	</nav>
 	<div class="text-off-white mt-14 flex items-center justify-center gap-2">
-		<Icon icon="el:phone-alt" class="size-5" />
-		<a href="tel:+79266569425" class="hover:text-light-brown">+7 (926) 656-94-25</a>
+		<a
+			href="https://t.me/ckrusdom1"
+			class="text-off-white hover:text-light-brown flex items-center gap-2 transition"
+		>
+			<Icon icon="ic:baseline-telegram" class="size-7 shrink-0" />+7 991 620 18 67
+		</a>
 	</div>
 	{#if isAdmin}
 		<p class="mt-8 text-center text-lg font-medium text-red-400">Admin</p>

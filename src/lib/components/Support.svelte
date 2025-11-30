@@ -1,5 +1,8 @@
-<script>
+<script lang="ts">
+	import { enhance } from '$app/forms';
 	import Icon from '@iconify/svelte';
+
+	let { isSent }: { isSent: boolean | undefined } = $props();
 </script>
 
 <section class="mx-auto mt-46 mb-46 max-w-[1440px] px-5">
@@ -8,7 +11,7 @@
 		Заполните форму ниже и мы на них ответим
 	</h3>
 	<div class=" flex flex-wrap items-center justify-center gap-8">
-		<form action="" class="mt-36 flex flex-col gap-2">
+		<form method="POST" action="?/support" class="mt-36 flex flex-col gap-2" use:enhance>
 			<div class="relative flex items-stretch">
 				<img src="images/stick.svg" alt="" class="absolute -top-30" />
 				<label for="name" class="sr-only">Имя</label>
@@ -21,6 +24,7 @@
 						type="text"
 						placeholder="Ваше имя"
 						class="text-off-white bg-light-olive rounded-r-2xl border-0 px-4 py-4 text-xl max-[600px]:text-base"
+						required
 					/>
 					<div
 						class="text-off-white bg-off-white absolute bottom-3 left-1/2 mt-4 h-px w-[89%] -translate-x-1/2 border"
@@ -55,6 +59,7 @@
 						type="tel"
 						placeholder="Телефон"
 						class="text-off-white bg-light-olive rounded-r-2xl border-0 px-4 py-4 text-xl max-[600px]:text-base"
+						required
 					/>
 					<div
 						class="text-off-white bg-off-white absolute bottom-3 left-1/2 mt-4 h-px w-[89%] -translate-x-1/2 border"
@@ -67,6 +72,7 @@
 					<Icon icon="solar:pen-linear" class="text-off-white size-10" />
 				</div>
 				<textarea
+					required
 					placeholder="Сообщение"
 					name="message"
 					class="text-off-white bg-light-olive min-h-64 w-96 resize-none rounded-r-2xl border-0 border-none px-4 py-4 text-xl max-[600px]:w-64 max-[600px]:text-lg"
@@ -77,6 +83,9 @@
 				class="bg-dark-brown text-off-white hover:bg-dark-olive w-max rounded-2xl px-12 py-3 text-xl transition"
 				>Отправить</button
 			>
+			{#if isSent}
+				<p class="text-light-olive mt-6 text-lg">Сообщение было отправлено успешно.</p>
+			{/if}
 		</form>
 		<div
 			class="border-light-olive relative mb-15 flex flex-col gap-3 self-end rounded-2xl border-2 py-8 pr-16 pl-6 max-[600px]:pr-10"

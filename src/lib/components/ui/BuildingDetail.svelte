@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { FinishType, type GetBuildingResult } from '$lib/types';
 	import { getFinishTypeName, getTabIcon, prettyPrice } from '$lib/utils';
@@ -6,7 +7,11 @@
 
 	import { Tabs, TabItem, Modal, Dropdown, DropdownItem } from 'flowbite-svelte';
 
-	const { building, isAdmin }: { building: NonNullable<GetBuildingResult>; isAdmin: boolean } =
+	const {
+		building,
+		isAdmin,
+		isSent
+	}: { building: NonNullable<GetBuildingResult>; isAdmin: boolean; isSent: boolean | undefined } =
 		$props();
 
 	let isModalOpen = $state(false);
@@ -173,16 +178,42 @@
 </div>
 
 <Modal
-	title="Позвоните нам!"
-	class="bg-dark-brown divide-none"
-	headerClass="text-off-white"
+	title="Отличный выбор!"
+	class="bg-off-white divide-none"
+	headerClass="text-dark-olive"
 	bind:open={isModalOpen}
 >
-	<h2 class="text-off-white text-xl">
-		Номер данного проекта <span class="text-dark-olive">{building.id}</span>. <br /> Позвоните на номер
-		указаный ниже и назовите номер этого проекта оператору.
+	<h2 class="text-dark-olive text-xl">
+		Оставте нам свой номер телефона и мы вам перезвоним в течении дня.
 	</h2>
-	<h3 class="text-off-white text-2xl font-medium">+7 (926) 656-94-25</h3>
+	<form method="POST" class="mt-6" use:enhance>
+		<div class=" flex items-stretch">
+			<label for="phone" class="sr-only">Телефон</label>
+			<div class="bg-light-olive flex items-center rounded-l-2xl pl-3">
+				<Icon icon="line-md:phone" class="text-off-white size-10" />
+			</div>
+			<div class="relative">
+				<input
+					name="phone"
+					type="tel"
+					placeholder="Телефон"
+					class="text-off-white bg-light-olive rounded-r-2xl border-0 px-4 py-4 text-xl max-[600px]:text-base"
+					required
+				/>
+				<div
+					class="text-off-white bg-off-white absolute bottom-3 left-1/2 mt-4 h-px w-[89%] -translate-x-1/2 border"
+				></div>
+			</div>
+		</div>
+		<button
+			type="submit"
+			class="bg-dark-brown text-off-white hover:bg-dark-olive mt-4 w-max rounded-2xl px-12 py-3 text-xl transition"
+			>Отправить</button
+		>
+		{#if isSent}
+			<p class="text-light-olive mt-6 text-lg">Сообщение было отправлено успешно.</p>
+		{/if}
+	</form>
 </Modal>
 
 <style>

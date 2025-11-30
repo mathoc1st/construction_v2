@@ -1,5 +1,8 @@
-<script>
+<script lang="ts">
+	import { enhance } from '$app/forms';
 	import Icon from '@iconify/svelte';
+
+	let { isSent }: { isSent: boolean | undefined } = $props();
 </script>
 
 <section class="bg-light-brown relative mt-36 mb-26 w-screen overflow-hidden">
@@ -13,7 +16,7 @@
 			<h4 class="text-off-white mx-auto mt-12 max-w-3xl text-center text-2xl max-[600px]:text-xl">
 				Свяжитесь с нами сегодня, чтобы получить бесплатную смету и профессиональную консультацию.
 			</h4>
-			<form action="" class="mt-18 flex flex-col items-center">
+			<form method="POST" action="?/free" class="mt-18 flex flex-col items-center" use:enhance>
 				<div class="flex w-max max-w-full items-stretch">
 					<label for="phone" class="sr-only">Телефон</label>
 					<div
@@ -49,6 +52,9 @@
 					/>
 					<img src="images/hand.svg" alt="" class="absolute -top-82 -right-110" />
 				</div>
+				{#if isSent}
+					<p class="text-light-olive mt-6 text-lg">Сообщение было отправлено успешно.</p>
+				{/if}
 			</form>
 		</div>
 	</section>

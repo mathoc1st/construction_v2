@@ -36,15 +36,18 @@
 			</p>
 		</div>
 		<div class="flex flex-col gap-1">
+			<a
+				href="https://t.me/ckrusdom1"
+				class="text-off-white hover:text-light-brown flex items-center gap-2 transition"
+			>
+				<Icon icon="ic:baseline-telegram" class="size-8" />+7 991 620 18 67
+			</a>
 			<p class="text-off-white flex items-center gap-2">
-				<Icon icon="ic:baseline-telegram" class="size-8" />+7 999 123-45-67
+				<Icon icon="ic:baseline-whatsapp" class="size-8" />+7 991 620 18 67
 			</p>
-			<p class="text-off-white flex items-center gap-2">
-				<Icon icon="ic:baseline-whatsapp" class="size-8" />+7 999 123-45-67
-			</p>
-			<p class="text-off-white flex items-center gap-2">
+			<!-- <p class="text-off-white flex items-center gap-2">
 				<Icon icon="material-symbols:mail-outline" class="size-8" />info@construction.ru
-			</p>
+			</p> -->
 		</div>
 		<p class="text-off-white mt-4 mb-4 hidden text-center text-sm max-[600px]:block">
 			© 2025 ООО «СК РУС ДОМ». Все права защищены.

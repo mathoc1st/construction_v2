@@ -1,0 +1,41 @@
+version: '3.9'
+services:
+  app:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: 'postgresql://construction_user:construction_password@localhost:5432/construction'
+  postgres:
+    image: postgres:18
+    container_name: construction-postgres
+    environment:
+      POSTGRES_USER: construction_user
+      POSTGRES_PASSWORD: construction_password
+      POSTGRES_DB: construction
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+  pg-backup:
+    image: postgres:18
+    container_name: pg-backup
+    depends_on:
+      - postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data:ro
+      - ./backups:/backups
+    entrypoint: /bin/sh
+    command: -c "
+      mkdir -p /backups &&
+      while true; do
+      DATE=$(date +'%F_%H-%M-%S')
+      BACKUP_FILE=/backups/constructiondb_$DATE.sql.gz
+      echo \"Backing up database to $BACKUP_FILE\"
+      pg_dump -U construction_user -h postgres construction | gzip > $BACKUP_FILE
+      ls -1tr /backups/*.sql.gz | head -n -7 | xargs -r rm --
+      sleep 86400
+      done"
+
+volumes:
+  pgdata:

@@ -6,9 +6,9 @@
 	import Support from '$lib/components/Support.svelte';
 	import Testimonies from '$lib/components/Testimonies.svelte';
 	import Work from '$lib/components/Work.svelte';
-	import type { PageProps } from './$types';
+	import type { ActionData, PageData } from './$types';
 
-	let { data }: PageProps = $props();
+	let { data, form }: { data: PageData; form: ActionData } = $props();
 </script>
 
 <Hero />
@@ -19,5 +19,5 @@
 />
 <Work />
 <Testimonies />
-<Action />
-<Support />
+<Action isSent={form?.freeSuccess} />
+<Support isSent={form?.supportSuccess} />
