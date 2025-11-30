@@ -3,6 +3,8 @@ services:
     build: .
     ports:
       - '3000:3000'
+    environment:
+      DATABASE_URL: postgres://construction_user:construction_password@postgres:5432/construction
     networks:
       - construction
     command: >
