@@ -29,7 +29,7 @@ services:
     depends_on:
       - postgres
     environment:
-      - POSTGRES_HOST=postgresql
+      - POSTGRES_HOST=postgres
       - POSTGRES_DB=construction
       - POSTGRES_USER=construction_user
       - POSTGRES_PASSWORD=construction_password
@@ -38,6 +38,8 @@ services:
       - BACKUP_ON_START=TRUE
       - BACKUP_KEEP_WEEKS=2
       - HEALTHCHECK_PORT=8080
+    networks:
+      - construction
 
 volumes:
   pgdata:
