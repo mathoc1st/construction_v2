@@ -1,9 +1,0 @@
-services:
-  app:
-    build: .
-    depends_on:
-      postgres:
-        condition: service_healthy
-        restart: true
-    ports:
-      - '3000:3000'
