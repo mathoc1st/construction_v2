@@ -8,7 +8,6 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml prisma ./
 RUN npm install -g pnpm
 RUN pnpm install
-RUN npx prisma migrate deploy
 RUN npx prisma generate
 
 # Copy source code
