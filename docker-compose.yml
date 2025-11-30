@@ -1,6 +1,21 @@
 services:
+  app:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
+    ports:
+      - '3000:3000'
+
   postgres:
     image: postgres:18
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
     container_name: construction-postgres
     environment:
       POSTGRES_USER: construction_user
@@ -11,34 +26,25 @@ services:
     ports:
       - '5432:5432'
 
-  app:
-    build: .
-    depends_on:
-      - postgres
-    ports:
-      - '3000:3000'
-    environment:
-      DATABASE_URL: 'postgresql://construction_user:construction_password@localhost:5432/construction'
-
-  pg-backup:
-    image: postgres:18
-    container_name: pg-backup
-    depends_on:
-      - postgres
-    volumes:
-      - pgdata:/var/lib/postgresql/data:ro
-      - ./backups:/backups
-    entrypoint: /bin/sh
-    command: -c "
-      mkdir -p /backups &&
-      while true; do
-      DATE=\$(date +'%F_%H-%M-%S')
-      BACKUP_FILE=/backups/constructiondb_\$DATE.sql.gz
-      echo \"Backing up database to \$BACKUP_FILE\"
-      pg_dump -U construction_user -h postgres construction | gzip > \$BACKUP_FILE
-      ls -1tr /backups/*.sql.gz | head -n -7 | xargs -r rm --
-      sleep 86400
-      done"
+  # pg-backup:
+  #   image: postgres:18
+  #   container_name: pg-backup
+  #   depends_on:
+  #     - postgres
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data:ro
+  #     - ./backups:/backups
+  #   entrypoint: /bin/sh
+  #   command: -c "
+  #     mkdir -p /backups &&
+  #     while true; do
+  #     DATE=\$(date +'%F_%H-%M-%S')
+  #     BACKUP_FILE=/backups/constructiondb_\$DATE.sql.gz
+  #     echo \"Backing up database to \$BACKUP_FILE\"
+  #     pg_dump -U construction_user -h postgres construction | gzip > \$BACKUP_FILE
+  #     ls -1tr /backups/*.sql.gz | head -n -7 | xargs -r rm --
+  #     sleep 86400
+  #     done"
 
 volumes:
   pgdata:
