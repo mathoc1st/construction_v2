@@ -31,6 +31,7 @@ RUN pnpm install --prod
 
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma.config.ts ./
 
 RUN npx prisma migrate deploy
 
