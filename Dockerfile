@@ -31,6 +31,3 @@ COPY --from=builder /app/build .
 
 # Expose port (SvelteKit default: 5173 for dev, your adapter may change)
 EXPOSE 3000
-
-# Run the app
-CMD ["node", "build"]
