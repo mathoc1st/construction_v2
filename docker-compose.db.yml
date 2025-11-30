@@ -16,6 +16,8 @@ services:
       - pgdata:/var/lib/postgresql/data
     ports:
       - '5432:5432'
+    networks:
+      - construction
 
   pg-backup:
     image: postgres:17
@@ -25,6 +27,8 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data:ro
       - ./backups:/backups
+    networks:
+      - construction
     entrypoint: /bin/sh
     command: -c "
       mkdir -p /backups &&
@@ -39,3 +43,7 @@ services:
 
 volumes:
   pgdata:
+
+networks:
+  construction:
+    external: true
