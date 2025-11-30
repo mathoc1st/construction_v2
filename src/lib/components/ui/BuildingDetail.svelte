@@ -1,16 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import type { getBuildingById } from '$lib/server/db/queries/building';
-	import { FinishType } from '$lib/types';
+	import { FinishType, type GetBuildingResult } from '$lib/types';
 	import { getFinishTypeName, getTabIcon, prettyPrice } from '$lib/utils';
 	import Icon from '@iconify/svelte';
 
 	import { Tabs, TabItem, Modal, Dropdown, DropdownItem } from 'flowbite-svelte';
 
-	const {
-		building,
-		isAdmin
-	}: { building: NonNullable<Awaited<ReturnType<typeof getBuildingById>>>; isAdmin: boolean } =
+	const { building, isAdmin }: { building: NonNullable<GetBuildingResult>; isAdmin: boolean } =
 		$props();
 
 	let isModalOpen = $state(false);

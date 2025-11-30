@@ -2,6 +2,7 @@ import z from 'zod';
 import { BuildingType, FinishType } from '../../../prisma/src/generated/prisma/enums';
 import type {
 	createBuilding,
+	getBuildingById,
 	getBuildingsByType,
 	updateBuilding
 } from '$lib/server/db/queries/building';
@@ -44,6 +45,7 @@ export type ServiceError = {
 export type GetBuildingsByTypeResult = Awaited<ReturnType<typeof getBuildingsByType>>;
 export type AddBuildingResult = Awaited<ReturnType<typeof createBuilding>>;
 export type UpdateBuildingResult = Awaited<ReturnType<typeof updateBuilding>>;
+export type GetBuildingResult = Awaited<ReturnType<typeof getBuildingById>>;
 
 export const buildingOptionsSchema = z.object({
 	type: z.preprocess(

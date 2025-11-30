@@ -50,7 +50,7 @@
 
 		const response = await fetch(`/api/building?${urlParams}`, { method: 'GET' });
 
-		if (!response.ok) console.log(response);
+		if (!response.ok) return;
 
 		const result = (await response.json()) as GetBuildingsByTypeResponse;
 
