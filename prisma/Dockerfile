@@ -6,8 +6,8 @@ WORKDIR /migration
 RUN npm install -g pnpm
 
 # Copy package files and Prisma schema only
-COPY package.json pnpm-lock.yaml* ./
-COPY prisma ./prisma
+COPY ../package.json ../pnpm-lock.yaml* ./
+COPY ../prisma ./prisma
 
 # Install only what's needed
 RUN pnpm install --frozen-lockfile
