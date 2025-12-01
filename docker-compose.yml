@@ -53,7 +53,7 @@ services:
     container_name: prisma-migrate
     build:
       context: .
-      dockerfile: /docker/prisma/Dockerfile
+      dockerfile: ./docker/prisma/Dockerfile
     volumes:
       - ./prisma:/migration/prisma
     depends_on:
