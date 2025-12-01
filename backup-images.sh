@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Folders
-UPLOADS_DIR="./uploads/images"
+UPLOADS_DIR="/home/mathoc1st/uploads/images"
 BACKUP_DIR="/home/mathoc1st/backups/images"
 
 # Create backup folder if it doesn't exist
