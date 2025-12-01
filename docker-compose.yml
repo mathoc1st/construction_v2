@@ -13,14 +13,6 @@ services:
     networks:
       - construction
 
-  picture-backup:
-    image: alpine
-    volumes:
-      - uploads:/data:ro # read-only access to uploaded pictures
-      - ./backups/pictures:/backups # backups stored on host
-    entrypoint: >
-      sh -c "tar -czf /backups/uploads_$(date +%F_%H-%M-%S).tar.gz /data"
-
   postgres:
     image: postgres:17
     container_name: construction-postgres
@@ -60,11 +52,10 @@ services:
     build:
       context: .
       dockerfile: ./prisma/Dockerfile
-    environment:
-      DB_HOST: postgres
-      DATABASE_URL: postgres://construction_user:construction_password@postgres:5432/construction
     depends_on:
       - postgres
+    networks:
+      - construction
 
 volumes:
   pgdata:
