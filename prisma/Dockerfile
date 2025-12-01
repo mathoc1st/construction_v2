@@ -2,7 +2,8 @@ FROM node:24-alpine
 
 WORKDIR /migration
 
-COPY . ./prisma
+COPY prisma.config.ts ./
+COPY prisma ./prisma
 
 # Install pnpm
 RUN npm install -g pnpm
