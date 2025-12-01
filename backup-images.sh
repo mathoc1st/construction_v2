@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Folders
 UPLOADS_DIR="./uploads/images"
-BACKUP_DIR="${HOME}/backups/images"
+BACKUP_DIR="/home/mathoc1st/backups/images"
 
 # Create backup folder if it doesn't exist
 mkdir -p "$BACKUP_DIR"
