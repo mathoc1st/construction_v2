@@ -59,7 +59,7 @@ services:
     container_name: prisma-migrate
     build:
       context: .
-      dockerfile: ./prisma
+      dockerfile: ./prisma/Dockerfile
     environment:
       DB_HOST: postgres
       DATABASE_URL: postgres://construction_user:construction_password@postgres:5432/construction
