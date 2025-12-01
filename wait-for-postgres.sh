@@ -10,7 +10,7 @@ POSTGRES_DB="${POSTGRES_DB:-construction}"
 # Healthcheck parameters
 RETRIES=5
 INTERVAL=10
-START_PERIOD=15
+START_PERIOD=10
 
 sleep $START_PERIOD
 

@@ -5,12 +5,12 @@ WORKDIR /migration
 # Install pnpm
 RUN npm install -g pnpm
 
-# Copy package files and Prisma schema only
-COPY ../package.json ../pnpm-lock.yaml* ./
-COPY ../prisma ./prisma
+RUN pnpm init -y
+RUN pnpm add -D typescript tsx @types/node
+RUN pnpx tsc --init
 
-# Install only what's needed
-RUN pnpm install --frozen-lockfile
+RUN pnpm add -D prisma @types/node @types/pg
+RUN pnpm add @prisma/client @prisma/adapter-pg pg dotenv
 
 # Generate Prisma client
 RUN npx prisma generate
