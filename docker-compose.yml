@@ -21,9 +21,59 @@ services:
     entrypoint: >
       sh -c "tar -czf /backups/uploads_$(date +%F_%H-%M-%S).tar.gz /data"
 
+  postgres:
+    image: postgres:17
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    container_name: construction-postgres
+    environment:
+      POSTGRES_USER: construction_user
+      POSTGRES_PASSWORD: construction_password
+      POSTGRES_DB: construction
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - construction
+
+  pgbackups:
+    image: prodrigestivill/postgres-backup-local
+    restart: always
+    volumes:
+      - /var/opt/pgbackups:/backups
+    depends_on:
+      postgres:
+        - healthcheck
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=construction
+      - POSTGRES_USER=construction_user
+      - POSTGRES_PASSWORD=construction_password
+      - POSTGRES_EXTRA_OPTS=-Z1 --schema=public --blobs
+      - SCHEDULE=@daily
+      - BACKUP_ON_START=TRUE
+      - BACKUP_KEEP_WEEKS=2
+      - HEALTHCHECK_PORT=8080
+    networks:
+      - construction
+
+  prisma-migrate:
+    container_name: prisma-migrate
+    build: ./prisma
+    environment:
+      DB_HOST: postgres
+    depends_on:
+      postgres:
+        - healthcheck
+
+volumes:
+  pgdata:
+
 networks:
   construction:
     external: true
-
-volumes:
-  uploads:
