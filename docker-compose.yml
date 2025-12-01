@@ -17,7 +17,7 @@ services:
     image: alpine
     volumes:
       - uploads:/data:ro # read-only access to uploaded pictures
-      - ${HOME}/backups/pictures:/backups # backups stored on host
+      - ./backups/pictures:/backups # backups stored on host
     entrypoint: >
       sh -c "tar -czf /backups/uploads_$(date +%F_%H-%M-%S).tar.gz /data"
 
