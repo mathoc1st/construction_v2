@@ -22,6 +22,7 @@ echo "Waiting for Postgres to be ready..."
 ./wait-for-postgres.sh
 
 echo "Applying prisma migrations..."
+docker compose up --build -d prisma-migrate
 docker compose run --rm prisma-migrate
 
 echo "Starting up the postgres backup container..."
