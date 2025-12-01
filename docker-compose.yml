@@ -65,6 +65,7 @@ services:
 
 volumes:
   pgdata:
+  uploads:
 
 networks:
   construction:
