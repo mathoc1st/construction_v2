@@ -62,6 +62,7 @@ services:
       dockerfile: ./prisma
     environment:
       DB_HOST: postgres
+      DATABASE_URL: postgres://construction_user:construction_password@postgres:5432/construction
     depends_on:
       - postgres
 
