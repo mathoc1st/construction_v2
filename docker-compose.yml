@@ -5,6 +5,7 @@ services:
       - '3000:3000'
     volumes:
       - ./logs:/app/logs
+      - uploads:/app/uploads
     environment:
       ORIGIN: 'https://skrusdom.ru'
       DATABASE_URL: postgres://construction_user:construction_password@postgres:5432/construction
@@ -12,6 +13,17 @@ services:
     networks:
       - construction
 
+  picture-backup:
+    image: alpine
+    volumes:
+      - uploads:/data:ro # read-only access to uploaded pictures
+      - ${HOME}/backups/pictures:/backups # backups stored on host
+    entrypoint: >
+      sh -c "tar -czf /backups/uploads_$(date +%F_%H-%M-%S).tar.gz /data"
+
 networks:
   construction:
     external: true
+
+volumes:
+  uploads:
