@@ -1,6 +1,8 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
     ports:
       - '3000:3000'
     volumes:
@@ -51,7 +53,9 @@ services:
     container_name: prisma-migrate
     build:
       context: .
-      dockerfile: ./prisma/Dockerfile
+      dockerfile: /docker/prisma/Dockerfile
+    volumes:
+      - ./prisma:/migration/prisma
     depends_on:
       - postgres
     networks:
