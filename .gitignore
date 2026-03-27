@@ -25,3 +25,5 @@ vite.config.ts.timestamp-*
 /prisma/src/generated/prisma
 /uploads
 /logs
+*storybook.log
+storybook-static
