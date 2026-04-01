@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Tabs } from 'flowbite-svelte';
 	import { finishSchema, FinishType, type FinishDto, type ParsedFinish } from '$lib/types';
-	import { getFinishTypeName } from '$lib/utils';
 	import FinishTabEditor from './FinishTabEditor.svelte';
 
 	let {
@@ -53,6 +52,19 @@
 		onDeleteFinish(finishType);
 
 		if (finishes.length > 0) selectedTab = finishes[finishes.length - 1].type;
+	}
+
+	function getFinishTypeName(type: OutsideFinish): string {
+		switch (type) {
+			case OutsideFinish.COLD:
+				return 'Холодный контур';
+			case OutsideFinish.WARM_100:
+				return 'Теплый контур 100мм';
+			case OutsideFinish.WARM_150:
+				return 'Теплый контур 150мм';
+			case OutsideFinish.WARM_200:
+				return 'Теплый контур 200мм';
+		}
 	}
 </script>
 

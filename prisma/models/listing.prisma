@@ -1,0 +1,22 @@
+model Listing {
+    id     Int      @id @default(autoincrement())
+    title  String
+    images String[]
+    views  Int
+
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    createdBy   User @relation("CreatedBy", fields: [createdById], references: [id])
+    createdById Int
+
+    updatedBy   User @relation("UpdatedBy", fields: [updatedById], references: [id])
+    updatedById Int
+
+    deletedBy   User? @relation("DeletedBy", fields: [deletedById], references: [id])
+    deletedById Int?
+
+    buildings  Building @relation(fields: [buildingId], references: [id])
+    buildingId Int      @unique
+}

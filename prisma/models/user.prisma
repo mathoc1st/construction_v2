@@ -1,0 +1,21 @@
+model User {
+    id           Int    @id @default(autoincrement())
+    username     String @unique
+    passwordHash String
+
+    sessions Session[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    createdBuildings Building[] @relation("CreatedBy")
+    updatedBuildings Building[] @relation("UpdatedBy")
+    deletedBuildings Building[] @relation("DeletedBy")
+
+    createdListings Listing[] @relation("CreatedBy")
+    updatedListings Listing[] @relation("UpdatedBy")
+    deletedListings Listing[] @relation("DeletedBy")
+
+    createdFinishes Finish[] @relation("CreatedBy")
+    updatedFinishes Finish[] @relation("UpdatedBy")
+}

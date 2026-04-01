@@ -25,3 +25,40 @@ export class InvalidUrlError extends DomainError {
 		this.name = 'InvalidUrlError';
 	}
 }
+
+export class InvalidPathError extends DomainError {
+	constructor(fieldName: string, path: string) {
+		super(`Invalid path for ${fieldName}: ${path}. Must be a valid path.`);
+		this.name = 'InvalidPathError';
+	}
+}
+
+export class InvalidImageExtensionError extends DomainError {
+	constructor(fieldName: string, path: string) {
+		super(
+			`Invalid image extension for ${fieldName}: ${path}. Must be one of the following extensions: .jpg, .jpeg, .png, .webp, .gif.`
+		);
+		this.name = 'InvalidImageExtensionError';
+	}
+}
+
+export class DeletedEntityModificationError extends DomainError {
+	constructor(entity: string, id: number) {
+		super(`Cannot modify ${entity} with id ${id} because it is deleted.`);
+		this.name = 'DeletedEntityModificationError';
+	}
+}
+
+export class EntityAlreadyDeletedError extends DomainError {
+	constructor(entity: string, id: number) {
+		super(`Entity ${entity} with id ${id} is already deleted.`);
+		this.name = 'EntityAlreadyDeletedError';
+	}
+}
+
+export class EntityMissingIdError extends DomainError {
+	constructor(entity: string) {
+		super(`Entity ${entity} is missing an id`);
+		this.name = 'EntityMissingIdError';
+	}
+}

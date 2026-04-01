@@ -1,5 +1,14 @@
 import type z from 'zod';
-import { BuildingType, FinishType, type ServiceError } from './types';
+import { BuildingType, FinishType, type ApiResponse, type ServiceError } from './types';
+import { OutsideFinish } from './server/api/buildings/building.domain';
+
+export function toApiOkResponse<T>(result: T): ApiResponse<T> {
+	return { success: true, data: result };
+}
+
+export function toApiErrorResponse(error: string): ApiResponse<never> {
+	return { success: false, error };
+}
 
 export class ServiceException extends Error {
 	status: number;
@@ -37,15 +46,15 @@ export function getBuildingTypeName(type: BuildingType): string {
 	}
 }
 
-export function getFinishTypeName(type: FinishType): string {
+export function getFinishTypeName(type: OutsideFinish): string {
 	switch (type) {
-		case FinishType.COLD:
+		case OutsideFinish.COLD:
 			return 'Холодный контур';
-		case FinishType.WARM_100:
+		case OutsideFinish.WARM_100:
 			return 'Теплый контур 100мм';
-		case FinishType.WARM_150:
+		case OutsideFinish.WARM_150:
 			return 'Теплый контур 150мм';
-		case FinishType.WARM_200:
+		case OutsideFinish.WARM_200:
 			return 'Теплый контур 200мм';
 	}
 }
