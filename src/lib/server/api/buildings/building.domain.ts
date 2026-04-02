@@ -86,6 +86,14 @@ export class Building {
 		createdById: number;
 	}): Building {
 		const now = new Date();
+
+		if (params.width <= 0) throw new NonPositiveValueError('width', params.width);
+		if (params.length <= 0) throw new NonPositiveValueError('length', params.length);
+		if (params.height <= 0) throw new NonPositiveValueError('height', params.height);
+		if (params.bedrooms < 0) throw new NonPositiveValueError('bedrooms', params.bedrooms);
+		if (params.bathrooms < 0) throw new NonPositiveValueError('bathrooms', params.bathrooms);
+		if (params.floors <= 0) throw new NonPositiveValueError('floors', params.floors);
+
 		return new Building({
 			id: null,
 			constructionType: params.constructionType,

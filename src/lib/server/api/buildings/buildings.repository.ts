@@ -1,4 +1,3 @@
-import { getPrismaService } from '$lib/server/prisma/prisma.service';
 import { Building as DomainBuilding } from './building.domain';
 import type {
 	BuildingFilterOptions,
@@ -12,11 +11,7 @@ import type {
 	Building as PrismaBuilding
 } from '$lib/server/prisma/generated/client';
 import { ConstructionType as DomainConstructionType } from './building.domain';
-import {
-	SortDirection,
-	type IPrismaService,
-	type SortOptions
-} from '$lib/server/prisma/prisma.types';
+import { SortDirection, type DbClient, type SortOptions } from '$lib/server/prisma/prisma.types';
 
 const constructionTypeMap: Record<PrismaConstructionType, DomainConstructionType> = {
 	FRAME: DomainConstructionType.FRAME,
@@ -24,18 +19,15 @@ const constructionTypeMap: Record<PrismaConstructionType, DomainConstructionType
 	CONTAINER: DomainConstructionType.CONTAINER
 };
 
-// const finishTypeMap: Record<PrismaFinishType, DomainFinishType> = {
-// 	COLD: DomainFinishType.COLD,
-// 	WARM_100: DomainFinishType.WARM_100,
-// 	WARM_150: DomainFinishType.WARM_150,
-// 	WARM_200: DomainFinishType.WARM_200
-// };
-
 export class BuildingsRepository implements IBuildingsRepository {
-	constructor(private readonly prismaService: IPrismaService) {}
+	constructor(private readonly _client: DbClient) {}
 
-	async getBuildingById(id: number): Promise<DomainBuilding | null> {
-		const record = await this.prismaService.client.building.findUnique({
+	withClient(client: DbClient): IBuildingsRepository {
+		return new BuildingsRepository(client);
+	}
+
+	async getById(id: number): Promise<DomainBuilding | null> {
+		const record = await this._client.building.findUnique({
 			where: { id }
 		});
 
@@ -45,7 +37,7 @@ export class BuildingsRepository implements IBuildingsRepository {
 	}
 
 	async findAll(options?: BuildingQueryOptions): Promise<DomainBuilding[]> {
-		const records = await this.prismaService.client.building.findMany({
+		const records = await this._client.building.findMany({
 			where: this.buildWhere(options?.filters),
 			orderBy: this.buildOrderBy(options?.sort),
 			take: options?.pagination?.limit,
@@ -56,14 +48,14 @@ export class BuildingsRepository implements IBuildingsRepository {
 	}
 
 	async findAllCount(filters?: BuildingFilterOptions): Promise<number> {
-		const count = await this.prismaService.client.building.count({
+		const count = await this._client.building.count({
 			where: this.buildWhere(filters)
 		});
 		return count;
 	}
 
 	async create(building: DomainBuilding): Promise<DomainBuilding> {
-		const record = await this.prismaService.client.building.create({
+		const record = await this._client.building.create({
 			data: {
 				constructionType: building.constructionType,
 				width: building.width,
@@ -90,9 +82,9 @@ export class BuildingsRepository implements IBuildingsRepository {
 			throw new Error('Building ID is required for update');
 		}
 
-		const model = this.toPrismaBuilding(building);
+		const model = this.toPrismaBuildingNoId(building);
 
-		const record = await this.prismaService.client.building.update({
+		const record = await this._client.building.update({
 			where: { id: building.id },
 			data: {
 				...model
@@ -103,7 +95,7 @@ export class BuildingsRepository implements IBuildingsRepository {
 	}
 
 	async softDelete(building: DomainBuilding): Promise<void> {
-		await this.prismaService.client.building.update({
+		await this._client.building.update({
 			where: {
 				id: building.id!
 			},
@@ -117,7 +109,7 @@ export class BuildingsRepository implements IBuildingsRepository {
 	}
 
 	async delete(building: DomainBuilding): Promise<void> {
-		await this.prismaService.client.building.delete({
+		await this._client.building.delete({
 			where: { id: building.id! }
 		});
 
@@ -183,7 +175,7 @@ export class BuildingsRepository implements IBuildingsRepository {
 		});
 	}
 
-	private toPrismaBuilding(building: DomainBuilding): Omit<PrismaBuilding, 'id'> {
+	private toPrismaBuildingNoId(building: DomainBuilding): Omit<PrismaBuilding, 'id'> {
 		return {
 			constructionType: building.constructionType,
 			width: building.width,
@@ -205,9 +197,9 @@ export class BuildingsRepository implements IBuildingsRepository {
 
 let buildingsRepository: IBuildingsRepository | null = null;
 
-export const getBuildingsRepository = () => {
+export const getBuildingsRepository = (client: DbClient) => {
 	if (!buildingsRepository) {
-		buildingsRepository = new BuildingsRepository(getPrismaService());
+		buildingsRepository = new BuildingsRepository(client);
 	}
 	return buildingsRepository;
 };

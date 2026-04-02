@@ -32,6 +32,7 @@ export type FinishAvgAggregateOutputType = {
   originalPrice: number | null
   createdById: number | null
   updatedById: number | null
+  deletedById: number | null
   buildingId: number | null
 }
 
@@ -41,6 +42,7 @@ export type FinishSumAggregateOutputType = {
   originalPrice: number | null
   createdById: number | null
   updatedById: number | null
+  deletedById: number | null
   buildingId: number | null
 }
 
@@ -52,8 +54,10 @@ export type FinishMinAggregateOutputType = {
   originalPrice: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
   createdById: number | null
   updatedById: number | null
+  deletedById: number | null
   buildingId: number | null
 }
 
@@ -65,8 +69,10 @@ export type FinishMaxAggregateOutputType = {
   originalPrice: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
   createdById: number | null
   updatedById: number | null
+  deletedById: number | null
   buildingId: number | null
 }
 
@@ -78,8 +84,10 @@ export type FinishCountAggregateOutputType = {
   originalPrice: number
   createdAt: number
   updatedAt: number
+  deletedAt: number
   createdById: number
   updatedById: number
+  deletedById: number
   buildingId: number
   _all: number
 }
@@ -91,6 +99,7 @@ export type FinishAvgAggregateInputType = {
   originalPrice?: true
   createdById?: true
   updatedById?: true
+  deletedById?: true
   buildingId?: true
 }
 
@@ -100,6 +109,7 @@ export type FinishSumAggregateInputType = {
   originalPrice?: true
   createdById?: true
   updatedById?: true
+  deletedById?: true
   buildingId?: true
 }
 
@@ -111,8 +121,10 @@ export type FinishMinAggregateInputType = {
   originalPrice?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
   createdById?: true
   updatedById?: true
+  deletedById?: true
   buildingId?: true
 }
 
@@ -124,8 +136,10 @@ export type FinishMaxAggregateInputType = {
   originalPrice?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
   createdById?: true
   updatedById?: true
+  deletedById?: true
   buildingId?: true
 }
 
@@ -137,8 +151,10 @@ export type FinishCountAggregateInputType = {
   originalPrice?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
   createdById?: true
   updatedById?: true
+  deletedById?: true
   buildingId?: true
   _all?: true
 }
@@ -237,8 +253,10 @@ export type FinishGroupByOutputType = {
   originalPrice: number | null
   createdAt: Date
   updatedAt: Date
+  deletedAt: Date | null
   createdById: number
   updatedById: number
+  deletedById: number | null
   buildingId: number
   _count: FinishCountAggregateOutputType | null
   _avg: FinishAvgAggregateOutputType | null
@@ -273,11 +291,14 @@ export type FinishWhereInput = {
   originalPrice?: Prisma.IntNullableFilter<"Finish"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Finish"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Finish"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Finish"> | Date | string | null
   createdById?: Prisma.IntFilter<"Finish"> | number
   updatedById?: Prisma.IntFilter<"Finish"> | number
+  deletedById?: Prisma.IntNullableFilter<"Finish"> | number | null
   buildingId?: Prisma.IntFilter<"Finish"> | number
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   updatedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  deletedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   building?: Prisma.XOR<Prisma.BuildingScalarRelationFilter, Prisma.BuildingWhereInput>
 }
 
@@ -289,11 +310,14 @@ export type FinishOrderByWithRelationInput = {
   originalPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdById?: Prisma.SortOrder
   updatedById?: Prisma.SortOrder
+  deletedById?: Prisma.SortOrderInput | Prisma.SortOrder
   buildingId?: Prisma.SortOrder
   createdBy?: Prisma.UserOrderByWithRelationInput
   updatedBy?: Prisma.UserOrderByWithRelationInput
+  deletedBy?: Prisma.UserOrderByWithRelationInput
   building?: Prisma.BuildingOrderByWithRelationInput
 }
 
@@ -308,11 +332,14 @@ export type FinishWhereUniqueInput = Prisma.AtLeast<{
   originalPrice?: Prisma.IntNullableFilter<"Finish"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Finish"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Finish"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Finish"> | Date | string | null
   createdById?: Prisma.IntFilter<"Finish"> | number
   updatedById?: Prisma.IntFilter<"Finish"> | number
+  deletedById?: Prisma.IntNullableFilter<"Finish"> | number | null
   buildingId?: Prisma.IntFilter<"Finish"> | number
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   updatedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  deletedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   building?: Prisma.XOR<Prisma.BuildingScalarRelationFilter, Prisma.BuildingWhereInput>
 }, "id">
 
@@ -324,8 +351,10 @@ export type FinishOrderByWithAggregationInput = {
   originalPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdById?: Prisma.SortOrder
   updatedById?: Prisma.SortOrder
+  deletedById?: Prisma.SortOrderInput | Prisma.SortOrder
   buildingId?: Prisma.SortOrder
   _count?: Prisma.FinishCountOrderByAggregateInput
   _avg?: Prisma.FinishAvgOrderByAggregateInput
@@ -345,8 +374,10 @@ export type FinishScalarWhereWithAggregatesInput = {
   originalPrice?: Prisma.IntNullableWithAggregatesFilter<"Finish"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Finish"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Finish"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Finish"> | Date | string | null
   createdById?: Prisma.IntWithAggregatesFilter<"Finish"> | number
   updatedById?: Prisma.IntWithAggregatesFilter<"Finish"> | number
+  deletedById?: Prisma.IntNullableWithAggregatesFilter<"Finish"> | number | null
   buildingId?: Prisma.IntWithAggregatesFilter<"Finish"> | number
 }
 
@@ -357,8 +388,10 @@ export type FinishCreateInput = {
   originalPrice?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedFinishesInput
   updatedBy: Prisma.UserCreateNestedOneWithoutUpdatedFinishesInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFinishesInput
   building: Prisma.BuildingCreateNestedOneWithoutFinishesInput
 }
 
@@ -370,8 +403,10 @@ export type FinishUncheckedCreateInput = {
   originalPrice?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   createdById: number
   updatedById: number
+  deletedById?: number | null
   buildingId: number
 }
 
@@ -382,8 +417,10 @@ export type FinishUpdateInput = {
   originalPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedFinishesNestedInput
   updatedBy?: Prisma.UserUpdateOneRequiredWithoutUpdatedFinishesNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFinishesNestedInput
   building?: Prisma.BuildingUpdateOneRequiredWithoutFinishesNestedInput
 }
 
@@ -395,8 +432,10 @@ export type FinishUncheckedUpdateInput = {
   originalPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdById?: Prisma.IntFieldUpdateOperationsInput | number
   updatedById?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   buildingId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -408,8 +447,10 @@ export type FinishCreateManyInput = {
   originalPrice?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   createdById: number
   updatedById: number
+  deletedById?: number | null
   buildingId: number
 }
 
@@ -420,6 +461,7 @@ export type FinishUpdateManyMutationInput = {
   originalPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type FinishUncheckedUpdateManyInput = {
@@ -430,8 +472,10 @@ export type FinishUncheckedUpdateManyInput = {
   originalPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdById?: Prisma.IntFieldUpdateOperationsInput | number
   updatedById?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   buildingId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -453,8 +497,10 @@ export type FinishCountOrderByAggregateInput = {
   originalPrice?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   updatedById?: Prisma.SortOrder
+  deletedById?: Prisma.SortOrder
   buildingId?: Prisma.SortOrder
 }
 
@@ -464,6 +510,7 @@ export type FinishAvgOrderByAggregateInput = {
   originalPrice?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   updatedById?: Prisma.SortOrder
+  deletedById?: Prisma.SortOrder
   buildingId?: Prisma.SortOrder
 }
 
@@ -475,8 +522,10 @@ export type FinishMaxOrderByAggregateInput = {
   originalPrice?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   updatedById?: Prisma.SortOrder
+  deletedById?: Prisma.SortOrder
   buildingId?: Prisma.SortOrder
 }
 
@@ -488,8 +537,10 @@ export type FinishMinOrderByAggregateInput = {
   originalPrice?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   updatedById?: Prisma.SortOrder
+  deletedById?: Prisma.SortOrder
   buildingId?: Prisma.SortOrder
 }
 
@@ -499,6 +550,7 @@ export type FinishSumOrderByAggregateInput = {
   originalPrice?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   updatedById?: Prisma.SortOrder
+  deletedById?: Prisma.SortOrder
   buildingId?: Prisma.SortOrder
 }
 
@@ -566,6 +618,13 @@ export type FinishCreateNestedManyWithoutUpdatedByInput = {
   connect?: Prisma.FinishWhereUniqueInput | Prisma.FinishWhereUniqueInput[]
 }
 
+export type FinishCreateNestedManyWithoutDeletedByInput = {
+  create?: Prisma.XOR<Prisma.FinishCreateWithoutDeletedByInput, Prisma.FinishUncheckedCreateWithoutDeletedByInput> | Prisma.FinishCreateWithoutDeletedByInput[] | Prisma.FinishUncheckedCreateWithoutDeletedByInput[]
+  connectOrCreate?: Prisma.FinishCreateOrConnectWithoutDeletedByInput | Prisma.FinishCreateOrConnectWithoutDeletedByInput[]
+  createMany?: Prisma.FinishCreateManyDeletedByInputEnvelope
+  connect?: Prisma.FinishWhereUniqueInput | Prisma.FinishWhereUniqueInput[]
+}
+
 export type FinishUncheckedCreateNestedManyWithoutCreatedByInput = {
   create?: Prisma.XOR<Prisma.FinishCreateWithoutCreatedByInput, Prisma.FinishUncheckedCreateWithoutCreatedByInput> | Prisma.FinishCreateWithoutCreatedByInput[] | Prisma.FinishUncheckedCreateWithoutCreatedByInput[]
   connectOrCreate?: Prisma.FinishCreateOrConnectWithoutCreatedByInput | Prisma.FinishCreateOrConnectWithoutCreatedByInput[]
@@ -577,6 +636,13 @@ export type FinishUncheckedCreateNestedManyWithoutUpdatedByInput = {
   create?: Prisma.XOR<Prisma.FinishCreateWithoutUpdatedByInput, Prisma.FinishUncheckedCreateWithoutUpdatedByInput> | Prisma.FinishCreateWithoutUpdatedByInput[] | Prisma.FinishUncheckedCreateWithoutUpdatedByInput[]
   connectOrCreate?: Prisma.FinishCreateOrConnectWithoutUpdatedByInput | Prisma.FinishCreateOrConnectWithoutUpdatedByInput[]
   createMany?: Prisma.FinishCreateManyUpdatedByInputEnvelope
+  connect?: Prisma.FinishWhereUniqueInput | Prisma.FinishWhereUniqueInput[]
+}
+
+export type FinishUncheckedCreateNestedManyWithoutDeletedByInput = {
+  create?: Prisma.XOR<Prisma.FinishCreateWithoutDeletedByInput, Prisma.FinishUncheckedCreateWithoutDeletedByInput> | Prisma.FinishCreateWithoutDeletedByInput[] | Prisma.FinishUncheckedCreateWithoutDeletedByInput[]
+  connectOrCreate?: Prisma.FinishCreateOrConnectWithoutDeletedByInput | Prisma.FinishCreateOrConnectWithoutDeletedByInput[]
+  createMany?: Prisma.FinishCreateManyDeletedByInputEnvelope
   connect?: Prisma.FinishWhereUniqueInput | Prisma.FinishWhereUniqueInput[]
 }
 
@@ -608,6 +674,20 @@ export type FinishUpdateManyWithoutUpdatedByNestedInput = {
   deleteMany?: Prisma.FinishScalarWhereInput | Prisma.FinishScalarWhereInput[]
 }
 
+export type FinishUpdateManyWithoutDeletedByNestedInput = {
+  create?: Prisma.XOR<Prisma.FinishCreateWithoutDeletedByInput, Prisma.FinishUncheckedCreateWithoutDeletedByInput> | Prisma.FinishCreateWithoutDeletedByInput[] | Prisma.FinishUncheckedCreateWithoutDeletedByInput[]
+  connectOrCreate?: Prisma.FinishCreateOrConnectWithoutDeletedByInput | Prisma.FinishCreateOrConnectWithoutDeletedByInput[]
+  upsert?: Prisma.FinishUpsertWithWhereUniqueWithoutDeletedByInput | Prisma.FinishUpsertWithWhereUniqueWithoutDeletedByInput[]
+  createMany?: Prisma.FinishCreateManyDeletedByInputEnvelope
+  set?: Prisma.FinishWhereUniqueInput | Prisma.FinishWhereUniqueInput[]
+  disconnect?: Prisma.FinishWhereUniqueInput | Prisma.FinishWhereUniqueInput[]
+  delete?: Prisma.FinishWhereUniqueInput | Prisma.FinishWhereUniqueInput[]
+  connect?: Prisma.FinishWhereUniqueInput | Prisma.FinishWhereUniqueInput[]
+  update?: Prisma.FinishUpdateWithWhereUniqueWithoutDeletedByInput | Prisma.FinishUpdateWithWhereUniqueWithoutDeletedByInput[]
+  updateMany?: Prisma.FinishUpdateManyWithWhereWithoutDeletedByInput | Prisma.FinishUpdateManyWithWhereWithoutDeletedByInput[]
+  deleteMany?: Prisma.FinishScalarWhereInput | Prisma.FinishScalarWhereInput[]
+}
+
 export type FinishUncheckedUpdateManyWithoutCreatedByNestedInput = {
   create?: Prisma.XOR<Prisma.FinishCreateWithoutCreatedByInput, Prisma.FinishUncheckedCreateWithoutCreatedByInput> | Prisma.FinishCreateWithoutCreatedByInput[] | Prisma.FinishUncheckedCreateWithoutCreatedByInput[]
   connectOrCreate?: Prisma.FinishCreateOrConnectWithoutCreatedByInput | Prisma.FinishCreateOrConnectWithoutCreatedByInput[]
@@ -636,6 +716,20 @@ export type FinishUncheckedUpdateManyWithoutUpdatedByNestedInput = {
   deleteMany?: Prisma.FinishScalarWhereInput | Prisma.FinishScalarWhereInput[]
 }
 
+export type FinishUncheckedUpdateManyWithoutDeletedByNestedInput = {
+  create?: Prisma.XOR<Prisma.FinishCreateWithoutDeletedByInput, Prisma.FinishUncheckedCreateWithoutDeletedByInput> | Prisma.FinishCreateWithoutDeletedByInput[] | Prisma.FinishUncheckedCreateWithoutDeletedByInput[]
+  connectOrCreate?: Prisma.FinishCreateOrConnectWithoutDeletedByInput | Prisma.FinishCreateOrConnectWithoutDeletedByInput[]
+  upsert?: Prisma.FinishUpsertWithWhereUniqueWithoutDeletedByInput | Prisma.FinishUpsertWithWhereUniqueWithoutDeletedByInput[]
+  createMany?: Prisma.FinishCreateManyDeletedByInputEnvelope
+  set?: Prisma.FinishWhereUniqueInput | Prisma.FinishWhereUniqueInput[]
+  disconnect?: Prisma.FinishWhereUniqueInput | Prisma.FinishWhereUniqueInput[]
+  delete?: Prisma.FinishWhereUniqueInput | Prisma.FinishWhereUniqueInput[]
+  connect?: Prisma.FinishWhereUniqueInput | Prisma.FinishWhereUniqueInput[]
+  update?: Prisma.FinishUpdateWithWhereUniqueWithoutDeletedByInput | Prisma.FinishUpdateWithWhereUniqueWithoutDeletedByInput[]
+  updateMany?: Prisma.FinishUpdateManyWithWhereWithoutDeletedByInput | Prisma.FinishUpdateManyWithWhereWithoutDeletedByInput[]
+  deleteMany?: Prisma.FinishScalarWhereInput | Prisma.FinishScalarWhereInput[]
+}
+
 export type FinishCreateWithoutBuildingInput = {
   type: $Enums.FinishType
   description: string
@@ -643,8 +737,10 @@ export type FinishCreateWithoutBuildingInput = {
   originalPrice?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedFinishesInput
   updatedBy: Prisma.UserCreateNestedOneWithoutUpdatedFinishesInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFinishesInput
 }
 
 export type FinishUncheckedCreateWithoutBuildingInput = {
@@ -655,8 +751,10 @@ export type FinishUncheckedCreateWithoutBuildingInput = {
   originalPrice?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   createdById: number
   updatedById: number
+  deletedById?: number | null
 }
 
 export type FinishCreateOrConnectWithoutBuildingInput = {
@@ -696,8 +794,10 @@ export type FinishScalarWhereInput = {
   originalPrice?: Prisma.IntNullableFilter<"Finish"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Finish"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Finish"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Finish"> | Date | string | null
   createdById?: Prisma.IntFilter<"Finish"> | number
   updatedById?: Prisma.IntFilter<"Finish"> | number
+  deletedById?: Prisma.IntNullableFilter<"Finish"> | number | null
   buildingId?: Prisma.IntFilter<"Finish"> | number
 }
 
@@ -708,7 +808,9 @@ export type FinishCreateWithoutCreatedByInput = {
   originalPrice?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   updatedBy: Prisma.UserCreateNestedOneWithoutUpdatedFinishesInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFinishesInput
   building: Prisma.BuildingCreateNestedOneWithoutFinishesInput
 }
 
@@ -720,7 +822,9 @@ export type FinishUncheckedCreateWithoutCreatedByInput = {
   originalPrice?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   updatedById: number
+  deletedById?: number | null
   buildingId: number
 }
 
@@ -741,7 +845,9 @@ export type FinishCreateWithoutUpdatedByInput = {
   originalPrice?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedFinishesInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedFinishesInput
   building: Prisma.BuildingCreateNestedOneWithoutFinishesInput
 }
 
@@ -753,7 +859,9 @@ export type FinishUncheckedCreateWithoutUpdatedByInput = {
   originalPrice?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   createdById: number
+  deletedById?: number | null
   buildingId: number
 }
 
@@ -764,6 +872,43 @@ export type FinishCreateOrConnectWithoutUpdatedByInput = {
 
 export type FinishCreateManyUpdatedByInputEnvelope = {
   data: Prisma.FinishCreateManyUpdatedByInput | Prisma.FinishCreateManyUpdatedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type FinishCreateWithoutDeletedByInput = {
+  type: $Enums.FinishType
+  description: string
+  price: number
+  originalPrice?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedFinishesInput
+  updatedBy: Prisma.UserCreateNestedOneWithoutUpdatedFinishesInput
+  building: Prisma.BuildingCreateNestedOneWithoutFinishesInput
+}
+
+export type FinishUncheckedCreateWithoutDeletedByInput = {
+  id?: number
+  type: $Enums.FinishType
+  description: string
+  price: number
+  originalPrice?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  createdById: number
+  updatedById: number
+  buildingId: number
+}
+
+export type FinishCreateOrConnectWithoutDeletedByInput = {
+  where: Prisma.FinishWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinishCreateWithoutDeletedByInput, Prisma.FinishUncheckedCreateWithoutDeletedByInput>
+}
+
+export type FinishCreateManyDeletedByInputEnvelope = {
+  data: Prisma.FinishCreateManyDeletedByInput | Prisma.FinishCreateManyDeletedByInput[]
   skipDuplicates?: boolean
 }
 
@@ -799,6 +944,22 @@ export type FinishUpdateManyWithWhereWithoutUpdatedByInput = {
   data: Prisma.XOR<Prisma.FinishUpdateManyMutationInput, Prisma.FinishUncheckedUpdateManyWithoutUpdatedByInput>
 }
 
+export type FinishUpsertWithWhereUniqueWithoutDeletedByInput = {
+  where: Prisma.FinishWhereUniqueInput
+  update: Prisma.XOR<Prisma.FinishUpdateWithoutDeletedByInput, Prisma.FinishUncheckedUpdateWithoutDeletedByInput>
+  create: Prisma.XOR<Prisma.FinishCreateWithoutDeletedByInput, Prisma.FinishUncheckedCreateWithoutDeletedByInput>
+}
+
+export type FinishUpdateWithWhereUniqueWithoutDeletedByInput = {
+  where: Prisma.FinishWhereUniqueInput
+  data: Prisma.XOR<Prisma.FinishUpdateWithoutDeletedByInput, Prisma.FinishUncheckedUpdateWithoutDeletedByInput>
+}
+
+export type FinishUpdateManyWithWhereWithoutDeletedByInput = {
+  where: Prisma.FinishScalarWhereInput
+  data: Prisma.XOR<Prisma.FinishUpdateManyMutationInput, Prisma.FinishUncheckedUpdateManyWithoutDeletedByInput>
+}
+
 export type FinishCreateManyBuildingInput = {
   id?: number
   type: $Enums.FinishType
@@ -807,8 +968,10 @@ export type FinishCreateManyBuildingInput = {
   originalPrice?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   createdById: number
   updatedById: number
+  deletedById?: number | null
 }
 
 export type FinishUpdateWithoutBuildingInput = {
@@ -818,8 +981,10 @@ export type FinishUpdateWithoutBuildingInput = {
   originalPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedFinishesNestedInput
   updatedBy?: Prisma.UserUpdateOneRequiredWithoutUpdatedFinishesNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFinishesNestedInput
 }
 
 export type FinishUncheckedUpdateWithoutBuildingInput = {
@@ -830,8 +995,10 @@ export type FinishUncheckedUpdateWithoutBuildingInput = {
   originalPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdById?: Prisma.IntFieldUpdateOperationsInput | number
   updatedById?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type FinishUncheckedUpdateManyWithoutBuildingInput = {
@@ -842,8 +1009,10 @@ export type FinishUncheckedUpdateManyWithoutBuildingInput = {
   originalPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdById?: Prisma.IntFieldUpdateOperationsInput | number
   updatedById?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type FinishCreateManyCreatedByInput = {
@@ -854,7 +1023,9 @@ export type FinishCreateManyCreatedByInput = {
   originalPrice?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   updatedById: number
+  deletedById?: number | null
   buildingId: number
 }
 
@@ -866,7 +1037,23 @@ export type FinishCreateManyUpdatedByInput = {
   originalPrice?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   createdById: number
+  deletedById?: number | null
+  buildingId: number
+}
+
+export type FinishCreateManyDeletedByInput = {
+  id?: number
+  type: $Enums.FinishType
+  description: string
+  price: number
+  originalPrice?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  createdById: number
+  updatedById: number
   buildingId: number
 }
 
@@ -877,7 +1064,9 @@ export type FinishUpdateWithoutCreatedByInput = {
   originalPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedBy?: Prisma.UserUpdateOneRequiredWithoutUpdatedFinishesNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFinishesNestedInput
   building?: Prisma.BuildingUpdateOneRequiredWithoutFinishesNestedInput
 }
 
@@ -889,7 +1078,9 @@ export type FinishUncheckedUpdateWithoutCreatedByInput = {
   originalPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedById?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   buildingId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -901,7 +1092,9 @@ export type FinishUncheckedUpdateManyWithoutCreatedByInput = {
   originalPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedById?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   buildingId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -912,7 +1105,9 @@ export type FinishUpdateWithoutUpdatedByInput = {
   originalPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedFinishesNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedFinishesNestedInput
   building?: Prisma.BuildingUpdateOneRequiredWithoutFinishesNestedInput
 }
 
@@ -924,7 +1119,9 @@ export type FinishUncheckedUpdateWithoutUpdatedByInput = {
   originalPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdById?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   buildingId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -936,7 +1133,50 @@ export type FinishUncheckedUpdateManyWithoutUpdatedByInput = {
   originalPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdById?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  buildingId?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type FinishUpdateWithoutDeletedByInput = {
+  type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  originalPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedFinishesNestedInput
+  updatedBy?: Prisma.UserUpdateOneRequiredWithoutUpdatedFinishesNestedInput
+  building?: Prisma.BuildingUpdateOneRequiredWithoutFinishesNestedInput
+}
+
+export type FinishUncheckedUpdateWithoutDeletedByInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  originalPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.IntFieldUpdateOperationsInput | number
+  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
+  buildingId?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type FinishUncheckedUpdateManyWithoutDeletedByInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  originalPrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.IntFieldUpdateOperationsInput | number
+  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
   buildingId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -950,11 +1190,14 @@ export type FinishSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   originalPrice?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
   createdById?: boolean
   updatedById?: boolean
+  deletedById?: boolean
   buildingId?: boolean
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   updatedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  deletedBy?: boolean | Prisma.Finish$deletedByArgs<ExtArgs>
   building?: boolean | Prisma.BuildingDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["finish"]>
 
@@ -966,11 +1209,14 @@ export type FinishSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   originalPrice?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
   createdById?: boolean
   updatedById?: boolean
+  deletedById?: boolean
   buildingId?: boolean
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   updatedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  deletedBy?: boolean | Prisma.Finish$deletedByArgs<ExtArgs>
   building?: boolean | Prisma.BuildingDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["finish"]>
 
@@ -982,11 +1228,14 @@ export type FinishSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   originalPrice?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
   createdById?: boolean
   updatedById?: boolean
+  deletedById?: boolean
   buildingId?: boolean
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   updatedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  deletedBy?: boolean | Prisma.Finish$deletedByArgs<ExtArgs>
   building?: boolean | Prisma.BuildingDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["finish"]>
 
@@ -998,25 +1247,30 @@ export type FinishSelectScalar = {
   originalPrice?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
   createdById?: boolean
   updatedById?: boolean
+  deletedById?: boolean
   buildingId?: boolean
 }
 
-export type FinishOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "description" | "price" | "originalPrice" | "createdAt" | "updatedAt" | "createdById" | "updatedById" | "buildingId", ExtArgs["result"]["finish"]>
+export type FinishOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "description" | "price" | "originalPrice" | "createdAt" | "updatedAt" | "deletedAt" | "createdById" | "updatedById" | "deletedById" | "buildingId", ExtArgs["result"]["finish"]>
 export type FinishInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   updatedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  deletedBy?: boolean | Prisma.Finish$deletedByArgs<ExtArgs>
   building?: boolean | Prisma.BuildingDefaultArgs<ExtArgs>
 }
 export type FinishIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   updatedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  deletedBy?: boolean | Prisma.Finish$deletedByArgs<ExtArgs>
   building?: boolean | Prisma.BuildingDefaultArgs<ExtArgs>
 }
 export type FinishIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   updatedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  deletedBy?: boolean | Prisma.Finish$deletedByArgs<ExtArgs>
   building?: boolean | Prisma.BuildingDefaultArgs<ExtArgs>
 }
 
@@ -1025,6 +1279,7 @@ export type $FinishPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     createdBy: Prisma.$UserPayload<ExtArgs>
     updatedBy: Prisma.$UserPayload<ExtArgs>
+    deletedBy: Prisma.$UserPayload<ExtArgs> | null
     building: Prisma.$BuildingPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1035,8 +1290,10 @@ export type $FinishPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     originalPrice: number | null
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
     createdById: number
     updatedById: number
+    deletedById: number | null
     buildingId: number
   }, ExtArgs["result"]["finish"]>
   composites: {}
@@ -1434,6 +1691,7 @@ export interface Prisma__FinishClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   updatedBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  deletedBy<T extends Prisma.Finish$deletedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Finish$deletedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   building<T extends Prisma.BuildingDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BuildingDefaultArgs<ExtArgs>>): Prisma.Prisma__BuildingClient<runtime.Types.Result.GetResult<Prisma.$BuildingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1471,8 +1729,10 @@ export interface FinishFieldRefs {
   readonly originalPrice: Prisma.FieldRef<"Finish", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Finish", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Finish", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"Finish", 'DateTime'>
   readonly createdById: Prisma.FieldRef<"Finish", 'Int'>
   readonly updatedById: Prisma.FieldRef<"Finish", 'Int'>
+  readonly deletedById: Prisma.FieldRef<"Finish", 'Int'>
   readonly buildingId: Prisma.FieldRef<"Finish", 'Int'>
 }
     
@@ -1872,6 +2132,25 @@ export type FinishDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Limit how many Finishes to delete.
    */
   limit?: number
+}
+
+/**
+ * Finish.deletedBy
+ */
+export type Finish$deletedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

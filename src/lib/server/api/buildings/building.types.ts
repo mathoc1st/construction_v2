@@ -1,9 +1,6 @@
-import type { PaginationOptions, SortOptions } from '$lib/server/prisma/prisma.types';
+import type { DbClient, PaginationOptions, SortOptions } from '$lib/server/prisma/prisma.types';
 import type { User } from '../users/user.domain';
 import type { Building, ConstructionType } from './building.domain';
-import type { Finish } from '../finish/finish.domain';
-
-export type BuildingWithFinishes = Building & { finishes: Finish[] };
 
 export enum BuildingSortableFields {
 	CONSTRUCTION_TYPE = 'constructionType',
@@ -33,7 +30,8 @@ export type BuildingQueryOptions = {
 };
 
 export interface IBuildingsRepository {
-	getBuildingById(id: number): Promise<Building | null>;
+	withClient(client: DbClient): IBuildingsRepository;
+	getById(id: number): Promise<Building | null>;
 	findAll(options?: BuildingQueryOptions): Promise<Building[]>;
 	findAllCount(filters?: BuildingFilterOptions): Promise<number>;
 	create(building: Building): Promise<Building>;

@@ -98,6 +98,102 @@ describe('Building Domain Unit', () => {
 			expect(building.deletedById).toBeNull();
 			expect(building.createdById).toEqual(1);
 		});
+
+		it('should throw an error when creating a building with invalid width', () => {
+			expect(() =>
+				Building.create({
+					constructionType: ConstructionType.BARN,
+					width: 0,
+					length: 20,
+					height: 5,
+					bedrooms: 2,
+					bathrooms: 1,
+					floors: 1,
+					veranda: false,
+					createdById: 1
+				})
+			).toThrow(NonPositiveValueError);
+		});
+
+		it('should throw an error when creating a building with invalid length', () => {
+			expect(() =>
+				Building.create({
+					constructionType: ConstructionType.BARN,
+					width: 10,
+					length: -5,
+					height: 5,
+					bedrooms: 2,
+					bathrooms: 1,
+					floors: 1,
+					veranda: false,
+					createdById: 1
+				})
+			).toThrow(NonPositiveValueError);
+		});
+
+		it('should throw an error when creating a building with invalid height', () => {
+			expect(() =>
+				Building.create({
+					constructionType: ConstructionType.BARN,
+					width: 10,
+					length: 20,
+					height: 0,
+					bedrooms: 2,
+					bathrooms: 1,
+					floors: 1,
+					veranda: false,
+					createdById: 1
+				})
+			).toThrow(NonPositiveValueError);
+		});
+
+		it('should throw an error when creating a building with invalid number of bedrooms', () => {
+			expect(() =>
+				Building.create({
+					constructionType: ConstructionType.BARN,
+					width: 10,
+					length: 20,
+					height: 5,
+					bedrooms: -1,
+					bathrooms: 1,
+					floors: 1,
+					veranda: false,
+					createdById: 1
+				})
+			).toThrow(NonPositiveValueError);
+		});
+
+		it('should throw an error when creating a building with invalid number of bathrooms', () => {
+			expect(() =>
+				Building.create({
+					constructionType: ConstructionType.BARN,
+					width: 10,
+					length: 20,
+					height: 5,
+					bedrooms: 2,
+					bathrooms: -1,
+					floors: 1,
+					veranda: false,
+					createdById: 1
+				})
+			).toThrow(NonPositiveValueError);
+		});
+
+		it('should throw an error when creating a building with invalid number of floors', () => {
+			expect(() =>
+				Building.create({
+					constructionType: ConstructionType.BARN,
+					width: 10,
+					length: 20,
+					height: 5,
+					bedrooms: 2,
+					bathrooms: 1,
+					floors: 0,
+					veranda: false,
+					createdById: 1
+				})
+			).toThrow(NonPositiveValueError);
+		});
 	});
 
 	describe('Changing Width', () => {

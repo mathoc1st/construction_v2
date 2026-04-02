@@ -1,18 +1,57 @@
-import { describe, expect, it } from 'vitest';
-import { Finish, FinishType } from '../../finish.domain';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { Finish } from '../../finish.domain';
 import {
+	DeletedEntityModificationError,
 	EmptyStringError,
 	NonPositiveValueError
 } from '$lib/server/api/common/errors/errors.domain';
+import { FinishType } from '../../finish.types';
 
 describe('Finish Domain Unit', () => {
+	let finish: Finish;
+	let deletedFinish: Finish;
+
+	beforeEach(() => {
+		finish = Finish.fromPersistence({
+			id: 1,
+			type: FinishType.COLD,
+			description: 'test',
+			price: 100,
+			originalPrice: null,
+			buildingId: 1,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			deletedAt: null,
+			createdById: 1,
+			updatedById: 1,
+			deletedById: null
+		});
+
+		deletedFinish = Finish.fromPersistence({
+			id: 1,
+			type: FinishType.COLD,
+			description: 'test',
+			price: 100,
+			originalPrice: null,
+			buildingId: 1,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			deletedAt: new Date(),
+			createdById: 1,
+			updatedById: 1,
+			deletedById: 1
+		});
+
+		vi.clearAllMocks();
+	});
 	describe('Creating Finish', () => {
 		it('should create a finish with valid parameters', () => {
 			const finish = Finish.create({
 				type: FinishType.COLD,
 				description: 'Cold finish',
 				price: 1000,
-				createdById: 1
+				createdById: 1,
+				buildingId: 1
 			});
 
 			expect(finish.id).toBeNull();
@@ -20,6 +59,7 @@ describe('Finish Domain Unit', () => {
 			expect(finish.description).toBe('Cold finish');
 			expect(finish.price).toBe(1000);
 			expect(finish.originalPrice).toBeNull();
+			expect(finish.buildingId).toBe(1);
 			expect(finish.createdAt).toBeInstanceOf(Date);
 			expect(finish.updatedAt).toBeInstanceOf(Date);
 			expect(finish.createdById).toBe(1);
@@ -35,8 +75,10 @@ describe('Finish Domain Unit', () => {
 				originalPrice: null,
 				createdAt: new Date(),
 				updatedAt: new Date(),
+				deletedAt: null,
 				createdById: 1,
 				updatedById: 1,
+				deletedById: null,
 				buildingId: 1
 			});
 
@@ -45,38 +87,70 @@ describe('Finish Domain Unit', () => {
 			expect(finish.description).toBe('Cold finish');
 			expect(finish.price).toBe(1000);
 			expect(finish.originalPrice).toBeNull();
+			expect(finish.buildingId).toBe(1);
 			expect(finish.createdAt).toBeInstanceOf(Date);
 			expect(finish.updatedAt).toBeInstanceOf(Date);
+			expect(finish.deletedAt).toBeNull();
 			expect(finish.createdById).toBe(1);
 			expect(finish.updatedById).toBe(1);
+			expect(finish.deletedById).toBeNull();
+		});
+
+		it('should throw an error if description is empty', () => {
+			expect(() =>
+				Finish.create({
+					type: FinishType.COLD,
+					description: '',
+					price: 1000,
+					createdById: 1,
+					buildingId: 1
+				})
+			).toThrow(EmptyStringError);
+		});
+
+		it('should throw an error if price is negative', () => {
+			expect(() =>
+				Finish.create({
+					type: FinishType.COLD,
+					description: 'Cold finish',
+					price: -100,
+					createdById: 1,
+					buildingId: 1
+				})
+			).toThrow(NonPositiveValueError);
+		});
+
+		it('should throw an error if original price is negative', () => {
+			expect(() =>
+				Finish.create({
+					type: FinishType.COLD,
+					description: 'Cold finish',
+					price: 1000,
+					originalPrice: -100,
+					createdById: 1,
+					buildingId: 1
+				})
+			).toThrow(NonPositiveValueError);
 		});
 	});
 
 	describe('Changing Finish  Type', () => {
 		it('should change the finish type', () => {
-			const finish = Finish.create({
-				type: FinishType.COLD,
-				description: 'Cold finish',
-				price: 1000,
-				createdById: 1
-			});
-
 			finish.changeType(FinishType.WARM_100, 2);
 
 			expect(finish.type).toBe(FinishType.WARM_100);
 			expect(finish.updatedById).toBe(2);
 		});
+
+		it('should throw an error when updating a deleted finish', () => {
+			expect(() => deletedFinish.changeType(FinishType.WARM_100, 2)).toThrow(
+				DeletedEntityModificationError
+			);
+		});
 	});
 
 	describe('Changing Finish Description', () => {
 		it('should change the finish description', () => {
-			const finish = Finish.create({
-				type: FinishType.COLD,
-				description: 'Cold finish',
-				price: 1000,
-				createdById: 1
-			});
-
 			finish.changeDescription('Updated description', 2);
 
 			expect(finish.description).toBe('Updated description');
@@ -84,26 +158,18 @@ describe('Finish Domain Unit', () => {
 		});
 
 		it('should throw an error if description is empty', () => {
-			const finish = Finish.create({
-				type: FinishType.COLD,
-				description: 'Cold finish',
-				price: 1000,
-				createdById: 1
-			});
-
 			expect(() => finish.changeDescription('', 2)).toThrow(EmptyStringError);
+		});
+
+		it('should throw an error when updating a deleted finish', () => {
+			expect(() => deletedFinish.changeDescription('Updated description', 2)).toThrow(
+				DeletedEntityModificationError
+			);
 		});
 	});
 
 	describe('Changing Finish Price', () => {
 		it('should change the finish price', () => {
-			const finish = Finish.create({
-				type: FinishType.COLD,
-				description: 'Cold finish',
-				price: 1000,
-				createdById: 1
-			});
-
 			finish.changePrice(1200, 2);
 
 			expect(finish.price).toBe(1200);
@@ -111,26 +177,16 @@ describe('Finish Domain Unit', () => {
 		});
 
 		it('should throw an error if price is negative', () => {
-			const finish = Finish.create({
-				type: FinishType.COLD,
-				description: 'Cold finish',
-				price: 1000,
-				createdById: 1
-			});
-
 			expect(() => finish.changePrice(-100, 2)).toThrow(NonPositiveValueError);
+		});
+
+		it('should throw an error when updating a deleted finish', () => {
+			expect(() => deletedFinish.changePrice(1200, 2)).toThrow(DeletedEntityModificationError);
 		});
 	});
 
 	describe('Changing Finish Original Price', () => {
 		it('should change the finish original price', () => {
-			const finish = Finish.create({
-				type: FinishType.COLD,
-				description: 'Cold finish',
-				price: 1000,
-				createdById: 1
-			});
-
 			finish.changeOriginalPrice(1500, 2);
 
 			expect(finish.originalPrice).toBe(1500);
@@ -138,14 +194,13 @@ describe('Finish Domain Unit', () => {
 		});
 
 		it('should throw an error if original price is negative', () => {
-			const finish = Finish.create({
-				type: FinishType.COLD,
-				description: 'Cold finish',
-				price: 1000,
-				createdById: 1
-			});
-
 			expect(() => finish.changeOriginalPrice(-100, 2)).toThrow(NonPositiveValueError);
+		});
+
+		it('should throw an error when updating a deleted finish', () => {
+			expect(() => deletedFinish.changeOriginalPrice(1500, 2)).toThrow(
+				DeletedEntityModificationError
+			);
 		});
 	});
 });

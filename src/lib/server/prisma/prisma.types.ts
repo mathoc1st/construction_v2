@@ -1,4 +1,4 @@
-import type { PrismaClient } from './generated/client';
+import type { Prisma, PrismaClient } from './generated/client';
 
 export enum SortDirection {
 	ASC = 'asc',
@@ -15,6 +15,9 @@ export type SortOptions<T extends string> = {
 	direction?: SortDirection;
 };
 
+export type DbClient = PrismaClient | Prisma.TransactionClient;
+
 export interface IPrismaService {
-	get client(): PrismaClient;
+	get client(): DbClient;
+	transaction<T>(fn: (tx: Prisma.TransactionClient) => Promise<T>): Promise<T>;
 }

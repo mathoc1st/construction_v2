@@ -1,8 +1,14 @@
+import type { IPrismaService } from '$lib/server/prisma/prisma.types';
+import { Building } from '../buildings/building.domain';
+import type { IBuildingsRepository } from '../buildings/building.types';
 import { EntityNotFoundError } from '../common/errors/errors.service';
+import { Finish } from '../finishes/finish.domain';
+import type { IFinishesRepository } from '../finishes/finish.types';
 import type { User } from '../users/user.domain';
 import { Listing } from './listing.domain';
 import type {
 	AddListingParams,
+	addListingWithBuildingAndFinishesParams,
 	DeleteListingParams,
 	FindListingsParams,
 	IListingsRepository,
@@ -11,11 +17,65 @@ import type {
 } from './listing.types';
 
 export class ListingsService implements IListingsService {
-	constructor(private readonly listingRepository: IListingsRepository) {}
+	constructor(
+		private readonly _prismaService: IPrismaService,
+		private readonly _listingRepository: IListingsRepository,
+		private readonly _buildingRepository: IBuildingsRepository,
+		private readonly _finishRepository: IFinishesRepository
+	) {}
+
+	async addListingWithBuildingAndFinishes(
+		params: addListingWithBuildingAndFinishesParams
+	): Promise<{
+		listing: Listing;
+		building: Building;
+		finishes: Finish[];
+	}> {
+		if (!params.performedBy.id) throw new Error('performedBy user must have an id');
+
+		return await this._prismaService.transaction(async (tx) => {
+			const buildingRepo = this._buildingRepository.withClient(tx);
+			const finishRepo = this._finishRepository.withClient(tx);
+			const listingRepo = this._listingRepository.withClient(tx);
+
+			const newBuilding = Building.create({
+				...params.buildingParams,
+				createdById: params.performedBy.id!
+			});
+
+			const createdBuilding = await buildingRepo.create(newBuilding);
+
+			const newFinishes = params.finishesParams.map((finishParam) =>
+				Finish.create({
+					...finishParam,
+					buildingId: createdBuilding.id!,
+					createdById: params.performedBy.id!
+				})
+			);
+
+			const createdFinishes: Finish[] = [];
+
+			for (const finish of newFinishes) {
+				const createdFinish = await finishRepo.create(finish);
+				createdFinishes.push(createdFinish);
+			}
+
+			const newListing = Listing.create({
+				...params.listingParams,
+				buildingId: createdBuilding.id!,
+				createdById: params.performedBy.id!
+			});
+
+			const createdListing = await listingRepo.create(newListing);
+
+			return { listing: createdListing, building: createdBuilding, finishes: createdFinishes };
+		});
+	}
+
 	async addListing(params: AddListingParams): Promise<Listing> {
 		const listing = Listing.create({ ...params, createdById: params.performedBy.id! });
 
-		const createdListing = await this.listingRepository.create(listing);
+		const createdListing = await this._listingRepository.create(listing);
 
 		return createdListing;
 	}
@@ -32,7 +92,7 @@ export class ListingsService implements IListingsService {
 	}
 
 	async deleteListing(params: DeleteListingParams): Promise<void> {
-		const targetListing = await this.listingRepository.getListingById(params.targetId);
+		const targetListing = await this._listingRepository.getListingById(params.targetId);
 
 		if (!targetListing) {
 			throw new EntityNotFoundError('listing', params.targetId);
@@ -40,13 +100,13 @@ export class ListingsService implements IListingsService {
 
 		targetListing.markDeleted(params.performedBy.id!);
 
-		await this.listingRepository.softDelete(targetListing);
+		await this._listingRepository.softDelete(targetListing);
 	}
 
 	async findListings(params: FindListingsParams): Promise<Listing[]> {
 		const { filters, sort, pagination } = params;
 
-		return await this.listingRepository.findAll({
+		return await this._listingRepository.findAll({
 			filters,
 			sort,
 			pagination
@@ -57,14 +117,14 @@ export class ListingsService implements IListingsService {
 		params: { targetId: number; performedBy: User },
 		updater: (listing: Listing, performedBy: User) => Promise<void> | void
 	): Promise<Listing> {
-		const targetListing = await this.listingRepository.getListingById(params.targetId);
+		const targetListing = await this._listingRepository.getListingById(params.targetId);
 		if (!targetListing) {
 			throw new EntityNotFoundError('listing', params.targetId);
 		}
 
 		await updater(targetListing, params.performedBy);
 
-		const updatedListing = await this.listingRepository.update(targetListing);
+		const updatedListing = await this._listingRepository.update(targetListing);
 
 		return updatedListing;
 	}

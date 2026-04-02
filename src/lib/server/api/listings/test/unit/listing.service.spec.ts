@@ -3,6 +3,7 @@ import { ListingsService } from '../../listings.service';
 import {
 	ListingSortableFields,
 	type AddListingParams,
+	type addListingWithBuildingAndFinishesParams,
 	type DeleteListingParams,
 	type FindListingsParams,
 	type IListingsRepository,
@@ -11,19 +12,74 @@ import {
 } from '../../listing.types';
 import { User } from '$lib/server/api/users/user.domain';
 import { Listing } from '../../listing.domain';
-import { SortDirection } from '$lib/server/prisma/prisma.types';
+import { SortDirection, type IPrismaService } from '$lib/server/prisma/prisma.types';
+import { FinishType, type IFinishesRepository } from '$lib/server/api/finishes/finish.types';
+import type { IBuildingsRepository } from '$lib/server/api/buildings/building.types';
+import { Building, ConstructionType } from '$lib/server/api/buildings/building.domain';
+import { Finish } from '$lib/server/api/finishes/finish.domain';
 
 describe('Listing Service Unit', () => {
+	const mockTx = {};
+
+	const prismaMock = {
+		transaction: vi.fn(async (fn) => {
+			return fn(mockTx);
+		})
+	};
+
+	const prismaServiceMock = {
+		transaction: prismaMock.transaction
+	} as unknown as IPrismaService;
+
+	const mockBuildingRepo = {
+		create: vi.fn()
+	};
+
+	const mockFinishRepo = {
+		create: vi.fn()
+	};
+
+	const mockListingRepo = {
+		create: vi.fn()
+	};
+
 	const listingRepositoryMock: Mocked<IListingsRepository> = {
 		getListingById: vi.fn(),
 		findAll: vi.fn(),
 		create: vi.fn(),
 		update: vi.fn(),
 		softDelete: vi.fn(),
-		delete: vi.fn()
+		delete: vi.fn(),
+		withClient: vi.fn(() => mockListingRepo as unknown as IListingsRepository)
 	};
 
-	const listingService: IListingsService = new ListingsService(listingRepositoryMock);
+	const buildingRepositoryMock: Mocked<IBuildingsRepository> = {
+		getById: vi.fn(),
+		findAll: vi.fn(),
+		create: vi.fn(),
+		update: vi.fn(),
+		delete: vi.fn(),
+		findAllCount: vi.fn(),
+		softDelete: vi.fn(),
+		withClient: vi.fn(() => mockBuildingRepo as unknown as IBuildingsRepository)
+	};
+
+	const finishRepositoryMock: Mocked<IFinishesRepository> = {
+		getById: vi.fn(),
+		findAllCount: vi.fn(),
+		findAll: vi.fn(),
+		create: vi.fn(),
+		update: vi.fn(),
+		delete: vi.fn(),
+		withClient: vi.fn(() => mockFinishRepo as unknown as IFinishesRepository)
+	};
+
+	const listingService: IListingsService = new ListingsService(
+		prismaServiceMock,
+		listingRepositoryMock,
+		buildingRepositoryMock,
+		finishRepositoryMock
+	);
 
 	const mockUser: User = User.fromPersistence({
 		id: 1,
@@ -75,6 +131,108 @@ describe('Listing Service Unit', () => {
 					buildingId: 1
 				})
 			);
+		});
+	});
+
+	describe('Add Listing with Building and Finishes', () => {
+		it('should add a listing with building and finishes successfully', async () => {
+			const params: addListingWithBuildingAndFinishesParams = {
+				performedBy: mockUser,
+				buildingParams: {
+					constructionType: ConstructionType.BARN,
+					width: 10,
+					length: 20,
+					height: 5,
+					bedrooms: 2,
+					bathrooms: 1,
+					floors: 1,
+					veranda: false
+				},
+				finishesParams: [
+					{
+						type: FinishType.COLD,
+						description: 'Cold finish',
+						price: 1000
+					}
+				],
+				listingParams: {
+					title: 'Test Listing',
+					images: ['image1.jpg']
+				}
+			};
+
+			mockBuildingRepo.create.mockResolvedValueOnce(
+				Building.fromPersistence({
+					...params.buildingParams,
+					createdById: mockUser.id!,
+					id: 1,
+					createdAt: new Date(),
+					updatedAt: new Date(),
+					deletedAt: null,
+					updatedById: mockUser.id!,
+					deletedById: null
+				})
+			);
+
+			mockFinishRepo.create.mockResolvedValueOnce(
+				Finish.fromPersistence({
+					...params.finishesParams[0],
+					buildingId: 1,
+					createdById: mockUser.id!,
+					originalPrice: null,
+					id: 1,
+					createdAt: new Date(),
+					updatedAt: new Date(),
+					deletedAt: null,
+					updatedById: mockUser.id!,
+					deletedById: null
+				})
+			);
+
+			mockListingRepo.create.mockResolvedValueOnce(
+				Listing.fromPersistence({
+					...params.listingParams,
+					buildingId: 1,
+					createdById: mockUser.id!,
+					id: 1,
+					createdAt: new Date(),
+					updatedAt: new Date(),
+					deletedAt: null,
+					updatedById: mockUser.id!,
+					deletedById: null,
+					views: 0
+				})
+			);
+
+			const result = await listingService.addListingWithBuildingAndFinishes(params);
+
+			expect(result.listing).toEqual(
+				expect.objectContaining({
+					title: 'Test Listing',
+					images: ['image1.jpg'],
+					buildingId: 1
+				})
+			);
+			expect(result.building).toEqual(
+				expect.objectContaining({
+					constructionType: ConstructionType.BARN,
+					width: 10,
+					length: 20,
+					height: 5,
+					bedrooms: 2,
+					bathrooms: 1,
+					floors: 1,
+					veranda: false
+				})
+			);
+			expect(result.finishes).toEqual([
+				expect.objectContaining({
+					type: FinishType.COLD,
+					description: 'Cold finish',
+					price: 1000,
+					buildingId: 1
+				})
+			]);
 		});
 	});
 

@@ -65,6 +65,17 @@ describe('Listing Domain Unit', () => {
 			expect(listing.updatedAt).toBeInstanceOf(Date);
 			expect(listing.deletedAt).toBeNull();
 		});
+
+		it('should throw an error when creating a listing with empty title', () => {
+			expect(() =>
+				Listing.create({
+					title: '   ',
+					images: ['image1.jpg'],
+					buildingId: 1,
+					createdById: 1
+				})
+			).toThrow(EmptyStringError);
+		});
 	});
 
 	describe('Change Title', () => {

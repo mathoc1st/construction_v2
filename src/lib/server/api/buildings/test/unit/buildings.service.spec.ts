@@ -15,12 +15,13 @@ import { SortDirection } from '$lib/server/prisma/prisma.types';
 describe('Building Service Unit', () => {
 	const buildingRepositoryMock: Mocked<IBuildingsRepository> = {
 		create: vi.fn(),
-		getBuildingById: vi.fn(),
+		getById: vi.fn(),
 		update: vi.fn(),
 		softDelete: vi.fn(),
 		delete: vi.fn(),
 		findAll: vi.fn(),
-		findAllCount: vi.fn()
+		findAllCount: vi.fn(),
+		withClient: vi.fn()
 	};
 
 	const buildingService = new BuildingsService(buildingRepositoryMock);
@@ -72,7 +73,19 @@ describe('Building Service Unit', () => {
 
 			const result = await buildingService.addBuilding(params);
 
-			expect(buildingRepositoryMock.create).toHaveBeenCalledWith(expectedBuilding);
+			expect(buildingRepositoryMock.create).toHaveBeenCalledWith(
+				expect.objectContaining({
+					constructionType: params.constructionType,
+					width: params.width,
+					length: params.length,
+					height: params.height,
+					bedrooms: params.bedrooms,
+					bathrooms: params.bathrooms,
+					floors: params.floors,
+					veranda: params.veranda,
+					createdById: params.performedBy.id
+				})
+			);
 			expect(result).toEqual(expectedBuilding);
 		});
 	});
@@ -92,7 +105,7 @@ describe('Building Service Unit', () => {
 				veranda: false
 			};
 
-			buildingRepositoryMock.getBuildingById.mockResolvedValueOnce(building);
+			buildingRepositoryMock.getById.mockResolvedValueOnce(building);
 
 			const updatedBuilding = Building.fromPersistence({
 				id: building.id!,
@@ -116,7 +129,7 @@ describe('Building Service Unit', () => {
 
 			const result = await buildingService.updateBuilding(params);
 
-			expect(buildingRepositoryMock.getBuildingById).toHaveBeenCalledWith(params.targetId);
+			expect(buildingRepositoryMock.getById).toHaveBeenCalledWith(params.targetId);
 			expect(buildingRepositoryMock.update).toHaveBeenCalledWith(
 				expect.objectContaining({
 					id: building.id,
@@ -141,12 +154,12 @@ describe('Building Service Unit', () => {
 				performedBy: User.create({ username: 'testuser', passwordHash: 'hashedpassword' })
 			};
 
-			buildingRepositoryMock.getBuildingById.mockResolvedValueOnce(building);
+			buildingRepositoryMock.getById.mockResolvedValueOnce(building);
 			buildingRepositoryMock.softDelete.mockResolvedValueOnce();
 
 			await buildingService.deleteBuilding(params);
 
-			expect(buildingRepositoryMock.getBuildingById).toHaveBeenCalledWith(params.targetId);
+			expect(buildingRepositoryMock.getById).toHaveBeenCalledWith(params.targetId);
 			expect(buildingRepositoryMock.softDelete).toHaveBeenCalledWith(
 				expect.objectContaining({
 					id: building.id,

@@ -12,14 +12,18 @@ model Finish {
   price         Int
   originalPrice Int?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   createdBy   User @relation("CreatedBy", fields: [createdById], references: [id])
   createdById Int
 
   updatedBy   User @relation("UpdatedBy", fields: [updatedById], references: [id])
   updatedById Int
+
+  deletedBy   User? @relation("DeletedBy", fields: [deletedById], references: [id])
+  deletedById Int?
 
   building   Building @relation(fields: [buildingId], references: [id])
   buildingId Int

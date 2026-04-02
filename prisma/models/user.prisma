@@ -18,4 +18,5 @@ model User {
 
     createdFinishes Finish[] @relation("CreatedBy")
     updatedFinishes Finish[] @relation("UpdatedBy")
+    deletedFinishes Finish[] @relation("DeletedBy")
 }

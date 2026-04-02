@@ -11,7 +11,7 @@ import {
 	type BuildingFilterOptions,
 	type BuildingQueryOptions
 } from '../../building.types';
-import { SortDirection, type IPrismaService } from '$lib/server/prisma/prisma.types';
+import { SortDirection, type DbClient, type IPrismaService } from '$lib/server/prisma/prisma.types';
 
 const constructionTypeMap: Record<PrismaConstructionType, DomainConstructionType> = {
 	FRAME: DomainConstructionType.FRAME,
@@ -31,11 +31,7 @@ describe('Buildings Repository Unit', () => {
 		}
 	};
 
-	const prismaServiceMock = {
-		client: prismaMock
-	} as unknown as IPrismaService;
-
-	const buildingsRepository = new BuildingsRepository(prismaServiceMock);
+	const buildingsRepository = new BuildingsRepository(prismaMock as unknown as DbClient);
 
 	const record: PrismaBuilding = {
 		id: 1,
@@ -99,7 +95,7 @@ describe('Buildings Repository Unit', () => {
 		it('should return a building when found', async () => {
 			prismaMock.building.findUnique.mockResolvedValue(record);
 
-			const result = await buildingsRepository.getBuildingById(1);
+			const result = await buildingsRepository.getById(1);
 
 			expect(prismaMock.building.findUnique).toHaveBeenCalledWith({
 				where: { id: 1 }
@@ -111,7 +107,7 @@ describe('Buildings Repository Unit', () => {
 		it('should return null when building is not found', async () => {
 			prismaMock.building.findUnique.mockResolvedValue(null);
 
-			const result = await buildingsRepository.getBuildingById(999);
+			const result = await buildingsRepository.getById(999);
 
 			expect(prismaMock.building.findUnique).toHaveBeenCalledWith({
 				where: { id: 999 }

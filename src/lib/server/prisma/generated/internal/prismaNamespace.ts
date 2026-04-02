@@ -846,8 +846,10 @@ export const FinishScalarFieldEnum = {
   originalPrice: 'originalPrice',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
   createdById: 'createdById',
   updatedById: 'updatedById',
+  deletedById: 'deletedById',
   buildingId: 'buildingId'
 } as const
 

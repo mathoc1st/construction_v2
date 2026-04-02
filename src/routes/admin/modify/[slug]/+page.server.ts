@@ -1,6 +1,7 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { getBuildingById } from '$lib/server/db/queries/building';
+import type { Actions } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const slug = params.slug;
@@ -18,3 +19,9 @@ export const load: PageServerLoad = async ({ params }) => {
 	if (!building) return error(404);
 	return { building };
 };
+
+export const actions = {
+	addListing: async (event) => {
+		// TODO log the user in
+	}
+} satisfies Actions;

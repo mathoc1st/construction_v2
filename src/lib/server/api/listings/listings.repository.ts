@@ -1,9 +1,5 @@
 import type { Prisma, Listing as ListingModel } from '$lib/server/prisma/generated/client';
-import {
-	SortDirection,
-	type IPrismaService,
-	type SortOptions
-} from '$lib/server/prisma/prisma.types';
+import { SortDirection, type DbClient, type SortOptions } from '$lib/server/prisma/prisma.types';
 import { Listing } from './listing.domain';
 import type {
 	IListingsRepository,
@@ -13,10 +9,14 @@ import type {
 } from './listing.types';
 
 export class ListingsRepository implements IListingsRepository {
-	constructor(private prismaService: IPrismaService) {}
+	constructor(private readonly _client: DbClient) {}
+
+	withClient(client: DbClient): IListingsRepository {
+		return new ListingsRepository(client);
+	}
 
 	async getListingById(id: number): Promise<Listing | null> {
-		const record = await this.prismaService.client.listing.findUnique({
+		const record = await this._client.listing.findUnique({
 			where: {
 				id
 			}
@@ -28,7 +28,7 @@ export class ListingsRepository implements IListingsRepository {
 	}
 
 	async findAll(options?: ListingQueryOptions): Promise<Listing[]> {
-		const record = await this.prismaService.client.listing.findMany({
+		const record = await this._client.listing.findMany({
 			where: this.buildWhere(options?.filters),
 			orderBy: this.buildOrderBy(options?.sort),
 			take: options?.pagination?.limit,
@@ -40,7 +40,7 @@ export class ListingsRepository implements IListingsRepository {
 
 	async create(listing: Listing): Promise<Listing> {
 		const model = this.toModel(listing);
-		const record = await this.prismaService.client.listing.create({
+		const record = await this._client.listing.create({
 			data: model
 		});
 
@@ -51,7 +51,7 @@ export class ListingsRepository implements IListingsRepository {
 		if (listing.id == null) throw new Error('Invalid Listing id');
 
 		const model = this.toModel(listing);
-		const record = await this.prismaService.client.listing.update({
+		const record = await this._client.listing.update({
 			where: {
 				id: listing.id
 			},
@@ -62,7 +62,7 @@ export class ListingsRepository implements IListingsRepository {
 	}
 
 	async softDelete(listing: Listing): Promise<void> {
-		await this.prismaService.client.listing.update({
+		await this._client.listing.update({
 			where: {
 				id: listing.id!
 			},
@@ -76,7 +76,7 @@ export class ListingsRepository implements IListingsRepository {
 	}
 
 	async delete(listing: Listing): Promise<void> {
-		await this.prismaService.client.listing.delete({ where: { id: listing.id! } });
+		await this._client.listing.delete({ where: { id: listing.id! } });
 	}
 
 	private toModel(listing: Listing): Omit<ListingModel, 'id'> & { id?: number } {

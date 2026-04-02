@@ -225,6 +225,7 @@ export type UserWhereInput = {
   deletedListings?: Prisma.ListingListRelationFilter
   createdFinishes?: Prisma.FinishListRelationFilter
   updatedFinishes?: Prisma.FinishListRelationFilter
+  deletedFinishes?: Prisma.FinishListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -242,6 +243,7 @@ export type UserOrderByWithRelationInput = {
   deletedListings?: Prisma.ListingOrderByRelationAggregateInput
   createdFinishes?: Prisma.FinishOrderByRelationAggregateInput
   updatedFinishes?: Prisma.FinishOrderByRelationAggregateInput
+  deletedFinishes?: Prisma.FinishOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -262,6 +264,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   deletedListings?: Prisma.ListingListRelationFilter
   createdFinishes?: Prisma.FinishListRelationFilter
   updatedFinishes?: Prisma.FinishListRelationFilter
+  deletedFinishes?: Prisma.FinishListRelationFilter
 }, "id" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -302,6 +305,7 @@ export type UserCreateInput = {
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -319,6 +323,7 @@ export type UserUncheckedCreateInput = {
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUpdateInput = {
@@ -335,6 +340,7 @@ export type UserUpdateInput = {
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -352,6 +358,7 @@ export type UserUncheckedUpdateInput = {
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -475,6 +482,12 @@ export type UserCreateNestedOneWithoutUpdatedFinishesInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutDeletedFinishesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeletedFinishesInput, Prisma.UserUncheckedCreateWithoutDeletedFinishesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeletedFinishesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneRequiredWithoutCreatedFinishesNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedFinishesInput, Prisma.UserUncheckedCreateWithoutCreatedFinishesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedFinishesInput
@@ -489,6 +502,16 @@ export type UserUpdateOneRequiredWithoutUpdatedFinishesNestedInput = {
   upsert?: Prisma.UserUpsertWithoutUpdatedFinishesInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUpdatedFinishesInput, Prisma.UserUpdateWithoutUpdatedFinishesInput>, Prisma.UserUncheckedUpdateWithoutUpdatedFinishesInput>
+}
+
+export type UserUpdateOneWithoutDeletedFinishesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeletedFinishesInput, Prisma.UserUncheckedCreateWithoutDeletedFinishesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeletedFinishesInput
+  upsert?: Prisma.UserUpsertWithoutDeletedFinishesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDeletedFinishesInput, Prisma.UserUpdateWithoutDeletedFinishesInput>, Prisma.UserUncheckedUpdateWithoutDeletedFinishesInput>
 }
 
 export type UserCreateNestedOneWithoutCreatedListingsInput = {
@@ -562,6 +585,7 @@ export type UserCreateWithoutCreatedBuildingsInput = {
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutCreatedBuildingsInput = {
@@ -578,6 +602,7 @@ export type UserUncheckedCreateWithoutCreatedBuildingsInput = {
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserCreateOrConnectWithoutCreatedBuildingsInput = {
@@ -598,6 +623,7 @@ export type UserCreateWithoutUpdatedBuildingsInput = {
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutUpdatedBuildingsInput = {
@@ -614,6 +640,7 @@ export type UserUncheckedCreateWithoutUpdatedBuildingsInput = {
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserCreateOrConnectWithoutUpdatedBuildingsInput = {
@@ -634,6 +661,7 @@ export type UserCreateWithoutDeletedBuildingsInput = {
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutDeletedBuildingsInput = {
@@ -650,6 +678,7 @@ export type UserUncheckedCreateWithoutDeletedBuildingsInput = {
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserCreateOrConnectWithoutDeletedBuildingsInput = {
@@ -681,6 +710,7 @@ export type UserUpdateWithoutCreatedBuildingsInput = {
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedBuildingsInput = {
@@ -697,6 +727,7 @@ export type UserUncheckedUpdateWithoutCreatedBuildingsInput = {
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUpsertWithoutUpdatedBuildingsInput = {
@@ -723,6 +754,7 @@ export type UserUpdateWithoutUpdatedBuildingsInput = {
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUpdatedBuildingsInput = {
@@ -739,6 +771,7 @@ export type UserUncheckedUpdateWithoutUpdatedBuildingsInput = {
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUpsertWithoutDeletedBuildingsInput = {
@@ -765,6 +798,7 @@ export type UserUpdateWithoutDeletedBuildingsInput = {
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDeletedBuildingsInput = {
@@ -781,6 +815,7 @@ export type UserUncheckedUpdateWithoutDeletedBuildingsInput = {
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserCreateWithoutCreatedFinishesInput = {
@@ -796,6 +831,7 @@ export type UserCreateWithoutCreatedFinishesInput = {
   updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutCreatedFinishesInput = {
@@ -812,6 +848,7 @@ export type UserUncheckedCreateWithoutCreatedFinishesInput = {
   updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserCreateOrConnectWithoutCreatedFinishesInput = {
@@ -832,6 +869,7 @@ export type UserCreateWithoutUpdatedFinishesInput = {
   updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
+  deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutUpdatedFinishesInput = {
@@ -848,11 +886,50 @@ export type UserUncheckedCreateWithoutUpdatedFinishesInput = {
   updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
+  deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserCreateOrConnectWithoutUpdatedFinishesInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutUpdatedFinishesInput, Prisma.UserUncheckedCreateWithoutUpdatedFinishesInput>
+}
+
+export type UserCreateWithoutDeletedFinishesInput = {
+  username: string
+  passwordHash: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  createdBuildings?: Prisma.BuildingCreateNestedManyWithoutCreatedByInput
+  updatedBuildings?: Prisma.BuildingCreateNestedManyWithoutUpdatedByInput
+  deletedBuildings?: Prisma.BuildingCreateNestedManyWithoutDeletedByInput
+  createdListings?: Prisma.ListingCreateNestedManyWithoutCreatedByInput
+  updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
+  deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
+  createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
+  updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
+}
+
+export type UserUncheckedCreateWithoutDeletedFinishesInput = {
+  id?: number
+  username: string
+  passwordHash: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  createdBuildings?: Prisma.BuildingUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedBuildings?: Prisma.BuildingUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedBuildings?: Prisma.BuildingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdListings?: Prisma.ListingUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
+}
+
+export type UserCreateOrConnectWithoutDeletedFinishesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeletedFinishesInput, Prisma.UserUncheckedCreateWithoutDeletedFinishesInput>
 }
 
 export type UserUpsertWithoutCreatedFinishesInput = {
@@ -879,6 +956,7 @@ export type UserUpdateWithoutCreatedFinishesInput = {
   updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedFinishesInput = {
@@ -895,6 +973,7 @@ export type UserUncheckedUpdateWithoutCreatedFinishesInput = {
   updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUpsertWithoutUpdatedFinishesInput = {
@@ -921,6 +1000,7 @@ export type UserUpdateWithoutUpdatedFinishesInput = {
   updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
+  deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUpdatedFinishesInput = {
@@ -937,6 +1017,51 @@ export type UserUncheckedUpdateWithoutUpdatedFinishesInput = {
   updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
+  deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
+}
+
+export type UserUpsertWithoutDeletedFinishesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDeletedFinishesInput, Prisma.UserUncheckedUpdateWithoutDeletedFinishesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeletedFinishesInput, Prisma.UserUncheckedCreateWithoutDeletedFinishesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDeletedFinishesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDeletedFinishesInput, Prisma.UserUncheckedUpdateWithoutDeletedFinishesInput>
+}
+
+export type UserUpdateWithoutDeletedFinishesInput = {
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  createdBuildings?: Prisma.BuildingUpdateManyWithoutCreatedByNestedInput
+  updatedBuildings?: Prisma.BuildingUpdateManyWithoutUpdatedByNestedInput
+  deletedBuildings?: Prisma.BuildingUpdateManyWithoutDeletedByNestedInput
+  createdListings?: Prisma.ListingUpdateManyWithoutCreatedByNestedInput
+  updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
+  deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
+  createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
+  updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDeletedFinishesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  createdBuildings?: Prisma.BuildingUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedBuildings?: Prisma.BuildingUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedBuildings?: Prisma.BuildingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdListings?: Prisma.ListingUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
 }
 
 export type UserCreateWithoutCreatedListingsInput = {
@@ -952,6 +1077,7 @@ export type UserCreateWithoutCreatedListingsInput = {
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutCreatedListingsInput = {
@@ -968,6 +1094,7 @@ export type UserUncheckedCreateWithoutCreatedListingsInput = {
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserCreateOrConnectWithoutCreatedListingsInput = {
@@ -988,6 +1115,7 @@ export type UserCreateWithoutUpdatedListingsInput = {
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutUpdatedListingsInput = {
@@ -1004,6 +1132,7 @@ export type UserUncheckedCreateWithoutUpdatedListingsInput = {
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserCreateOrConnectWithoutUpdatedListingsInput = {
@@ -1024,6 +1153,7 @@ export type UserCreateWithoutDeletedListingsInput = {
   updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutDeletedListingsInput = {
@@ -1040,6 +1170,7 @@ export type UserUncheckedCreateWithoutDeletedListingsInput = {
   updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserCreateOrConnectWithoutDeletedListingsInput = {
@@ -1071,6 +1202,7 @@ export type UserUpdateWithoutCreatedListingsInput = {
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedListingsInput = {
@@ -1087,6 +1219,7 @@ export type UserUncheckedUpdateWithoutCreatedListingsInput = {
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUpsertWithoutUpdatedListingsInput = {
@@ -1113,6 +1246,7 @@ export type UserUpdateWithoutUpdatedListingsInput = {
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUpdatedListingsInput = {
@@ -1129,6 +1263,7 @@ export type UserUncheckedUpdateWithoutUpdatedListingsInput = {
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUpsertWithoutDeletedListingsInput = {
@@ -1155,6 +1290,7 @@ export type UserUpdateWithoutDeletedListingsInput = {
   updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDeletedListingsInput = {
@@ -1171,6 +1307,7 @@ export type UserUncheckedUpdateWithoutDeletedListingsInput = {
   updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -1186,6 +1323,7 @@ export type UserCreateWithoutSessionsInput = {
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -1202,6 +1340,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1233,6 +1372,7 @@ export type UserUpdateWithoutSessionsInput = {
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1249,6 +1389,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
 }
 
 
@@ -1266,6 +1407,7 @@ export type UserCountOutputType = {
   deletedListings: number
   createdFinishes: number
   updatedFinishes: number
+  deletedFinishes: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1278,6 +1420,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   deletedListings?: boolean | UserCountOutputTypeCountDeletedListingsArgs
   createdFinishes?: boolean | UserCountOutputTypeCountCreatedFinishesArgs
   updatedFinishes?: boolean | UserCountOutputTypeCountUpdatedFinishesArgs
+  deletedFinishes?: boolean | UserCountOutputTypeCountDeletedFinishesArgs
 }
 
 /**
@@ -1353,6 +1496,13 @@ export type UserCountOutputTypeCountUpdatedFinishesArgs<ExtArgs extends runtime.
   where?: Prisma.FinishWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDeletedFinishesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FinishWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1369,6 +1519,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   deletedListings?: boolean | Prisma.User$deletedListingsArgs<ExtArgs>
   createdFinishes?: boolean | Prisma.User$createdFinishesArgs<ExtArgs>
   updatedFinishes?: boolean | Prisma.User$updatedFinishesArgs<ExtArgs>
+  deletedFinishes?: boolean | Prisma.User$deletedFinishesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1407,6 +1558,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   deletedListings?: boolean | Prisma.User$deletedListingsArgs<ExtArgs>
   createdFinishes?: boolean | Prisma.User$createdFinishesArgs<ExtArgs>
   updatedFinishes?: boolean | Prisma.User$updatedFinishesArgs<ExtArgs>
+  deletedFinishes?: boolean | Prisma.User$deletedFinishesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1424,6 +1576,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     deletedListings: Prisma.$ListingPayload<ExtArgs>[]
     createdFinishes: Prisma.$FinishPayload<ExtArgs>[]
     updatedFinishes: Prisma.$FinishPayload<ExtArgs>[]
+    deletedFinishes: Prisma.$FinishPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1834,6 +1987,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   deletedListings<T extends Prisma.User$deletedListingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deletedListingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdFinishes<T extends Prisma.User$createdFinishesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdFinishesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinishPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   updatedFinishes<T extends Prisma.User$updatedFinishesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$updatedFinishesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinishPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deletedFinishes<T extends Prisma.User$deletedFinishesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deletedFinishesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinishPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2456,6 +2610,30 @@ export type User$createdFinishesArgs<ExtArgs extends runtime.Types.Extensions.In
  * User.updatedFinishes
  */
 export type User$updatedFinishesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Finish
+   */
+  select?: Prisma.FinishSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Finish
+   */
+  omit?: Prisma.FinishOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinishInclude<ExtArgs> | null
+  where?: Prisma.FinishWhereInput
+  orderBy?: Prisma.FinishOrderByWithRelationInput | Prisma.FinishOrderByWithRelationInput[]
+  cursor?: Prisma.FinishWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FinishScalarFieldEnum | Prisma.FinishScalarFieldEnum[]
+}
+
+/**
+ * User.deletedFinishes
+ */
+export type User$deletedFinishesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Finish
    */

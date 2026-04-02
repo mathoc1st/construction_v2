@@ -1,3 +1,4 @@
+import type { DbClient } from '$lib/server/prisma/prisma.types';
 import type { User } from './user.domain';
 
 export type UserFilterOptions = {
@@ -10,7 +11,8 @@ export enum UserSortableField {
 	UPDATED_AT = 'updatedAt'
 }
 
-export interface IUserRepository {
+export interface IUsersRepository {
+	withClient(client: DbClient): IUsersRepository;
 	getUserById(id: number): Promise<User | null>;
 	getUserByUsername(username: string): Promise<User | null>;
 	create(user: User): Promise<User>;

@@ -1,11 +1,11 @@
-import { EmptyStringError, NonPositiveValueError } from '../common/errors/errors.domain';
-
-export enum FinishType {
-	COLD = 'COLD',
-	WARM_100 = 'WARM_100',
-	WARM_150 = 'WARM_150',
-	WARM_200 = 'WARM_200'
-}
+import {
+	DeletedEntityModificationError,
+	EmptyStringError,
+	EntityAlreadyDeletedError,
+	EntityMissingIdError,
+	NonPositiveValueError
+} from '../common/errors/errors.domain';
+import type { FinishType } from './finish.types';
 
 export class Finish {
 	private _id: number | null;
@@ -14,13 +14,15 @@ export class Finish {
 	private _price: number;
 	private _originalPrice: number | null;
 
-	private _buildingId: number | null;
+	private _buildingId: number;
 
 	private _createdAt: Date;
 	private _updatedAt: Date;
+	private _deletedAt: Date | null;
 
 	private _createdById: number;
 	private _updatedById: number;
+	private _deletedById: number | null;
 
 	private constructor(params: {
 		id: number | null;
@@ -28,11 +30,13 @@ export class Finish {
 		description: string;
 		price: number;
 		originalPrice: number | null;
-		buildingId: number | null;
+		buildingId: number;
 		createdAt: Date;
 		updatedAt: Date;
+		deletedAt: Date | null;
 		createdById: number;
 		updatedById: number;
+		deletedById: number | null;
 	}) {
 		this._id = params.id;
 		this._type = params.type;
@@ -42,8 +46,10 @@ export class Finish {
 		this._buildingId = params.buildingId;
 		this._createdAt = params.createdAt;
 		this._updatedAt = params.updatedAt;
+		this._deletedAt = params.deletedAt;
 		this._createdById = params.createdById;
 		this._updatedById = params.updatedById;
+		this._deletedById = params.deletedById;
 	}
 
 	static create(params: {
@@ -52,7 +58,16 @@ export class Finish {
 		price: number;
 		originalPrice?: number;
 		createdById: number;
+		buildingId: number;
 	}): Finish {
+		if (!params.description || params.description.trim() === '')
+			throw new EmptyStringError('Description');
+
+		if (params.price <= 0) throw new NonPositiveValueError('Price', params.price);
+
+		if (params.originalPrice !== undefined && params.originalPrice <= 0)
+			throw new NonPositiveValueError('Original Price', params.originalPrice);
+
 		const now = new Date();
 		return new Finish({
 			id: null,
@@ -60,11 +75,13 @@ export class Finish {
 			description: params.description,
 			price: params.price,
 			originalPrice: params.originalPrice ?? null,
-			buildingId: null,
+			buildingId: params.buildingId,
 			createdAt: now,
 			updatedAt: now,
+			deletedAt: null,
 			createdById: params.createdById,
-			updatedById: params.createdById
+			updatedById: params.createdById,
+			deletedById: null
 		});
 	}
 
@@ -77,8 +94,10 @@ export class Finish {
 		buildingId: number;
 		createdAt: Date;
 		updatedAt: Date;
+		deletedAt: Date | null;
 		createdById: number;
 		updatedById: number;
+		deletedById: number | null;
 	}): Finish {
 		return new Finish({
 			id: params.id,
@@ -89,8 +108,10 @@ export class Finish {
 			buildingId: params.buildingId,
 			createdAt: params.createdAt,
 			updatedAt: params.updatedAt,
+			deletedAt: params.deletedAt,
 			createdById: params.createdById,
-			updatedById: params.updatedById
+			updatedById: params.updatedById,
+			deletedById: params.deletedById
 		});
 	}
 
@@ -114,7 +135,7 @@ export class Finish {
 		return this._originalPrice;
 	}
 
-	get buildingId(): number | null {
+	get buildingId(): number {
 		return this._buildingId;
 	}
 
@@ -126,6 +147,10 @@ export class Finish {
 		return this._updatedAt;
 	}
 
+	get deletedAt(): Date | null {
+		return this._deletedAt;
+	}
+
 	get createdById(): number {
 		return this._createdById;
 	}
@@ -134,18 +159,36 @@ export class Finish {
 		return this._updatedById;
 	}
 
+	get deletedById(): number | null {
+		return this._deletedById;
+	}
+
+	get isDeleted(): boolean {
+		return this._deletedAt !== null;
+	}
+
+	private get entityName() {
+		return 'Finish';
+	}
+
 	changeType(type: FinishType, updatedById: number): void {
+		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName, this.id!);
+
 		this._type = type;
 		this.markUpdated(updatedById);
 	}
 
 	changeDescription(description: string, updatedById: number): void {
+		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName, this.id!);
+
 		this.validateString('Description', description);
 		this._description = description;
 		this.markUpdated(updatedById);
 	}
 
 	changePrice(price: number, updatedById: number): void {
+		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName, this.id!);
+
 		this.validatePrice(price);
 
 		this._price = price;
@@ -153,10 +196,20 @@ export class Finish {
 	}
 
 	changeOriginalPrice(originalPrice: number, updatedById: number): void {
+		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName, this.id!);
+
 		this.validatePrice(originalPrice);
 
 		this._originalPrice = originalPrice;
 		this.markUpdated(updatedById);
+	}
+
+	markDeleted(deletedById: number) {
+		if (!this.id) throw new EntityMissingIdError(this.entityName);
+		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName, this.id);
+
+		this._deletedAt = new Date();
+		this._deletedById = deletedById;
 	}
 
 	private validatePrice(price: number) {

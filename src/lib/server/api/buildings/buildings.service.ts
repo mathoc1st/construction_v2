@@ -1,3 +1,4 @@
+import type { DbClient } from '$lib/server/prisma/prisma.types';
 import { EntityNotFoundError } from '../common/errors/errors.service';
 import type { User } from '../users/user.domain';
 import { Building } from './building.domain';
@@ -15,7 +16,7 @@ export class BuildingsService implements IBuildingsService {
 	constructor(private readonly buildingRepository: IBuildingsRepository) {}
 
 	async getBuildingById(id: number): Promise<Building> {
-		const building = await this.buildingRepository.getBuildingById(id);
+		const building = await this.buildingRepository.getById(id);
 		if (!building) {
 			throw new EntityNotFoundError('building', id);
 		}
@@ -49,7 +50,7 @@ export class BuildingsService implements IBuildingsService {
 	}
 
 	async deleteBuilding(params: DeleteBuildingParams): Promise<void> {
-		const targetBuilding = await this.buildingRepository.getBuildingById(params.targetId);
+		const targetBuilding = await this.buildingRepository.getById(params.targetId);
 
 		if (!targetBuilding) {
 			throw new EntityNotFoundError('building', params.targetId);
@@ -70,7 +71,7 @@ export class BuildingsService implements IBuildingsService {
 		params: { targetId: number; performedBy: User },
 		updater: (building: Building, performedBy: User) => Promise<void> | void
 	): Promise<Building> {
-		const targetBuilding = await this.buildingRepository.getBuildingById(params.targetId);
+		const targetBuilding = await this.buildingRepository.getById(params.targetId);
 		if (!targetBuilding) {
 			throw new EntityNotFoundError('building', params.targetId);
 		}
@@ -85,9 +86,9 @@ export class BuildingsService implements IBuildingsService {
 
 let buildingService: IBuildingsService | null = null;
 
-export const getBuildingsService = () => {
+export const getBuildingsService = (client: DbClient) => {
 	if (!buildingService) {
-		buildingService = new BuildingsService(getBuildingsRepository());
+		buildingService = new BuildingsService(getBuildingsRepository(client));
 	}
 	return buildingService;
 };

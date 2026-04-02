@@ -1,14 +1,18 @@
 import { User } from './user.domain';
-import { UserSortableField, type IUserRepository, type UserFilterOptions } from './users.types';
+import { UserSortableField, type IUsersRepository, type UserFilterOptions } from './users.types';
 import type { UserAggregateArgs } from '$lib/server/prisma/generated/models/User';
-import { type IPrismaService, type SortOptions } from '$lib/server/prisma/prisma.types';
+import { type DbClient, type SortOptions } from '$lib/server/prisma/prisma.types';
 import type { Prisma } from '$lib/server/prisma/generated/client';
 
-export class UserRepository implements IUserRepository {
-	constructor(private readonly prismaService: IPrismaService) {}
+export class UserRepository implements IUsersRepository {
+	constructor(private readonly _client: DbClient) {}
+
+	withClient(client: DbClient): IUsersRepository {
+		return new UserRepository(client);
+	}
 
 	async getUserById(id: number): Promise<User | null> {
-		const record = await this.prismaService.client.user.findUnique({
+		const record = await this._client.user.findUnique({
 			where: { id }
 		});
 
@@ -19,7 +23,7 @@ export class UserRepository implements IUserRepository {
 		return User.fromPersistence(record);
 	}
 	async getUserByUsername(username: string): Promise<User | null> {
-		const record = await this.prismaService.client.user.findUnique({
+		const record = await this._client.user.findUnique({
 			where: { username }
 		});
 
@@ -31,7 +35,7 @@ export class UserRepository implements IUserRepository {
 	}
 
 	async create(user: User): Promise<User> {
-		const record = await this.prismaService.client.user.create({
+		const record = await this._client.user.create({
 			data: { username: user.username, passwordHash: user.passwordHash }
 		});
 
@@ -39,7 +43,7 @@ export class UserRepository implements IUserRepository {
 	}
 
 	async update(user: User): Promise<User> {
-		const record = await this.prismaService.client.user.update({
+		const record = await this._client.user.update({
 			where: { id: user.id! },
 			data: { username: user.username, passwordHash: user.passwordHash }
 		});
@@ -48,7 +52,7 @@ export class UserRepository implements IUserRepository {
 	}
 
 	async delete(user: User): Promise<void> {
-		await this.prismaService.client.user.delete({
+		await this._client.user.delete({
 			where: { id: user.id! }
 		});
 	}

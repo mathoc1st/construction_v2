@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { UserRepository } from '../../users.repository';
 import { User } from '../../user.domain';
-import type { IPrismaService } from '$lib/server/prisma/prisma.types';
+import type { DbClient } from '$lib/server/prisma/prisma.types';
 
 describe('User Repository Unit', () => {
 	const prismaMock = {
@@ -12,12 +12,7 @@ describe('User Repository Unit', () => {
 			delete: vi.fn()
 		}
 	};
-
-	const prismaServiceMock = {
-		client: prismaMock
-	} as unknown as IPrismaService;
-
-	const userService = new UserRepository(prismaServiceMock);
+	const userService = new UserRepository(prismaMock as unknown as DbClient);
 
 	let user: User;
 
@@ -33,7 +28,7 @@ describe('User Repository Unit', () => {
 
 	describe('Create User', () => {
 		it('should create a user successfully', async () => {
-			vi.mocked(prismaServiceMock.client.user.create).mockResolvedValue({
+			vi.mocked(prismaMock.user.create).mockResolvedValue({
 				id: 1,
 				username: user.username,
 				passwordHash: user.passwordHash,
@@ -52,7 +47,7 @@ describe('User Repository Unit', () => {
 
 	describe('Update User', () => {
 		it('should update a user successfully', async () => {
-			vi.mocked(prismaServiceMock.client.user.update).mockResolvedValue({
+			vi.mocked(prismaMock.user.update).mockResolvedValue({
 				id: 1,
 				username: user.username,
 				passwordHash: user.passwordHash,
@@ -60,7 +55,7 @@ describe('User Repository Unit', () => {
 				updatedAt: new Date()
 			});
 
-			const updatedUser = await userService.create(user);
+			const updatedUser = await userService.update(user);
 
 			expect(updatedUser).toBeInstanceOf(User);
 			expect(updatedUser.id).toBe(user.id);
@@ -73,7 +68,7 @@ describe('User Repository Unit', () => {
 		it('should delete a user successfully', async () => {
 			await userService.delete(user);
 
-			expect(prismaServiceMock.client.user.delete).toHaveBeenCalledExactlyOnceWith({
+			expect(prismaMock.user.delete).toHaveBeenCalledExactlyOnceWith({
 				where: {
 					id: 1
 				}

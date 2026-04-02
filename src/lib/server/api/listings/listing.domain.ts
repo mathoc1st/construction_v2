@@ -60,6 +60,8 @@ export class Listing {
 		buildingId: number;
 		createdById: number;
 	}): Listing {
+		if (!params.title || params.title.trim() === '') throw new EmptyStringError('Title');
+
 		const now = new Date();
 		return new Listing({
 			id: null,
