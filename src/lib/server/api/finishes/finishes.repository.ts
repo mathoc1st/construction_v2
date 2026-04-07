@@ -1,21 +1,18 @@
 import { Finish as DomainFinish } from './finish.domain';
-import type { Prisma, Finish as PrismaFinish } from '$lib/server/prisma/generated/client';
+import type { Prisma } from '$lib/server/api/prisma/generated/client';
 import {
-	FinishType as DomainFinishType,
 	FinishSortableFields,
 	type FinishFilterOptions,
 	type FinishQueryOptions,
+	type FinishWithId,
 	type IFinishesRepository
-} from './finish.types';
-import { FinishType as PrismaFinishType } from '$lib/server/prisma/generated/enums';
-import { SortDirection, type DbClient, type SortOptions } from '$lib/server/prisma/prisma.types';
-
-const finishTypeMap: Record<PrismaFinishType, DomainFinishType> = {
-	COLD: DomainFinishType.COLD,
-	WARM_100: DomainFinishType.WARM_100,
-	WARM_150: DomainFinishType.WARM_150,
-	WARM_200: DomainFinishType.WARM_200
-};
+} from '$lib/types/finishes/finishes.repository.types';
+import {
+	SortDirection,
+	type DbClient,
+	type SortOptions
+} from '$lib/types/prisma/prisma.service.types';
+import { FinishMapper, finishTypePrismaMap } from './finish.mapper';
 
 export class FinishesRepository implements IFinishesRepository {
 	constructor(private readonly _client: DbClient) {}
@@ -24,36 +21,47 @@ export class FinishesRepository implements IFinishesRepository {
 		return new FinishesRepository(client);
 	}
 
-	async create(finish: DomainFinish): Promise<DomainFinish> {
+	async create(buildingId: number, finish: DomainFinish): Promise<FinishWithId> {
 		const record = await this._client.finish.create({
-			data: this.toPrismaFinish(finish)
+			data: {
+				...FinishMapper.toPrismaCreateFromDomain(finish),
+				building: {
+					connect: { id: buildingId }
+				}
+			}
 		});
 
-		return this.toDomainFinish(record);
+		return {
+			finish: FinishMapper.toDomainFromPrisma(record),
+			id: record.id
+		};
 	}
 
-	async update(finish: DomainFinish): Promise<DomainFinish> {
-		if (!finish.id) throw new Error('Cannot update finish without an id');
+	async update(id: number, finish: DomainFinish): Promise<FinishWithId> {
+		const model = FinishMapper.toPrismaFromDomain(finish);
+
 		const record = await this._client.finish.update({
 			where: {
-				id: finish.id
+				id
 			},
-			data: this.toPrismaFinish(finish)
+			data: model
 		});
 
-		return this.toDomainFinish(record);
+		return {
+			finish: FinishMapper.toDomainFromPrisma(record),
+			id: record.id
+		};
 	}
 
-	async delete(finish: DomainFinish): Promise<void> {
-		if (!finish.id) throw new Error('Cannot delete finish without an id');
+	async delete(id: number): Promise<void> {
 		await this._client.finish.delete({
 			where: {
-				id: finish.id
+				id
 			}
 		});
 	}
 
-	async findAll(options: FinishQueryOptions): Promise<DomainFinish[]> {
+	async findAll(options: FinishQueryOptions): Promise<FinishWithId[]> {
 		const records = await this._client.finish.findMany({
 			where: this.buildWhere(options.filters),
 			orderBy: this.buildOrderBy(options.sort),
@@ -61,7 +69,10 @@ export class FinishesRepository implements IFinishesRepository {
 			skip: options.pagination?.offset
 		});
 
-		return records.map((r) => this.toDomainFinish(r));
+		return records.map((r) => ({
+			finish: FinishMapper.toDomainFromPrisma(r),
+			id: r.id
+		}));
 	}
 
 	async findAllCount(options: FinishFilterOptions): Promise<number> {
@@ -70,7 +81,7 @@ export class FinishesRepository implements IFinishesRepository {
 		});
 	}
 
-	async getById(id: number): Promise<DomainFinish | null> {
+	async getById(id: number): Promise<FinishWithId | null> {
 		const record = await this._client.finish.findUnique({
 			where: {
 				id
@@ -79,7 +90,10 @@ export class FinishesRepository implements IFinishesRepository {
 
 		if (!record) return null;
 
-		return this.toDomainFinish(record);
+		return {
+			finish: FinishMapper.toDomainFromPrisma(record),
+			id: record.id
+		};
 	}
 
 	private buildOrderBy(
@@ -97,10 +111,16 @@ export class FinishesRepository implements IFinishesRepository {
 	private buildWhere(filters?: FinishFilterOptions): Prisma.FinishWhereInput {
 		const where: Prisma.FinishWhereInput = {};
 
+		if (filters?.includesDeleted) {
+			return where;
+		} else {
+			where.deletedAt = null;
+		}
+
 		if (!filters) return where;
 
 		if (filters.type) {
-			where.type = filters.type;
+			where.type = finishTypePrismaMap[filters.type];
 		}
 
 		if (filters.price_from) {
@@ -125,27 +145,13 @@ export class FinishesRepository implements IFinishesRepository {
 
 		return where;
 	}
-
-	private toPrismaFinish(finish: DomainFinish): Omit<PrismaFinish, 'id'> {
-		return {
-			type: finish.type,
-			description: finish.description,
-			price: finish.price,
-			originalPrice: finish.originalPrice,
-			buildingId: finish.buildingId,
-			createdAt: finish.createdAt,
-			updatedAt: finish.updatedAt,
-			deletedAt: finish.deletedAt,
-			createdById: finish.createdById,
-			updatedById: finish.updatedById,
-			deletedById: finish.deletedById
-		};
-	}
-
-	private toDomainFinish(finish: PrismaFinish): DomainFinish {
-		return DomainFinish.fromPersistence({
-			...finish,
-			type: finishTypeMap[finish.type]
-		});
-	}
 }
+
+let finishesRepository: IFinishesRepository | null = null;
+
+export const getFinishesRepository = (client: DbClient) => {
+	if (!finishesRepository) {
+		finishesRepository = new FinishesRepository(client);
+	}
+	return finishesRepository;
+};

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { Image } from '$lib/types';
 	import {
 		Carousel,
 		Controls,
@@ -9,15 +8,14 @@
 		ControlButton
 	} from 'flowbite-svelte';
 
-	const { buildingImages }: { buildingImages: Image[] } = $props();
+	const { buildingImages }: { buildingImages: string[] } = $props();
 
 	let index = $state(0);
-	let selectedMain = $state(0);
 
 	let images = $derived(
 		buildingImages.map((i) => {
 			return {
-				src: `/api/images/${i.filename}`,
+				src: `/api/uploads?key=${i}`,
 				onerror: (l: Event) => {
 					const img = l.target as HTMLImageElement;
 					img.src = '/images/placeholder.jpg';
@@ -25,10 +23,6 @@
 			};
 		})
 	);
-
-	function onSelectedMain(event: Event, index: number) {
-		selectedMain = index;
-	}
 </script>
 
 <!-- <div
@@ -75,7 +69,7 @@
 			hidden={images.length <= 1}
 			class="flex w-[80%] flex-wrap items-center justify-center gap-y-2"
 		>
-			{#snippet children({ selected, index })}
+			{#snippet children({ selected })}
 				<Indicator class="bg-dark-brown h-3 w-3  {selected ? 'opacity-100' : 'opacity-30'}"
 				></Indicator>
 			{/snippet}

@@ -1,14 +1,7 @@
 import type z from 'zod';
-import { BuildingType, FinishType, type ApiResponse, type ServiceError } from './types';
-import { OutsideFinish } from './server/api/buildings/building.domain';
-
-export function toApiOkResponse<T>(result: T): ApiResponse<T> {
-	return { success: true, data: result };
-}
-
-export function toApiErrorResponse(error: string): ApiResponse<never> {
-	return { success: false, error };
-}
+import type { ConstructionType } from './server/api/buildings/building.types';
+import type { FinishType } from './server/api/finishes/finish.types';
+import type { ServiceError } from './server/api/common/errors/errors.service';
 
 export class ServiceException extends Error {
 	status: number;
@@ -18,6 +11,14 @@ export class ServiceException extends Error {
 		this.status = status;
 		this.name = 'ServiceException';
 	}
+}
+
+export function toCamelCase(str: string): string {
+	return str.toLowerCase().replace(/[-_\s]+(.)?/g, (_, c) => (c ? c.toUpperCase() : ''));
+}
+
+export function createEnumRecord<T extends string, V>(values: T[], defaultValue: V): Record<T, V> {
+	return Object.fromEntries(values.map((v) => [v, defaultValue])) as Record<T, V>;
 }
 
 export function toServiceError(err: unknown): ServiceError {
@@ -35,26 +36,26 @@ export function toServiceError(err: unknown): ServiceError {
 	return { status: 500, message: String(err) };
 }
 
-export function getBuildingTypeName(type: BuildingType): string {
+export function getBuildingTypeName(type: ConstructionType): string {
 	switch (type) {
-		case BuildingType.FRAME:
+		case 'FRAME':
 			return 'Каркасные дома';
-		case BuildingType.BARN:
+		case 'BARN':
 			return 'Барнхаусы';
-		case BuildingType.CONTAINER:
+		case 'CONTAINER':
 			return 'Бытовки';
 	}
 }
 
-export function getFinishTypeName(type: OutsideFinish): string {
+export function getFinishTypeName(type: FinishType): string {
 	switch (type) {
-		case OutsideFinish.COLD:
+		case 'COLD':
 			return 'Холодный контур';
-		case OutsideFinish.WARM_100:
+		case 'WARM_100':
 			return 'Теплый контур 100мм';
-		case OutsideFinish.WARM_150:
+		case 'WARM_150':
 			return 'Теплый контур 150мм';
-		case OutsideFinish.WARM_200:
+		case 'WARM_200':
 			return 'Теплый контур 200мм';
 	}
 }
@@ -75,13 +76,13 @@ export const prettyPrice = new Intl.NumberFormat('ru-RU', {
 
 export function getTabIcon(type: FinishType) {
 	switch (type) {
-		case FinishType.COLD:
+		case 'COLD':
 			return 'fa-solid:thermometer-empty';
-		case FinishType.WARM_100:
+		case 'WARM_100':
 			return 'fa-solid:thermometer-quarter';
-		case FinishType.WARM_150:
+		case 'WARM_150':
 			return 'fa-solid:thermometer-three-quarters';
-		case FinishType.WARM_200:
+		case 'WARM_200':
 			return 'fa-solid:thermometer-full';
 	}
 }

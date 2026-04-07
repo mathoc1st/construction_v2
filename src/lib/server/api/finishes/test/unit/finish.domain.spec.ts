@@ -5,7 +5,7 @@ import {
 	EmptyStringError,
 	NonPositiveValueError
 } from '$lib/server/api/common/errors/errors.domain';
-import { FinishType } from '../../finish.types';
+import { FinishType } from '$lib/types/finishes/finish.domain.types';
 
 describe('Finish Domain Unit', () => {
 	let finish: Finish;
@@ -13,12 +13,10 @@ describe('Finish Domain Unit', () => {
 
 	beforeEach(() => {
 		finish = Finish.fromPersistence({
-			id: 1,
 			type: FinishType.COLD,
 			description: 'test',
 			price: 100,
 			originalPrice: null,
-			buildingId: 1,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			deletedAt: null,
@@ -28,12 +26,10 @@ describe('Finish Domain Unit', () => {
 		});
 
 		deletedFinish = Finish.fromPersistence({
-			id: 1,
 			type: FinishType.COLD,
 			description: 'test',
 			price: 100,
 			originalPrice: null,
-			buildingId: 1,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			deletedAt: new Date(),
@@ -50,16 +46,13 @@ describe('Finish Domain Unit', () => {
 				type: FinishType.COLD,
 				description: 'Cold finish',
 				price: 1000,
-				createdById: 1,
-				buildingId: 1
+				createdById: 1
 			});
 
-			expect(finish.id).toBeNull();
 			expect(finish.type).toBe(FinishType.COLD);
 			expect(finish.description).toBe('Cold finish');
 			expect(finish.price).toBe(1000);
 			expect(finish.originalPrice).toBeNull();
-			expect(finish.buildingId).toBe(1);
 			expect(finish.createdAt).toBeInstanceOf(Date);
 			expect(finish.updatedAt).toBeInstanceOf(Date);
 			expect(finish.createdById).toBe(1);
@@ -68,7 +61,6 @@ describe('Finish Domain Unit', () => {
 
 		it('should create a finish from persistence with valid parameters', () => {
 			const finish = Finish.fromPersistence({
-				id: 1,
 				type: FinishType.COLD,
 				description: 'Cold finish',
 				price: 1000,
@@ -78,16 +70,13 @@ describe('Finish Domain Unit', () => {
 				deletedAt: null,
 				createdById: 1,
 				updatedById: 1,
-				deletedById: null,
-				buildingId: 1
+				deletedById: null
 			});
 
-			expect(finish.id).toBe(1);
 			expect(finish.type).toBe(FinishType.COLD);
 			expect(finish.description).toBe('Cold finish');
 			expect(finish.price).toBe(1000);
 			expect(finish.originalPrice).toBeNull();
-			expect(finish.buildingId).toBe(1);
 			expect(finish.createdAt).toBeInstanceOf(Date);
 			expect(finish.updatedAt).toBeInstanceOf(Date);
 			expect(finish.deletedAt).toBeNull();
@@ -102,8 +91,7 @@ describe('Finish Domain Unit', () => {
 					type: FinishType.COLD,
 					description: '',
 					price: 1000,
-					createdById: 1,
-					buildingId: 1
+					createdById: 1
 				})
 			).toThrow(EmptyStringError);
 		});
@@ -114,8 +102,7 @@ describe('Finish Domain Unit', () => {
 					type: FinishType.COLD,
 					description: 'Cold finish',
 					price: -100,
-					createdById: 1,
-					buildingId: 1
+					createdById: 1
 				})
 			).toThrow(NonPositiveValueError);
 		});
@@ -127,8 +114,7 @@ describe('Finish Domain Unit', () => {
 					description: 'Cold finish',
 					price: 1000,
 					originalPrice: -100,
-					createdById: 1,
-					buildingId: 1
+					createdById: 1
 				})
 			).toThrow(NonPositiveValueError);
 		});

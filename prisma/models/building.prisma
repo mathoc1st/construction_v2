@@ -19,7 +19,8 @@ model Building {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  listing Listing?
+  listing   Listing @relation(fields: [listingId], references: [id])
+  listingId Int     @unique
 
   finishes Finish[]
 

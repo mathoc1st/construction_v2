@@ -27,4 +27,6 @@ model Finish {
 
   building   Building @relation(fields: [buildingId], references: [id])
   buildingId Int
+
+  @@unique([type, buildingId, deletedAt])
 }

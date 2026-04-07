@@ -43,15 +43,17 @@ export class InvalidImageExtensionError extends DomainError {
 }
 
 export class DeletedEntityModificationError extends DomainError {
-	constructor(entity: string, id: number) {
-		super(`Cannot modify ${entity} with id ${id} because it is deleted.`);
+	constructor(entity: string, id?: number) {
+		super(
+			`Cannot modify ${entity}${id !== undefined ? ` with id ${id}` : ''} because it is deleted.`
+		);
 		this.name = 'DeletedEntityModificationError';
 	}
 }
 
 export class EntityAlreadyDeletedError extends DomainError {
-	constructor(entity: string, id: number) {
-		super(`Entity ${entity} with id ${id} is already deleted.`);
+	constructor(entity: string, id?: number) {
+		super(`Entity ${entity}${id !== undefined ? ` with id ${id}` : ''} is already deleted.`);
 		this.name = 'EntityAlreadyDeletedError';
 	}
 }

@@ -1,15 +1,32 @@
-import { getBuildingsByType } from '$lib/server/db/queries/building';
-import { BuildingType, SortBy } from '$lib/types';
+import { ListingMapper } from '$lib/server/api/listings/listing.mapper';
+import { getListingsService } from '$lib/server/api/listings/listings.service';
+import { ConstructionType } from '$lib/types/buildings/building.domain.types';
+import { ListingSortableFields } from '$lib/types/listings/listings.repository.types';
+import { SortDirection } from '$lib/types/prisma/prisma.service.types';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
+	const filter = {
+		sort: { field: ListingSortableFields.VIEWS, direction: SortDirection.DESC },
+		pagination: { limit: 3 }
+	};
 	const [popularFrames, popularBarns, popularContainers] = await Promise.all([
-		getBuildingsByType({ type: BuildingType.FRAME, sortBy: SortBy.POPULARITY_DESC }),
-		getBuildingsByType({ type: BuildingType.BARN, sortBy: SortBy.POPULARITY_DESC }),
-		getBuildingsByType({ type: BuildingType.CONTAINER, sortBy: SortBy.POPULARITY_DESC })
+		getListingsService().findListingsByBuildingType(ConstructionType.FRAME, filter),
+		getListingsService().findListingsByBuildingType(ConstructionType.BARN, filter),
+		getListingsService().findListingsByBuildingType(ConstructionType.CONTAINER, filter)
 	]);
 
-	return { popularFrames, popularBarns, popularContainers };
+	const popularFramesDto = popularFrames.map((listing) =>
+		ListingMapper.toDtoWithRelationsFromDomain(listing)
+	);
+	const popularBarnsDto = popularBarns.map((listing) =>
+		ListingMapper.toDtoWithRelationsFromDomain(listing)
+	);
+	const popularContainersDto = popularContainers.map((listing) =>
+		ListingMapper.toDtoWithRelationsFromDomain(listing)
+	);
+
+	return { popularFramesDto, popularBarnsDto, popularContainersDto };
 };
 
 export const actions = {

@@ -2,7 +2,6 @@ import path from 'path';
 import {
 	EmptyStringError,
 	EntityAlreadyDeletedError,
-	EntityMissingIdError,
 	InvalidImageExtensionError,
 	InvalidPathError
 } from '../common/errors/errors.domain';
@@ -10,12 +9,9 @@ import {
 const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
 
 export class Listing {
-	private _id: number | null;
 	private _title: string;
 	private _images: string[];
 	private _views: number;
-
-	private _buildingId: number;
 
 	private _createdAt: Date;
 	private _updatedAt: Date;
@@ -26,12 +22,9 @@ export class Listing {
 	private _deletedById: number | null;
 
 	private constructor(params: {
-		id: number | null;
 		title: string;
 		images: string[];
 		views: number;
-
-		buildingId: number;
 
 		createdAt: Date;
 		updatedAt: Date;
@@ -41,11 +34,9 @@ export class Listing {
 		updatedById: number;
 		deletedById: number | null;
 	}) {
-		this._id = params.id;
 		this._title = params.title;
 		this._images = params.images;
 		this._views = params.views;
-		this._buildingId = params.buildingId;
 		this._createdAt = params.createdAt;
 		this._updatedAt = params.updatedAt;
 		this._deletedAt = params.deletedAt;
@@ -54,21 +45,14 @@ export class Listing {
 		this._deletedById = params.deletedById;
 	}
 
-	public static create(params: {
-		title: string;
-		images: string[];
-		buildingId: number;
-		createdById: number;
-	}): Listing {
+	public static create(params: { title: string; images: string[]; createdById: number }): Listing {
 		if (!params.title || params.title.trim() === '') throw new EmptyStringError('Title');
 
 		const now = new Date();
 		return new Listing({
-			id: null,
 			title: params.title,
 			images: params.images,
 			views: 0,
-			buildingId: params.buildingId,
 			createdAt: now,
 			updatedAt: now,
 			deletedAt: null,
@@ -79,11 +63,9 @@ export class Listing {
 	}
 
 	public static fromPersistence(params: {
-		id: number;
 		title: string;
 		images: string[];
 		views: number;
-		buildingId: number;
 
 		createdAt: Date;
 		updatedAt: Date;
@@ -94,11 +76,9 @@ export class Listing {
 		deletedById: number | null;
 	}): Listing {
 		return new Listing({
-			id: params.id,
 			title: params.title,
 			images: params.images,
 			views: params.views,
-			buildingId: params.buildingId,
 			createdAt: params.createdAt,
 			updatedAt: params.updatedAt,
 			deletedAt: params.deletedAt,
@@ -106,10 +86,6 @@ export class Listing {
 			updatedById: params.updatedById,
 			deletedById: params.deletedById
 		});
-	}
-
-	get id(): number | null {
-		return this._id;
 	}
 
 	get title(): string {
@@ -122,10 +98,6 @@ export class Listing {
 
 	get views(): number {
 		return this._views;
-	}
-
-	get buildingId(): number {
-		return this._buildingId;
 	}
 
 	get createdAt(): Date {
@@ -161,7 +133,7 @@ export class Listing {
 	}
 
 	changeTitle(newTitle: string, updatedById: number) {
-		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName, this.id!);
+		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName);
 
 		this.validateString('title', newTitle);
 		this._title = newTitle;
@@ -169,13 +141,19 @@ export class Listing {
 	}
 
 	incrementViews() {
-		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName, this.id!);
+		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName);
 
 		this._views += 1;
 	}
 
 	changeImages(newImages: string[], updatedById: number) {
-		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName, this.id!);
+		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName);
+
+		if (!newImages || newImages.length === 0) {
+			this._images = [];
+			this.markUpdated(updatedById);
+			return;
+		}
 
 		newImages.forEach((name, index) => {
 			this.validateImage(name, index);
@@ -185,8 +163,7 @@ export class Listing {
 	}
 
 	markDeleted(deletedById: number) {
-		if (!this.id) throw new EntityMissingIdError(this.entityName);
-		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName, this.id);
+		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName);
 
 		this._deletedById = deletedById;
 		this._deletedAt = new Date();

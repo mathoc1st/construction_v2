@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { BuildingType, type Building, type Image } from '$lib/types';
+	import type { ListingWithRelationsDto } from '$lib/dtos/listing.dto';
+	import { ConstructionType } from '$lib/types/buildings/building.domain.types';
 	import BuildingCard from './ui/BuildingCard.svelte';
 
 	let {
@@ -7,19 +8,19 @@
 		popularBarn,
 		popularContainer
 	}: {
-		popularFrame: (Building & { images: Image[] })[];
-		popularBarn: (Building & { images: Image[] })[];
-		popularContainer: (Building & { images: Image[] })[];
+		popularFrame: ListingWithRelationsDto[];
+		popularBarn: ListingWithRelationsDto[];
+		popularContainer: ListingWithRelationsDto[];
 	} = $props();
 
-	let selectedType: BuildingType = $state(BuildingType.FRAME);
+	let selectedType: ConstructionType = $state(ConstructionType.FRAME);
 
-	function handleTypeChange(event: Event, type: BuildingType) {
+	function handleTypeChange(event: Event, type: ConstructionType) {
 		selectedType = type;
 	}
 </script>
 
-<section class="mx-auto mt-46 mb-46 max-w-[1440px] px-5">
+<section class="mx-auto mt-46 mb-46 max-w-360 px-5">
 	<h1 class="text-dark-olive mb-18 text-center text-5xl font-medium max-[600px]:text-4xl">
 		Популярные проекты
 	</h1>
@@ -28,51 +29,51 @@
 		<li
 			class={[
 				'bg-dark-olive text-off-white hover:bg-light-brown hover:text-dark-olive flex items-center rounded-2xl transition',
-				{ 'bg-light-brown text-dark-olive!': selectedType === BuildingType.FRAME }
+				{ 'bg-light-brown text-dark-olive!': selectedType === ConstructionType.FRAME }
 			]}
 		>
 			<button
 				class="h-full w-full px-6 py-1.5"
-				onclick={(e) => handleTypeChange(e, BuildingType.FRAME)}>Каркасный</button
+				onclick={(e) => handleTypeChange(e, ConstructionType.FRAME)}>Каркасный</button
 			>
 		</li>
 		<li
 			class={[
 				'bg-dark-olive text-off-white hover:bg-light-brown hover:text-dark-olive flex items-center rounded-2xl transition',
-				{ 'bg-light-brown text-dark-olive!': selectedType === BuildingType.BARN }
+				{ 'bg-light-brown text-dark-olive!': selectedType === ConstructionType.BARN }
 			]}
 		>
 			<button
 				class="h-full w-full px-6 py-1.5"
-				onclick={(e) => handleTypeChange(e, BuildingType.BARN)}>Барнхаус</button
+				onclick={(e) => handleTypeChange(e, ConstructionType.BARN)}>Барнхаус</button
 			>
 		</li>
 		<li
 			class={[
 				'bg-dark-olive text-off-white hover:bg-light-brown hover:text-dark-olive flex items-center rounded-2xl transition',
-				{ 'bg-light-brown text-dark-olive!': selectedType === BuildingType.CONTAINER }
+				{ 'bg-light-brown text-dark-olive!': selectedType === ConstructionType.CONTAINER }
 			]}
 		>
 			<button
 				class="h-full w-full px-6 py-1.5"
-				onclick={(e) => handleTypeChange(e, BuildingType.CONTAINER)}>Бытовка</button
+				onclick={(e) => handleTypeChange(e, ConstructionType.CONTAINER)}>Бытовка</button
 			>
 		</li>
 	</ul>
 	<div class="mt-12 flex flex-wrap justify-center gap-4">
-		{#if selectedType === BuildingType.FRAME}
-			{#each popularFrame as building, i (building.id)}
-				<BuildingCard {building} />
+		{#if selectedType === ConstructionType.FRAME}
+			{#each popularFrame as record (record.listing.id)}
+				<BuildingCard data={record} />
 			{/each}
 		{/if}
-		{#if selectedType === BuildingType.BARN}
-			{#each popularBarn as building, i (building.id)}
-				<BuildingCard {building} />
+		{#if selectedType === ConstructionType.BARN}
+			{#each popularBarn as record (record.listing.id)}
+				<BuildingCard data={record} />
 			{/each}
 		{/if}
-		{#if selectedType === BuildingType.CONTAINER}
-			{#each popularContainer as building, i (building.id)}
-				<BuildingCard {building} />
+		{#if selectedType === ConstructionType.CONTAINER}
+			{#each popularContainer as record (record.listing.id)}
+				<BuildingCard data={record} />
 			{/each}
 		{/if}
 	</div>

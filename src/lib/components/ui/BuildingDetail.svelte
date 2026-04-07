@@ -1,41 +1,54 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
-	import { FinishType, type GetBuildingResult } from '$lib/types';
+	import { resolve } from '$app/paths';
+	import type { ListingWithRelationsDto } from '$lib/dtos/listing.dto';
+	import { FinishType } from '$lib/types/finishes/finish.domain.types';
 	import { getFinishTypeName, getTabIcon, prettyPrice } from '$lib/utils';
 	import Icon from '@iconify/svelte';
 
 	import { Tabs, TabItem, Modal, Dropdown, DropdownItem } from 'flowbite-svelte';
 
 	const {
-		building,
+		building: listingWithRelations,
 		isAdmin,
 		isSent
-	}: { building: NonNullable<GetBuildingResult>; isAdmin: boolean; isSent: boolean | undefined } =
-		$props();
+	}: {
+		building: ListingWithRelationsDto;
+		isAdmin: boolean;
+		isSent: boolean | undefined;
+	} = $props();
 
 	let isModalOpen = $state(false);
 	let isDeleteError = $state(false);
 	let deleteError = $state('');
 
+	let area = $state(
+		listingWithRelations.building?.length && listingWithRelations.building?.width
+			? listingWithRelations.building.length * listingWithRelations.building.width
+			: null
+	);
+
+	let dimensions = $state(
+		listingWithRelations.building?.length && listingWithRelations.building?.width
+			? `${listingWithRelations.building.length}x${listingWithRelations.building.width} м`
+			: null
+	);
+
 	async function removeBuilding(id: number) {
-		isDeleteError = false;
-		const params = new URLSearchParams();
-		params.append('id', id.toString());
-
-		const response = await fetch(`/api/building?${params}`, { method: 'DELETE' });
-
-		if (!response.ok) {
-			isDeleteError = true;
-			deleteError = (await response.json()).message;
-			return;
-		}
-
-		goto(`/catalog/${building.type.toLowerCase()}`);
+		// isDeleteError = false;
+		// const params = new URLSearchParams();
+		// params.append('id', id.toString());
+		// const response = await fetch(`/api/building?${params}`, { method: 'DELETE' });
+		// if (!response.ok) {
+		// 	isDeleteError = true;
+		// 	deleteError = (await response.json()).message;
+		// 	return;
+		// }
+		// goto(`/catalog/${listingWithRelations.type.toLowerCase()}`);
 	}
 </script>
 
-<div class="relative flex basis-1/2 flex-col justify-center max-[1300px]:items-center">
+<div class="relative flex max-w-1/2 basis-1/2 flex-col justify-center max-[1300px]:items-center">
 	{#if isAdmin}
 		<button
 			class="bg-light-brown text-off-white hover:bg-dark-olive absolute -top-4 right-0 flex max-w-max items-center gap-1 self-end rounded-2xl p-2 text-lg transition"
@@ -44,7 +57,7 @@
 		<Dropdown simple class="bg-dark-olive ">
 			<DropdownItem class="hover:bg-light-brown transition"
 				><a
-					href={`/admin/modify/${building.id}`}
+					href={resolve(`/admin/edit/listing/${listingWithRelations.listing.id}`)}
 					class="text-off-white flex items-center gap-1 text-base"
 					><Icon icon="solar:pen-linear" class="size-5" />Редактировать</a
 				></DropdownItem
@@ -53,7 +66,7 @@
 				><button
 					class="text-off-white flex items-center gap-1 text-base"
 					onclick={async () => {
-						await removeBuilding(building.id);
+						await removeBuilding(listingWithRelations.id);
 					}}><Icon icon="material-symbols:delete-outline-rounded" class="size-5" />Удалить</button
 				></DropdownItem
 			>
@@ -67,42 +80,40 @@
 	<h2
 		class="text-dark-olive text-4xl font-medium max-[1300px]:mt-4 max-[1300px]:text-center max-[600px]:text-3xl"
 	>
-		{building.name || 'Untitled'}
+		{listingWithRelations.listing.title || 'Untitled'}
 	</h2>
 	<div class="border-light-olive bg-light-olive mt-4 h-px w-40 border"></div>
 	<h4 class="text-dark-olive mt-6 text-3xl max-[600px]:text-2xl">Паспорт объекта</h4>
 	<div class="place-i mt-6 grid grid-cols-2 gap-2.5 gap-x-8">
 		<p class="text-dark-olive flex items-center gap-1">
 			<Icon icon="ix:align-object-dimensions" class="size-8 min-w-6" /><span
-				class="max-[600px]:text-md text-lg">Габариты: {building.size || 'Unknown'}</span
+				class="max-[600px]:text-md text-lg">Габариты: {dimensions || 'Unknown'}</span
 			>
 		</p>
 		<p class="text-dark-olive flex items-center gap-1">
 			<Icon icon="bx:area" class="size-8 min-w-6" /><span class="max-[600px]:text-md text-lg"
-				>Площадь: {!building.length || !building.width
-					? 'Unknown'
-					: building.length * building.width} м<sup>2</sup></span
+				>Площадь: {!area ? 'Unknown' : `${area} м²`}</span
 			>
 		</p>
 		<p class="text-dark-olive flex items-center gap-1">
 			<Icon icon="mdi:bathroom" class="size-8 min-w-6" /><span class="max-[600px]:text-md text-lg"
-				>Санузлов: {building.bathrooms || 'Unknown'}</span
+				>Санузлов: {listingWithRelations.building?.bathrooms || 'Unknown'}</span
 			>
 		</p>
 
 		<p class="text-dark-olive flex items-center gap-1">
 			<Icon icon="uil:bed" class="size-8 min-w-6" /><span class="max-[600px]:text-md text-lg"
-				>Комнат: {building.bedrooms || 'Unknown'}</span
+				>Комнат: {listingWithRelations.building?.bedrooms || 'Unknown'}</span
 			>
 		</p>
 		<p class="text-dark-olive flex items-center gap-1">
 			<Icon icon="ri:stairs-line" class="size-8 min-w-6" /><span class="max-[600px]:text-md text-lg"
-				>Этажность: {building.floors || 'Unknown'}</span
+				>Этажность: {listingWithRelations.building?.floors || 'Unknown'}</span
 			>
 		</p>
 		<p class="text-dark-olive flex items-center gap-1">
 			<Icon icon="mdi:veranda" class="size-8 min-w-6" /><span class="max-[600px]:text-md text-lg"
-				>Веранда: {building.veranda ? 'есть' : 'нет'}</span
+				>Веранда: {listingWithRelations.building?.veranda ? 'есть' : 'нет'}</span
 			>
 		</p>
 	</div>
@@ -114,10 +125,10 @@
 			class=" grid w-max grid-cols-2 max-[600px]:mx-auto max-[600px]:grid-cols-1"
 			classes={{ divider: 'bg-light-olive w-full' }}
 		>
-			{#each building.finishes.toSorted((a, b) => {
+			{#each listingWithRelations.finishes.toSorted((a, b) => {
 				const order = Object.keys(FinishType);
 				return order.indexOf(a.type) - order.indexOf(b.type);
-			}) as finish}
+			}) as finish (finish.id)}
 				<TabItem
 					class="w-full"
 					classes={{
@@ -138,7 +149,7 @@
 							</p>
 						</div>
 					{/snippet}
-					<div>
+					<div class="max-w-fit">
 						<div class="flex flex-col gap-2">
 							<p class="flex items-start gap-2 text-lg">
 								<Icon
@@ -146,18 +157,9 @@
 									class="text-dark-brown mt-1 size-6 shrink-0"
 								/>Характеристика дома
 							</p>
-							{#each finish.options as finishOption}
-								<p class="flex items-start gap-2 text-lg">
-									<Icon
-										icon={finishOption.isAvailable
-											? 'ic:round-check-circle-outline'
-											: 'material-symbols:cancel-outline-rounded'}
-										class="mt-1 size-6 shrink-0 {finishOption.isAvailable
-											? 'text-dark-brown'
-											: 'text-light-olive'}"
-									/>{finishOption.description}
-								</p>
-							{/each}
+							<p class="w-full wrap-break-word">
+								{finish.description || 'Описание отсутствует.'}
+							</p>
 						</div>
 
 						<div class="mt-6 flex flex-col gap-4 max-[1300px]:items-center">

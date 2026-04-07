@@ -1,17 +1,16 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { Building, ConstructionType } from '../../building.domain';
+import { Building } from '../../building.domain';
 import {
 	EntityAlreadyDeletedError,
-	EntityMissingIdError,
 	NonPositiveValueError
 } from '../../../common/errors/errors.domain';
+import { ConstructionType } from '$lib/types/buildings/building.domain.types';
 
 describe('Building Domain Unit', () => {
 	let building: Building;
 
 	beforeEach(() => {
 		building = Building.fromPersistence({
-			id: 1,
 			constructionType: ConstructionType.BARN,
 			width: 10,
 			length: 20,
@@ -64,7 +63,6 @@ describe('Building Domain Unit', () => {
 
 		it('should create a building from persistence', () => {
 			const building = Building.fromPersistence({
-				id: 1,
 				constructionType: ConstructionType.BARN,
 				width: 10,
 				length: 20,
@@ -82,7 +80,6 @@ describe('Building Domain Unit', () => {
 			});
 
 			expect(building).toBeInstanceOf(Building);
-			expect(building.id).toBe(1);
 			expect(building.constructionType).toBe(ConstructionType.BARN);
 			expect(building.width).toBe(10);
 			expect(building.length).toBe(20);
@@ -345,22 +342,6 @@ describe('Building Domain Unit', () => {
 		it('should throw an error if marking deleted building twice', () => {
 			building.markDeleted(1);
 			expect(() => building.markDeleted(1)).toThrow(EntityAlreadyDeletedError);
-		});
-
-		it('should throw an error when deleting a building with no id', () => {
-			const building = Building.create({
-				constructionType: ConstructionType.BARN,
-				width: 10,
-				length: 20,
-				height: 5,
-				bedrooms: 2,
-				bathrooms: 1,
-				floors: 1,
-				veranda: false,
-				createdById: 1
-			});
-
-			expect(() => building.markDeleted(1)).toThrow(EntityMissingIdError);
 		});
 	});
 });

@@ -1,7 +1,7 @@
-import type { PrismaService } from '$lib/server/prisma/prisma.service';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { SessionRepository } from '../../session.repository';
+import { SessionsRepository } from '../../session.repository';
 import { Session } from '../../session.domain';
+import type { DbClient } from '$lib/types/prisma/prisma.service.types';
 
 describe('Session Repository Unit', () => {
 	const prismaMock = {
@@ -13,11 +13,7 @@ describe('Session Repository Unit', () => {
 		}
 	};
 
-	const prismaServiceMock = {
-		client: prismaMock
-	} as unknown as PrismaService;
-
-	const sessionRepository = new SessionRepository(prismaServiceMock);
+	const sessionRepository = new SessionsRepository(prismaMock as unknown as DbClient);
 
 	const record = {
 		id: 1,

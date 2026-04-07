@@ -1,12 +1,9 @@
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import {
-	createSession,
-	generateSessionToken,
-	setSessionTokenCookie
-} from '$lib/server/services/auth';
-import { verify } from '@node-rs/argon2';
-import { getUserByUsername } from '$lib/server/db/queries/user';
+import { getUsersService } from '$lib/server/api/users/users.service';
+import { getPasswordService } from '$lib/server/api/auth/password.service';
+import { getSessionsService } from '$lib/server/api/auth/session/session.service';
+import { SESSION_COOKIE_NAME } from '$env/static/private';
 
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {
@@ -23,68 +20,40 @@ export const actions: Actions = {
 
 		if (!validateUsername(username)) {
 			return fail(400, {
-				message: 'Invalid username (min 3, max 31 characters, alphanumeric only)'
+				message: 'Invalid username'
 			});
 		}
 		if (!validatePassword(password)) {
-			return fail(400, { message: 'Invalid password (min 6, max 255 characters)' });
+			return fail(400, { message: 'Invalid password' });
 		}
 
-		const existingUser = await getUserByUsername(username);
+		const userWithId = await getUsersService().getUserByUsername(username);
 
-		if (!existingUser) {
+		if (!userWithId) {
 			return fail(400, { message: 'Incorrect username or password' });
 		}
 
-		const validPassword = await verify(existingUser.passwordHash, password, {
-			memoryCost: 19456,
-			timeCost: 2,
-			outputLen: 32,
-			parallelism: 1
-		});
+		const validPassword = await getPasswordService().comparePassword(
+			password,
+			userWithId.user.passwordHash
+		);
+
 		if (!validPassword) {
 			return fail(400, { message: 'Incorrect username or password' });
 		}
 
-		const sessionToken = generateSessionToken();
-		const session = await createSession(sessionToken, existingUser.id);
-		setSessionTokenCookie(event, sessionToken, session.expiresAt);
+		const { session, token } = await getSessionsService().createSession({
+			userId: userWithId.id
+		});
+
+		event.cookies.set(SESSION_COOKIE_NAME, token, {
+			expires: session.expiresAt,
+			secure: true,
+			path: '/'
+		});
 
 		return redirect(302, '/');
 	}
-	// register: async (event) => {
-	// 	const formData = await event.request.formData();
-	// 	const username = formData.get('username');
-	// 	const password = formData.get('password');
-
-	// 	if (!validateUsername(username)) {
-	// 		return fail(400, { message: 'Invalid username' });
-	// 	}
-	// 	if (!validatePassword(password)) {
-	// 		return fail(400, { message: 'Invalid password' });
-	// 	}
-
-	// 	const passwordHash = await hash(password, {
-	// 		// recommended minimum parameters
-	// 		memoryCost: 19456,
-	// 		timeCost: 2,
-	// 		outputLen: 32,
-	// 		parallelism: 1
-	// 	});
-
-	// 	try {
-	// 		const newUser = await createUser(username, passwordHash);
-
-	// 		if (!newUser) return fail(500, { message: 'An error has occurred' });
-
-	// 		const sessionToken = generateSessionToken();
-	// 		const session = await createSession(sessionToken, newUser.id);
-	// 		setSessionTokenCookie(event, sessionToken, session.expiresAt);
-	// 	} catch {
-	// 		return fail(500, { message: 'An error has occurred' });
-	// 	}
-	// 	return redirect(302, '/');
-	// }
 };
 
 function validateUsername(username: unknown): username is string {

@@ -1,12 +1,24 @@
-import type { Prisma, Listing as ListingModel } from '$lib/server/prisma/generated/client';
-import { SortDirection, type DbClient, type SortOptions } from '$lib/server/prisma/prisma.types';
+import type { Prisma } from '$lib/server/api/prisma/generated/client';
+import {
+	SortDirection,
+	type DbClient,
+	type SortOptions
+} from '$lib/types/prisma/prisma.service.types';
 import { Listing } from './listing.domain';
 import type {
 	IListingsRepository,
 	ListingFilterOptions,
 	ListingQueryOptions,
-	ListingSortableFields
-} from './listing.types';
+	ListingSortableFields,
+	ListingWithId,
+	ListingWithRelations
+} from '$lib/types/listings/listings.repository.types';
+import { ListingMapper } from './listing.mapper';
+import { BuildingMapper } from '../buildings/building.mapper';
+import { FinishMapper } from '../finishes/finish.mapper';
+import type { Building } from '../buildings/building.domain';
+import type { Finish } from '../finishes/finish.domain';
+import type { ConstructionType } from '$lib/types/buildings/building.domain.types';
 
 export class ListingsRepository implements IListingsRepository {
 	constructor(private readonly _client: DbClient) {}
@@ -15,7 +27,91 @@ export class ListingsRepository implements IListingsRepository {
 		return new ListingsRepository(client);
 	}
 
-	async getListingById(id: number): Promise<Listing | null> {
+	async getListingByIdWithRelations(
+		id: number,
+		includesDeleted?: boolean
+	): Promise<ListingWithRelations | null> {
+		const record = await this._client.listing.findUnique({
+			where: {
+				id
+			},
+			include: {
+				building: {
+					where: includesDeleted ? undefined : { deletedAt: null },
+					include: {
+						finishes: {
+							where: includesDeleted ? undefined : { deletedAt: null }
+						}
+					}
+				}
+			}
+		});
+
+		if (!record) return null;
+
+		return {
+			listing: {
+				id: record.id,
+				record: ListingMapper.toDomainFromPrisma(record)
+			},
+			building: record.building
+				? {
+						id: record.building.id,
+						record: BuildingMapper.toDomainFromPrisma(record.building)
+					}
+				: null,
+			finishes:
+				record.building?.finishes.map((f) => ({
+					id: f.id,
+					record: FinishMapper.toDomainFromPrisma(f)
+				})) || []
+		};
+	}
+
+	async findListingsByBuildingType(
+		type: ConstructionType,
+		options?: ListingQueryOptions
+	): Promise<ListingWithRelations[]> {
+		const records = await this._client.listing.findMany({
+			where: {
+				...this.buildWhere(options?.filters),
+				building: {
+					constructionType: type,
+					deletedAt: options?.filters?.includesDeleted ? undefined : null
+				}
+			},
+			orderBy: this.buildOrderBy(options?.sort),
+			take: options?.pagination?.limit,
+			skip: options?.pagination?.offset,
+			include: {
+				building: {
+					include: {
+						finishes: true
+					}
+				}
+			}
+		});
+
+		return records.map((record) => ({
+			listing: {
+				id: record.id,
+				record: ListingMapper.toDomainFromPrisma(record)
+			},
+			building: record.building
+				? {
+						id: record.building.id,
+						record: BuildingMapper.toDomainFromPrisma(record.building)
+					}
+				: null,
+			finishes:
+				record.building?.finishes.map((f) => ({
+					id: f.id,
+					record: FinishMapper.toDomainFromPrisma(f)
+				})) || []
+		}));
+	}
+
+	async getListingById(id: number): Promise<ListingWithId | null> {
 		const record = await this._client.listing.findUnique({
 			where: {
 				id
@@ -24,10 +120,28 @@ export class ListingsRepository implements IListingsRepository {
 
 		if (!record) return null;
 
-		return Listing.fromPersistence(record);
+		return {
+			id: record.id,
+			listing: ListingMapper.toDomainFromPrisma(record)
+		};
 	}
 
-	async findAll(options?: ListingQueryOptions): Promise<Listing[]> {
+	async getBuildingIdByListingId(id: number): Promise<number | null> {
+		const record = await this._client.listing.findUnique({
+			where: {
+				id
+			},
+			select: {
+				building: true
+			}
+		});
+
+		if (!record || !record.building) return null;
+
+		return record.building.id;
+	}
+
+	async findAll(options?: ListingQueryOptions): Promise<ListingWithId[]> {
 		const record = await this._client.listing.findMany({
 			where: this.buildWhere(options?.filters),
 			orderBy: this.buildOrderBy(options?.sort),
@@ -35,68 +149,102 @@ export class ListingsRepository implements IListingsRepository {
 			skip: options?.pagination?.offset
 		});
 
-		return record.map((r) => Listing.fromPersistence(r));
+		return record.map((r) => ({
+			id: r.id,
+			listing: ListingMapper.toDomainFromPrisma(r)
+		}));
 	}
 
-	async create(listing: Listing): Promise<Listing> {
-		const model = this.toModel(listing);
+	async create(buildingId: number, listing: Listing): Promise<ListingWithId> {
+		const model = ListingMapper.toPrismaCreateFromDomain(listing);
 		const record = await this._client.listing.create({
-			data: model
-		});
-
-		return Listing.fromPersistence(record);
-	}
-
-	async update(listing: Listing): Promise<Listing> {
-		if (listing.id == null) throw new Error('Invalid Listing id');
-
-		const model = this.toModel(listing);
-		const record = await this._client.listing.update({
-			where: {
-				id: listing.id
-			},
-			data: model
-		});
-
-		return Listing.fromPersistence(record);
-	}
-
-	async softDelete(listing: Listing): Promise<void> {
-		await this._client.listing.update({
-			where: {
-				id: listing.id!
-			},
 			data: {
-				deletedAt: listing.deletedAt,
-				deletedById: listing.deletedById
+				...model,
+				building: {
+					connect: { id: buildingId }
+				}
 			}
 		});
 
-		return;
-	}
-
-	async delete(listing: Listing): Promise<void> {
-		await this._client.listing.delete({ where: { id: listing.id! } });
-	}
-
-	private toModel(listing: Listing): Omit<ListingModel, 'id'> & { id?: number } {
 		return {
-			id: listing.id ?? undefined,
-			title: listing.title,
-			images: listing.images,
-			views: listing.views,
-			createdAt: listing.createdAt,
-			updatedAt: listing.updatedAt,
-			deletedAt: listing.deletedAt,
-			createdById: listing.createdById,
-			updatedById: listing.updatedById,
-			deletedById: listing.deletedById,
-			buildingId: listing.buildingId
+			id: record.id,
+			listing: ListingMapper.toDomainFromPrisma(record)
 		};
+	}
+
+	async createListingWithRelations(
+		listing: Listing,
+		building: Building,
+		finishes: Finish[]
+	): Promise<ListingWithRelations> {
+		const record = await this._client.listing.create({
+			data: {
+				...ListingMapper.toPrismaCreateFromDomain(listing),
+				building: {
+					create: {
+						...BuildingMapper.toPrismaCreateFromDomain(building),
+						finishes: {
+							create: finishes.map((f) => FinishMapper.toPrismaCreateFromDomain(f))
+						}
+					}
+				}
+			},
+			include: {
+				building: {
+					include: {
+						finishes: true
+					}
+				}
+			}
+		});
+
+		return {
+			listing: {
+				id: record.id,
+				record: ListingMapper.toDomainFromPrisma(record)
+			},
+			building: record.building
+				? {
+						id: record.building.id,
+						record: BuildingMapper.toDomainFromPrisma(record.building)
+					}
+				: null,
+			finishes:
+				record.building?.finishes.map((f) => ({
+					id: f.id,
+					record: FinishMapper.toDomainFromPrisma(f)
+				})) || []
+		};
+	}
+
+	async update(id: number, listing: Listing): Promise<ListingWithId> {
+		const model = ListingMapper.toPrismaFromDomain(listing);
+
+		const record = await this._client.listing.update({
+			where: {
+				id
+			},
+			data: model
+		});
+
+		return {
+			id: record.id,
+			listing: ListingMapper.toDomainFromPrisma(record)
+		};
+	}
+
+	async delete(id: number): Promise<void> {
+		await this._client.listing.delete({ where: { id } });
 	}
 
 	private buildWhere(filters?: ListingFilterOptions): Prisma.ListingWhereInput {
 		const where: Prisma.ListingWhereInput = {};
+
+		if (!filters?.includesDeleted) {
+			where.deletedAt = null;
+		} else {
+			return where;
+		}
 
 		if (filters?.title) {
 			where.title = { contains: filters.title };
@@ -117,3 +265,12 @@ export class ListingsRepository implements IListingsRepository {
 		};
 	}
 }
+
+let listingsRepository: IListingsRepository | null = null;
+
+export const getListingsRepository = (client: DbClient) => {
+	if (!listingsRepository) {
+		listingsRepository = new ListingsRepository(client);
+	}
+	return listingsRepository;
+};

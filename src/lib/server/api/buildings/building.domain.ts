@@ -1,8 +1,8 @@
+import type { ConstructionType } from '$lib/types/buildings/building.domain.types';
 import {
 	DeletedEntityModificationError,
 	DomainError,
 	EntityAlreadyDeletedError,
-	EntityMissingIdError,
 	NonPositiveValueError
 } from '../common/errors/errors.domain';
 
@@ -13,14 +13,7 @@ export class BuildingAlreadyDeletedError extends DomainError {
 	}
 }
 
-export enum ConstructionType {
-	FRAME = 'FRAME',
-	BARN = 'BARN',
-	CONTAINER = 'CONTAINER'
-}
-
 export class Building {
-	private _id: number | null;
 	private _constructionType: ConstructionType;
 	private _width: number;
 	private _length: number;
@@ -39,7 +32,6 @@ export class Building {
 	private _deletedById: number | null;
 
 	private constructor(params: {
-		id: number | null;
 		constructionType: ConstructionType;
 		width: number;
 		length: number;
@@ -55,7 +47,6 @@ export class Building {
 		updatedById: number;
 		deletedById: number | null;
 	}) {
-		this._id = params.id;
 		this._constructionType = params.constructionType;
 		this._width = params.width;
 		this._length = params.length;
@@ -95,7 +86,6 @@ export class Building {
 		if (params.floors <= 0) throw new NonPositiveValueError('floors', params.floors);
 
 		return new Building({
-			id: null,
 			constructionType: params.constructionType,
 			width: params.width,
 			length: params.length,
@@ -114,7 +104,6 @@ export class Building {
 	}
 
 	static fromPersistence(params: {
-		id: number;
 		constructionType: ConstructionType;
 		width: number;
 		length: number;
@@ -131,10 +120,6 @@ export class Building {
 		deletedById: number | null;
 	}): Building {
 		return new Building(params);
-	}
-
-	get id() {
-		return this._id;
 	}
 
 	get constructionType() {
@@ -202,14 +187,14 @@ export class Building {
 	}
 
 	changeConstructionType(newType: ConstructionType, updatedById: number) {
-		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName, this.id!);
+		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName);
 
 		this._constructionType = newType;
 		this.markUpdated(updatedById);
 	}
 
 	changeWidth(newWidth: number, updatedById: number) {
-		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName, this.id!);
+		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName);
 
 		this.validateDimension(newWidth);
 		this._width = newWidth;
@@ -217,7 +202,7 @@ export class Building {
 	}
 
 	changeLength(newLength: number, updatedById: number) {
-		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName, this.id!);
+		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName);
 
 		this.validateDimension(newLength);
 		this._length = newLength;
@@ -225,7 +210,7 @@ export class Building {
 	}
 
 	changeHeight(newHeight: number, updatedById: number) {
-		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName, this.id!);
+		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName);
 
 		this.validateDimension(newHeight);
 		this._height = newHeight;
@@ -233,14 +218,14 @@ export class Building {
 	}
 
 	changeBedrooms(newBedrooms: number, updatedById: number) {
-		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName, this.id!);
+		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName);
 		this.validateDimension(newBedrooms);
 		this._bedrooms = newBedrooms;
 		this.markUpdated(updatedById);
 	}
 
 	changeBathrooms(newBathrooms: number, updatedById: number) {
-		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName, this.id!);
+		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName);
 
 		this.validateDimension(newBathrooms);
 		this._bathrooms = newBathrooms;
@@ -248,7 +233,7 @@ export class Building {
 	}
 
 	changeFloors(newFloors: number, updatedById: number) {
-		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName, this.id!);
+		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName);
 
 		this.validateDimension(newFloors);
 		this._floors = newFloors;
@@ -256,15 +241,14 @@ export class Building {
 	}
 
 	changeVeranda(hasVeranda: boolean, updatedById: number) {
-		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName, this.id!);
+		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName);
 
 		this._veranda = hasVeranda;
 		this.markUpdated(updatedById);
 	}
 
 	markDeleted(deletedById: number) {
-		if (!this.id) throw new EntityMissingIdError(this.entityName);
-		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName, this.id);
+		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName);
 
 		this._deletedAt = new Date();
 		this._deletedById = deletedById;

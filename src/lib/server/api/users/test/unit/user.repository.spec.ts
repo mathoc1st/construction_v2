@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { UserRepository } from '../../users.repository';
 import { User } from '../../user.domain';
-import type { DbClient } from '$lib/server/prisma/prisma.types';
+import type { DbClient } from '$lib/types/prisma/prisma.service.types';
 
 describe('User Repository Unit', () => {
 	const prismaMock = {
@@ -18,7 +18,6 @@ describe('User Repository Unit', () => {
 
 	beforeEach(() => {
 		user = User.fromPersistence({
-			id: 1,
 			username: 'test',
 			passwordHash: 'hash',
 			createdAt: new Date(),
@@ -36,12 +35,15 @@ describe('User Repository Unit', () => {
 				updatedAt: new Date()
 			});
 
-			const newUser = await userService.create(user);
+			const result = await userService.create(user);
 
-			expect(newUser).toBeInstanceOf(User);
-			expect(newUser.id).toBe(user.id);
-			expect(newUser.username).toBe(user.username);
-			expect(newUser.passwordHash).toBe(user.passwordHash);
+			expect(result).toEqual({
+				id: expect.any(Number),
+				user: expect.objectContaining({
+					username: user.username,
+					passwordHash: user.passwordHash
+				})
+			});
 		});
 	});
 
@@ -55,18 +57,21 @@ describe('User Repository Unit', () => {
 				updatedAt: new Date()
 			});
 
-			const updatedUser = await userService.update(user);
+			const result = await userService.update(1, user);
 
-			expect(updatedUser).toBeInstanceOf(User);
-			expect(updatedUser.id).toBe(user.id);
-			expect(updatedUser.username).toBe(user.username);
-			expect(updatedUser.passwordHash).toBe(user.passwordHash);
+			expect(result).toEqual({
+				id: expect.any(Number),
+				user: expect.objectContaining({
+					username: user.username,
+					passwordHash: user.passwordHash
+				})
+			});
 		});
 	});
 
 	describe('Delete User', () => {
 		it('should delete a user successfully', async () => {
-			await userService.delete(user);
+			await userService.delete(1);
 
 			expect(prismaMock.user.delete).toHaveBeenCalledExactlyOnceWith({
 				where: {

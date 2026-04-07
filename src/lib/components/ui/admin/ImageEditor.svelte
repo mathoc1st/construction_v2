@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import Icon from '@iconify/svelte';
 	import {
 		Carousel,
@@ -11,49 +10,76 @@
 		Fileupload,
 		ControlButton
 	} from 'flowbite-svelte';
-	import type { ClassValue } from 'svelte/elements';
+	import { onMount } from 'svelte';
 
-	let {
-		uploadedImages,
-		onChangeImages,
-		class: className
-	}: {
-		uploadedImages: File[];
-		onChangeImages: (file: File[]) => void;
-		class?: ClassValue;
-	} = $props();
+	interface Props {
+		images?: string[];
+	}
 
-	let images: File[] = $derived(uploadedImages);
-	let imageIndex = $state(0);
+	let { images = $bindable() }: Props = $props();
 
-	let previews = $derived.by(() => {
-		if (!images || images.length === 0) {
-			return [{ src: '/images/placeholder.jpg' }];
-		}
+	let imageContainer: HTMLDivElement | null = $state(null);
 
-		return images.map((f) => {
-			return {
-				src: URL.createObjectURL(f)
-			};
+	onMount(() => {
+		const buttons = imageContainer?.querySelectorAll('button:not([type])');
+
+		buttons?.forEach((btn) => {
+			(btn as HTMLButtonElement).type = 'button';
 		});
 	});
 
+	let imageIndex = $state(0);
+	let selectedFiles = $state<FileList | null>(null);
+	let previews: { src: string }[] = $state([]);
+
 	$effect(() => {
-		onChangeImages(images);
+		if (!images || images.length === 0) {
+			previews = [{ src: '/images/placeholder.jpg' }];
+			return;
+		}
+
+		(async () => {
+			const newPreviews = await Promise.all(
+				images.map(async (key) => {
+					const res = await fetch(`/api/uploads?key=${key}`);
+					const { url } = await res.json();
+
+					return { src: url };
+				})
+			);
+
+			previews = newPreviews;
+		})();
 	});
 
-	function handleAddImages(event: Event) {
+	async function handleAddImages(event: Event) {
 		const input = event.target as HTMLInputElement;
 
 		if (!input.files) return;
 
-		images.push(...Array.from(input.files));
+		const files = Array.from(input.files);
 
 		input.value = '';
+
+		const formData = new FormData();
+
+		files.forEach((file) => {
+			formData.append('files', file);
+		});
+
+		const res = await fetch('/api/uploads', {
+			method: 'POST',
+			body: formData
+		});
+
+		const uploads: { keys: string[] } = await res.json();
+
+		images = [...(images ?? []), ...uploads.keys];
 	}
 
-	function onImageDelete(_: Event, index: number) {
+	async function onImageDelete(_: Event, index: number) {
 		if (!images || images.length === 0) return;
+
 		images = images.filter((_, i) => i !== index);
 		imageIndex = Math.max(0, index - 1);
 	}
@@ -67,26 +93,14 @@
 
 		imageIndex = 0;
 	}
-
-	function fileArrayToFileList(images: File[] | undefined): FileList | null {
-		if (!browser || !images) return null;
-
-		const dataTransfer = new DataTransfer();
-
-		for (const image of images) {
-			dataTransfer.items.add(image);
-		}
-
-		return dataTransfer.files;
-	}
 </script>
 
-<div class="shrink-0 basis-1/2 max-[1100px]:basis-full">
+<div bind:this={imageContainer} class="shrink-0 basis-1/2 max-[1100px]:basis-full">
 	{#key previews}
 		<Carousel
 			images={previews}
 			bind:index={imageIndex}
-			class="mx-auto mb-6 h-[450px]! max-[1100px]:max-w-[700px] max-[600px]:h-[350px]! max-[400px]:h-[300px]!"
+			class="mx-auto mb-6 h-112.5! max-[1100px]:max-w-175 max-[600px]:h-87.5! max-[400px]:h-75!"
 		>
 			{#snippet slide({ index, Slide })}
 				<p
@@ -129,7 +143,7 @@
 				hidden={previews.length <= 1}
 				class="flex w-[80%] flex-wrap items-center justify-center gap-y-2"
 			>
-				{#snippet children({ selected, index })}
+				{#snippet children({ selected })}
 					<Indicator class="bg-dark-brown h-3 w-3  {selected ? 'opacity-100' : 'opacity-30'}"
 					></Indicator>
 				{/snippet}
@@ -173,11 +187,13 @@
 			'bg-dark-olive text-off-white max-w-max rounded-2xl border-0 pr-8!',
 			{ 'rounded-r-none pr-2': images && images.length > 0 }
 		]}
+		id="file"
+		name="file"
 		clearable
 		onchange={handleAddImages}
 		multiple
 		accept="image/*"
-		files={fileArrayToFileList(images)}
+		bind:files={selectedFiles}
 	/>
 	{#if previews.length > 1}
 		<Thumbnails
@@ -189,7 +205,7 @@
 				<Thumbnail
 					{selected}
 					{...image}
-					class="h-[100px] w-[100px] rounded-md object-contain {selected
+					class="h-25 w-25 rounded-md object-contain {selected
 						? 'border-light-olive border-2'
 						: ''}"
 				/>

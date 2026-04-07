@@ -7,18 +7,27 @@ describe('User Domain Unit', () => {
 			const user = User.create({ username: 'testuser', passwordHash: 'hashedpassword' });
 			expect(user.username).toBe('testuser');
 			expect(user.passwordHash).toBe('hashedpassword');
-			expect(user.id).toBeNull();
+		});
+
+		it('should throw an error when creating a user with an empty username', () => {
+			expect(() => User.create({ username: '   ', passwordHash: 'hashedpassword' })).toThrow(
+				'username cannot be an empty string'
+			);
+		});
+
+		it('should throw an error when creating a user with an empty password hash', () => {
+			expect(() => User.create({ username: 'testuser', passwordHash: '   ' })).toThrow(
+				'passwordHash cannot be an empty string'
+			);
 		});
 
 		it('should create a user from persistence', () => {
 			const user = User.fromPersistence({
-				id: 1,
 				username: 'testuser',
 				passwordHash: 'hashedpassword',
 				createdAt: new Date(),
 				updatedAt: new Date()
 			});
-			expect(user.id).toBe(1);
 			expect(user.username).toBe('testuser');
 			expect(user.passwordHash).toBe('hashedpassword');
 		});

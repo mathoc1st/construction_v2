@@ -1,23 +1,24 @@
 import { beforeEach, describe, expect, it, vi, type Mocked } from 'vitest';
 import {
-	BuildingSortableFields,
 	type AddBuildingParams,
 	type DeleteBuildingParams,
 	type FindBuildingsParams,
-	type IBuildingsRepository,
 	type UpdateBuildingParams
-} from '../../building.types';
+} from '$lib/types/buildings/buildings.service.types';
 import { BuildingsService } from '../../buildings.service';
-import { Building, ConstructionType } from '../../building.domain';
-import { User } from '$lib/server/api/users/user.domain';
-import { SortDirection } from '$lib/server/prisma/prisma.types';
+import { Building } from '../../building.domain';
+import { ConstructionType } from '$lib/types/buildings/building.domain.types';
+import { SortDirection } from '$lib/types/prisma/prisma.service.types';
+import {
+	BuildingSortableFields,
+	type IBuildingsRepository
+} from '$lib/types/buildings/buildings.repository.types';
 
 describe('Building Service Unit', () => {
 	const buildingRepositoryMock: Mocked<IBuildingsRepository> = {
 		create: vi.fn(),
 		getById: vi.fn(),
 		update: vi.fn(),
-		softDelete: vi.fn(),
 		delete: vi.fn(),
 		findAll: vi.fn(),
 		findAllCount: vi.fn(),
@@ -30,7 +31,6 @@ describe('Building Service Unit', () => {
 
 	beforeEach(() => {
 		building = Building.fromPersistence({
-			id: 1,
 			constructionType: ConstructionType.BARN,
 			width: 10,
 			length: 20,
@@ -61,19 +61,24 @@ describe('Building Service Unit', () => {
 				bathrooms: 1,
 				floors: 1,
 				veranda: false,
-				performedBy: User.create({ username: 'testuser', passwordHash: 'hashedpassword' })
+				performedById: 1,
+				listingId: 1
 			};
 
 			const expectedBuilding = Building.create({
 				...params,
-				createdById: params.performedBy.id!
+				createdById: params.performedById
 			});
 
-			buildingRepositoryMock.create.mockResolvedValueOnce(expectedBuilding);
+			buildingRepositoryMock.create.mockResolvedValueOnce({
+				building: expectedBuilding,
+				id: 1
+			});
 
 			const result = await buildingService.addBuilding(params);
 
 			expect(buildingRepositoryMock.create).toHaveBeenCalledWith(
+				1,
 				expect.objectContaining({
 					constructionType: params.constructionType,
 					width: params.width,
@@ -82,11 +87,13 @@ describe('Building Service Unit', () => {
 					bedrooms: params.bedrooms,
 					bathrooms: params.bathrooms,
 					floors: params.floors,
-					veranda: params.veranda,
-					createdById: params.performedBy.id
+					veranda: params.veranda
 				})
 			);
-			expect(result).toEqual(expectedBuilding);
+			expect(result).toEqual({
+				building: expectedBuilding,
+				id: 1
+			});
 		});
 	});
 
@@ -94,7 +101,7 @@ describe('Building Service Unit', () => {
 		it('should update a building successfully', async () => {
 			const params: UpdateBuildingParams = {
 				targetId: 1,
-				performedBy: User.create({ username: 'testuser', passwordHash: 'hashedpassword' }),
+				performedById: 1,
 				constructionType: ConstructionType.BARN,
 				width: 10,
 				length: 20,
@@ -105,10 +112,9 @@ describe('Building Service Unit', () => {
 				veranda: false
 			};
 
-			buildingRepositoryMock.getById.mockResolvedValueOnce(building);
+			buildingRepositoryMock.getById.mockResolvedValueOnce({ building, id: 1 });
 
 			const updatedBuilding = Building.fromPersistence({
-				id: building.id!,
 				constructionType: params.constructionType!,
 				width: params.width!,
 				length: params.length!,
@@ -121,18 +127,21 @@ describe('Building Service Unit', () => {
 				updatedAt: new Date(),
 				deletedAt: null,
 				createdById: building.createdById,
-				updatedById: params.performedBy.id!,
+				updatedById: params.performedById,
 				deletedById: null
 			});
 
-			buildingRepositoryMock.update.mockResolvedValueOnce(updatedBuilding);
+			buildingRepositoryMock.update.mockResolvedValueOnce({
+				building: updatedBuilding,
+				id: 1
+			});
 
 			const result = await buildingService.updateBuilding(params);
 
 			expect(buildingRepositoryMock.getById).toHaveBeenCalledWith(params.targetId);
 			expect(buildingRepositoryMock.update).toHaveBeenCalledWith(
+				1,
 				expect.objectContaining({
-					id: building.id,
 					constructionType: params.constructionType,
 					width: params.width,
 					length: params.length,
@@ -143,7 +152,10 @@ describe('Building Service Unit', () => {
 					veranda: params.veranda
 				})
 			);
-			expect(result).toEqual(updatedBuilding);
+			expect(result).toEqual({
+				building: updatedBuilding,
+				id: 1
+			});
 		});
 	});
 
@@ -151,22 +163,14 @@ describe('Building Service Unit', () => {
 		it('should delete a building successfully', async () => {
 			const params: DeleteBuildingParams = {
 				targetId: 1,
-				performedBy: User.create({ username: 'testuser', passwordHash: 'hashedpassword' })
+				performedById: 1
 			};
 
-			buildingRepositoryMock.getById.mockResolvedValueOnce(building);
-			buildingRepositoryMock.softDelete.mockResolvedValueOnce();
+			buildingRepositoryMock.getById.mockResolvedValueOnce({ building, id: 1 });
 
 			await buildingService.deleteBuilding(params);
 
 			expect(buildingRepositoryMock.getById).toHaveBeenCalledWith(params.targetId);
-			expect(buildingRepositoryMock.softDelete).toHaveBeenCalledWith(
-				expect.objectContaining({
-					id: building.id,
-					isDeleted: true,
-					deletedById: params.performedBy.id
-				})
-			);
 		});
 	});
 
@@ -185,10 +189,10 @@ describe('Building Service Unit', () => {
 					offset: 0,
 					limit: 10
 				},
-				performedBy: User.create({ username: 'testuser', passwordHash: 'hashedpassword' })
+				performedById: 1
 			};
 
-			const expectedBuildings = [building];
+			const expectedBuildings = [{ building, id: 1 }];
 
 			buildingRepositoryMock.findAll.mockResolvedValueOnce(expectedBuildings);
 
@@ -204,7 +208,13 @@ describe('Building Service Unit', () => {
 					pagination: params.pagination
 				})
 			);
-			expect(result).toEqual(expectedBuildings);
+
+			expect(result).toEqual([
+				{
+					building: expectedBuildings[0].building,
+					id: expectedBuildings[0].id
+				}
+			]);
 		});
 	});
 });

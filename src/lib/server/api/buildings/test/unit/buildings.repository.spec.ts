@@ -4,14 +4,20 @@ import { BuildingsRepository } from '../../buildings.repository';
 import {
 	type Building as PrismaBuilding,
 	ConstructionType as PrismaConstructionType
-} from '$lib/server/prisma/generated/client';
-import { Building, ConstructionType as DomainConstructionType } from '../../building.domain';
+} from '$lib/server/api/prisma/generated/client';
+import { Building } from '../../building.domain';
+import { ConstructionType as DomainConstructionType } from '$lib/types/buildings/building.domain.types';
 import {
 	BuildingSortableFields,
 	type BuildingFilterOptions,
-	type BuildingQueryOptions
-} from '../../building.types';
-import { SortDirection, type DbClient, type IPrismaService } from '$lib/server/prisma/prisma.types';
+	type BuildingQueryOptions,
+	type BuildingWithId
+} from '$lib/types/buildings/buildings.repository.types';
+import {
+	SortDirection,
+	type DbClient,
+	type IPrismaService
+} from '$lib/types/prisma/prisma.service.types';
 
 const constructionTypeMap: Record<PrismaConstructionType, DomainConstructionType> = {
 	FRAME: DomainConstructionType.FRAME,
@@ -43,6 +49,7 @@ describe('Buildings Repository Unit', () => {
 		bathrooms: 2,
 		floors: 2,
 		veranda: true,
+		listingId: 1,
 		createdAt: new Date(),
 		updatedAt: new Date(),
 		deletedAt: null,
@@ -52,24 +59,11 @@ describe('Buildings Repository Unit', () => {
 	};
 
 	let building: Building;
-	let newBuilding: Building;
 
 	beforeEach(() => {
 		building = Building.fromPersistence({
 			...record,
 			constructionType: constructionTypeMap[record.constructionType]
-		});
-
-		newBuilding = Building.create({
-			constructionType: DomainConstructionType.BARN,
-			width: 10,
-			length: 20,
-			height: 5,
-			bedrooms: 3,
-			bathrooms: 2,
-			floors: 2,
-			veranda: true,
-			createdById: 1
 		});
 
 		vi.clearAllMocks();
@@ -79,15 +73,27 @@ describe('Buildings Repository Unit', () => {
 		it('should create a building successfully', async () => {
 			prismaMock.building.create.mockResolvedValue(record);
 
-			const result = await buildingsRepository.create(building);
+			const result = await buildingsRepository.create(1, building);
 
-			const { id: _, ...expectedBuildingRecord } = record;
+			expect(prismaMock.building.create).toHaveBeenCalledWith(
+				expect.objectContaining({
+					data: expect.objectContaining({
+						constructionType: building.constructionType,
+						width: building.width,
+						length: building.length,
+						height: building.height,
+						bedrooms: building.bedrooms,
+						bathrooms: building.bathrooms,
+						floors: building.floors,
+						veranda: building.veranda
+					})
+				})
+			);
 
-			expect(prismaMock.building.create).toHaveBeenCalledWith({
-				data: expectedBuildingRecord
+			expect(result).toEqual({
+				building,
+				id: 1
 			});
-
-			expect(result).toEqual(building);
 		});
 	});
 
@@ -101,7 +107,10 @@ describe('Buildings Repository Unit', () => {
 				where: { id: 1 }
 			});
 
-			expect(result).toEqual(building);
+			expect(result).toEqual({
+				building,
+				id: 1
+			});
 		});
 
 		it('should return null when building is not found', async () => {
@@ -120,6 +129,7 @@ describe('Buildings Repository Unit', () => {
 	describe('Update Building', () => {
 		it('should update a building successfully', async () => {
 			const updatedRecord: PrismaBuilding = { ...record, bedrooms: 4 };
+
 			prismaMock.building.update.mockResolvedValue(updatedRecord);
 
 			const updatedBuilding = Building.fromPersistence({
@@ -127,67 +137,38 @@ describe('Buildings Repository Unit', () => {
 				constructionType: constructionTypeMap[updatedRecord.constructionType]
 			});
 
-			const result = await buildingsRepository.update(updatedBuilding);
+			const result = await buildingsRepository.update(1, updatedBuilding);
 
-			expect(prismaMock.building.update).toHaveBeenCalledWith({
-				where: { id: updatedBuilding.id },
-				data: {
-					constructionType: updatedBuilding.constructionType,
-					width: updatedBuilding.width,
-					length: updatedBuilding.length,
-					height: updatedBuilding.height,
-					bedrooms: updatedBuilding.bedrooms,
-					bathrooms: updatedBuilding.bathrooms,
-					floors: updatedBuilding.floors,
-					veranda: updatedBuilding.veranda,
-					createdAt: updatedBuilding.createdAt,
-					updatedAt: updatedBuilding.updatedAt,
-					deletedAt: updatedBuilding.deletedAt,
-					createdById: updatedBuilding.createdById,
-					updatedById: updatedBuilding.updatedById,
-					deletedById: updatedBuilding.deletedById
-				}
-			});
+			expect(prismaMock.building.update).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: { id: 1 },
+					data: expect.objectContaining({
+						constructionType: updatedBuilding.constructionType,
+						width: updatedBuilding.width,
+						length: updatedBuilding.length,
+						height: updatedBuilding.height,
+						bedrooms: updatedBuilding.bedrooms,
+						bathrooms: updatedBuilding.bathrooms,
+						floors: updatedBuilding.floors,
+						veranda: updatedBuilding.veranda
+					})
+				})
+			);
 
-			expect(result).toEqual(updatedBuilding);
-		});
-
-		it('should throw an error if id is not present', async () => {
-			await expect(buildingsRepository.update(newBuilding)).rejects.toThrow();
-
-			expect(prismaMock.building.update).not.toHaveBeenCalled();
-		});
-	});
-
-	describe('Soft Delete Building', () => {
-		it('should soft delete a building successfully', async () => {
-			const deletedRecord: PrismaBuilding = { ...record, deletedAt: new Date(), deletedById: 1 };
-			prismaMock.building.update.mockResolvedValue(deletedRecord);
-
-			const deletedBuilding = Building.fromPersistence({
-				...deletedRecord,
-				constructionType: constructionTypeMap[deletedRecord.constructionType]
-			});
-
-			await buildingsRepository.softDelete(deletedBuilding);
-
-			expect(prismaMock.building.update).toHaveBeenCalledWith({
-				where: { id: deletedBuilding.id },
-				data: {
-					deletedAt: deletedBuilding.deletedAt,
-					deletedById: deletedBuilding.deletedById
-				}
+			expect(result).toEqual({
+				building: updatedBuilding,
+				id: 1
 			});
 		});
 	});
 
 	describe('Delete Building', () => {
 		it('should delete building successfully', async () => {
-			await buildingsRepository.delete(building);
+			await buildingsRepository.delete(1);
 
 			expect(prismaMock.building.delete).toHaveBeenCalledWith({
 				where: {
-					id: building.id
+					id: 1
 				}
 			});
 		});
@@ -206,7 +187,7 @@ describe('Buildings Repository Unit', () => {
 				skip: undefined
 			});
 
-			expect(result).toEqual([building]);
+			expect(result).toEqual([{ building, id: 1 }]);
 		});
 
 		it('should find buildings with optional filters', async () => {
@@ -237,7 +218,7 @@ describe('Buildings Repository Unit', () => {
 				skip: 0
 			});
 
-			expect(result).toEqual([building]);
+			expect(result).toEqual([{ building, id: 1 }]);
 		});
 	});
 

@@ -2,17 +2,19 @@ import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
 import { Session } from './session.domain';
 import type {
 	CreateSessionParams,
-	ISessionRepository,
-	ISessionService,
+	ISessionsRepository,
+	ISessionsService,
 	ValidateSessionParams,
 	ValidateSessionResult,
 	InvalidateSessionParams
 } from './session.types';
 import { sha256 } from '@oslojs/crypto/sha2';
+import { getSessionsRepository } from './session.repository';
+import { getPrismaService } from '$lib/server/api/prisma/prisma.service';
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24 * 15; // 15 days
-export class SessionService implements ISessionService {
-	constructor(private readonly sessionRepository: ISessionRepository) {}
+export class SessionsService implements ISessionsService {
+	constructor(private readonly sessionRepository: ISessionsRepository) {}
 
 	async createSession(params: CreateSessionParams): Promise<{ session: Session; token: string }> {
 		const token = this.generateSessionToken();
@@ -50,6 +52,11 @@ export class SessionService implements ISessionService {
 		}
 	}
 
+	async getUserBySessionToken(token: string) {
+		const tokenHash = this.generateTokenHash(token);
+		return this.sessionRepository.getUserBySessionTokenHash(tokenHash);
+	}
+
 	private generateSessionToken() {
 		const bytes = crypto.getRandomValues(new Uint8Array(18));
 		const token = encodeBase64url(bytes);
@@ -60,3 +67,14 @@ export class SessionService implements ISessionService {
 		return encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	}
 }
+
+let sessionsService: ISessionsService | null = null;
+
+export const getSessionsService = () => {
+	const prismaService = getPrismaService();
+
+	if (!sessionsService) {
+		sessionsService = new SessionsService(getSessionsRepository(prismaService.client));
+	}
+	return sessionsService;
+};

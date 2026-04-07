@@ -323,6 +323,7 @@ export type FinishOrderByWithRelationInput = {
 
 export type FinishWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  type_buildingId_deletedAt?: Prisma.FinishTypeBuildingIdDeletedAtCompoundUniqueInput
   AND?: Prisma.FinishWhereInput | Prisma.FinishWhereInput[]
   OR?: Prisma.FinishWhereInput[]
   NOT?: Prisma.FinishWhereInput | Prisma.FinishWhereInput[]
@@ -341,7 +342,7 @@ export type FinishWhereUniqueInput = Prisma.AtLeast<{
   updatedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   deletedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   building?: Prisma.XOR<Prisma.BuildingScalarRelationFilter, Prisma.BuildingWhereInput>
-}, "id">
+}, "id" | "type_buildingId_deletedAt">
 
 export type FinishOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -487,6 +488,12 @@ export type FinishListRelationFilter = {
 
 export type FinishOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type FinishTypeBuildingIdDeletedAtCompoundUniqueInput = {
+  type: $Enums.FinishType
+  buildingId: number
+  deletedAt: Date | string
 }
 
 export type FinishCountOrderByAggregateInput = {

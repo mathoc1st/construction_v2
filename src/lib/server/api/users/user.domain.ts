@@ -1,5 +1,6 @@
+import { EmptyStringError } from '../common/errors/errors.domain';
+
 export class User {
-	private _id: number | null;
 	private _username: string;
 	private _passwordHash: string;
 
@@ -7,13 +8,11 @@ export class User {
 	private _updatedAt: Date;
 
 	private constructor(params: {
-		id: number | null;
 		username: string;
 		passwordHash: string;
 		createdAt: Date;
 		updatedAt: Date;
 	}) {
-		this._id = params.id;
 		this._username = params.username;
 		this._passwordHash = params.passwordHash;
 		this._createdAt = params.createdAt;
@@ -21,10 +20,17 @@ export class User {
 	}
 
 	static create(params: { username: string; passwordHash: string }): User {
+		if (params.username.trim() === '') {
+			throw new EmptyStringError('username');
+		}
+
+		if (params.passwordHash.trim() === '') {
+			throw new EmptyStringError('passwordHash');
+		}
+
 		const now = new Date();
 
 		return new User({
-			id: null,
 			username: params.username,
 			passwordHash: params.passwordHash,
 			createdAt: now,
@@ -33,23 +39,17 @@ export class User {
 	}
 
 	static fromPersistence(params: {
-		id: number;
 		username: string;
 		passwordHash: string;
 		createdAt: Date;
 		updatedAt: Date;
 	}): User {
 		return new User({
-			id: params.id,
 			username: params.username,
 			passwordHash: params.passwordHash,
 			createdAt: params.createdAt,
 			updatedAt: params.updatedAt
 		});
-	}
-
-	get id() {
-		return this._id;
 	}
 
 	get username() {
@@ -58,5 +58,31 @@ export class User {
 
 	get passwordHash() {
 		return this._passwordHash;
+	}
+
+	get createdAt() {
+		return this._createdAt;
+	}
+
+	get updatedAt() {
+		return this._updatedAt;
+	}
+
+	changeUsername(newUsername: string) {
+		if (newUsername.trim() === '') {
+			throw new EmptyStringError('username');
+		}
+
+		this._username = newUsername;
+		this._updatedAt = new Date();
+	}
+
+	changePasswordHash(newPasswordHash: string) {
+		if (newPasswordHash.trim() === '') {
+			throw new EmptyStringError('passwordHash');
+		}
+
+		this._passwordHash = newPasswordHash;
+		this._updatedAt = new Date();
 	}
 }

@@ -2,23 +2,24 @@ import { beforeEach, describe, expect, it, vi, type Mocked } from 'vitest';
 import type {
 	CreateSessionParams,
 	InvalidateSessionParams,
-	ISessionRepository,
-	ISessionService,
+	ISessionsRepository,
+	ISessionsService,
 	CreationSessionResult,
 	ValidateSessionResult
 } from '../../session.types';
-import { SessionService } from '../../session.service';
+import { SessionsService } from '../../session.service';
 import { Session } from '../../session.domain';
 
 describe('Session Service Unit', () => {
-	const sessionRepositoryMock: Mocked<ISessionRepository> = {
+	const sessionRepositoryMock: Mocked<ISessionsRepository> = {
 		create: vi.fn(),
 		delete: vi.fn(),
 		update: vi.fn(),
-		getSessionByTokenHash: vi.fn()
+		getSessionByTokenHash: vi.fn(),
+		getUserBySessionTokenHash: vi.fn()
 	};
 
-	const sessionService: ISessionService = new SessionService(sessionRepositoryMock);
+	const sessionService: ISessionsService = new SessionsService(sessionRepositoryMock);
 
 	beforeEach(() => {
 		vi.clearAllMocks();

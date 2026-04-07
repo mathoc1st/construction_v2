@@ -1,16 +1,15 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-	Prisma,
 	type Finish as PrismaFinish,
 	FinishType as PrismaFinishType
-} from '$lib/server/prisma/generated/client';
+} from '$lib/server/api/prisma/generated/client';
 import { Finish as DomainFinish } from '../../finish.domain';
 import {
-	FinishType as DomainFinishType,
 	FinishSortableFields,
 	type IFinishesRepository
-} from '../../finish.types';
-import { SortDirection, type DbClient } from '$lib/server/prisma/prisma.types';
+} from '$lib/types/finishes/finishes.repository.types';
+import { FinishType as DomainFinishType } from '$lib/types/finishes/finish.domain.types';
+import { SortDirection, type DbClient } from '$lib/types/prisma/prisma.service.types';
 import { FinishesRepository } from '../../finishes.repository';
 
 const finishTypeMap: Record<PrismaFinishType, DomainFinishType> = {
@@ -52,28 +51,13 @@ describe('Finish Repository Unit Tests', () => {
 	};
 
 	let newFinish: DomainFinish;
-	let existingFinish: DomainFinish;
-	let deletedFinish: DomainFinish;
 
 	beforeEach(() => {
 		newFinish = DomainFinish.create({
 			type: finishTypeMap[record.type],
 			description: record.description,
 			price: record.price,
-			createdById: record.createdById,
-			buildingId: record.buildingId
-		});
-
-		existingFinish = DomainFinish.fromPersistence({
-			...record,
-			type: finishTypeMap[record.type]
-		});
-
-		deletedFinish = DomainFinish.fromPersistence({
-			...record,
-			type: finishTypeMap[record.type],
-			deletedAt: new Date(),
-			deletedById: 1
+			createdById: record.createdById
 		});
 
 		vi.clearAllMocks();
@@ -81,38 +65,36 @@ describe('Finish Repository Unit Tests', () => {
 
 	describe('Create Finish', () => {
 		it('should create a new finish successfully', async () => {
-			const expectedParams: Prisma.FinishCreateArgs = {
-				data: {
+			prismaMock.finish.create.mockResolvedValueOnce(record);
+
+			const result = await finishRepository.create(1, newFinish);
+
+			expect(prismaMock.finish.create).toHaveBeenCalledExactlyOnceWith(
+				expect.objectContaining({
+					data: expect.objectContaining({
+						type: record.type,
+						description: record.description,
+						price: record.price,
+						originalPrice: record.originalPrice
+					})
+				})
+			);
+
+			expect(result).toEqual({
+				id: record.id,
+				finish: expect.objectContaining({
 					type: newFinish.type,
 					description: newFinish.description,
 					price: newFinish.price,
 					originalPrice: newFinish.originalPrice,
-					createdAt: expect.any(Date),
-					updatedAt: expect.any(Date),
-					deletedAt: null,
-					createdById: newFinish.createdById,
-					updatedById: newFinish.updatedById,
-					deletedById: null,
-					buildingId: newFinish.buildingId
-				}
-			};
-
-			prismaMock.finish.create.mockResolvedValueOnce(record);
-
-			const result = await finishRepository.create(newFinish);
-
-			expect(prismaMock.finish.create).toHaveBeenCalledExactlyOnceWith(expectedParams);
-			expect(result).toEqual(existingFinish);
+					createdById: newFinish.createdById
+				})
+			});
 		});
 	});
 
 	describe('Update Finish', () => {
 		it('should update finish successfully', async () => {
-			const existingFinish = DomainFinish.fromPersistence({
-				...record,
-				type: finishTypeMap[record.type]
-			});
-
 			const updatedRecord: PrismaFinish = {
 				...record,
 				type: PrismaFinishType.WARM_100,
@@ -120,62 +102,60 @@ describe('Finish Repository Unit Tests', () => {
 				price: 111,
 				originalPrice: 10
 			};
-			const updatedFinish: DomainFinish = DomainFinish.fromPersistence({
+
+			const updatedFinish = DomainFinish.fromPersistence({
 				...updatedRecord,
 				type: finishTypeMap[updatedRecord.type]
 			});
-			const expectedParams: Prisma.FinishUpdateArgs = {
-				where: {
-					id: existingFinish.id!
-				},
-				data: toPrismaFinish(updatedFinish)
-			};
+
 			prismaMock.finish.update.mockResolvedValueOnce(updatedRecord);
 
-			const result = await finishRepository.update(updatedFinish);
+			const result = await finishRepository.update(1, updatedFinish);
 
-			expect(prismaMock.finish.update).toHaveBeenCalledExactlyOnceWith(expectedParams);
-			expect(result).toEqual(updatedFinish);
-		});
-
-		it('should  throw an error if finish is missing an id', async () => {
-			await expect(finishRepository.update(newFinish)).rejects.toThrow();
+			expect(prismaMock.finish.update).toHaveBeenCalledExactlyOnceWith(
+				expect.objectContaining({
+					where: {
+						id: 1
+					},
+					data: expect.objectContaining({
+						type: updatedRecord.type,
+						description: updatedRecord.description,
+						price: updatedRecord.price,
+						originalPrice: updatedRecord.originalPrice
+					})
+				})
+			);
+			expect(result).toEqual({
+				id: updatedRecord.id,
+				finish: expect.objectContaining({
+					type: updatedFinish.type,
+					description: updatedFinish.description,
+					price: updatedFinish.price,
+					originalPrice: updatedFinish.originalPrice,
+					createdById: updatedFinish.createdById
+				})
+			});
 		});
 	});
 
 	describe('Delete Finish', () => {
 		it('should delete finish successfully', async () => {
-			const expectedParams: Prisma.FinishDeleteArgs = {
-				where: {
-					id: deletedFinish.id!
-				}
-			};
-
 			prismaMock.finish.delete.mockResolvedValueOnce(undefined);
 
-			await finishRepository.delete(deletedFinish);
+			await finishRepository.delete(1);
 
-			expect(prismaMock.finish.delete).toHaveBeenCalledExactlyOnceWith(expectedParams);
-		});
-
-		it('should  throw an error if finish is missing an id', async () => {
-			await expect(finishRepository.delete(newFinish)).rejects.toThrow();
+			expect(prismaMock.finish.delete).toHaveBeenCalledExactlyOnceWith(
+				expect.objectContaining({
+					where: {
+						id: 1
+					}
+				})
+			);
 		});
 	});
 
 	describe('Find All Finishes', () => {
 		it('should find all finishes with the specified query options successfully', async () => {
-			const expectedParams: Prisma.FinishFindManyArgs = {
-				where: {
-					type: PrismaFinishType.COLD
-				},
-				orderBy: {
-					price: 'asc'
-				},
-				take: 10,
-				skip: 0
-			};
-
 			prismaMock.finish.findMany.mockResolvedValueOnce([record]);
 
 			const result = await finishRepository.findAll({
@@ -192,60 +172,77 @@ describe('Finish Repository Unit Tests', () => {
 				}
 			});
 
-			expect(prismaMock.finish.findMany).toHaveBeenCalledExactlyOnceWith(expectedParams);
-			expect(result).toEqual(expect.arrayContaining([existingFinish]));
+			expect(prismaMock.finish.findMany).toHaveBeenCalledExactlyOnceWith(
+				expect.objectContaining({
+					where: {
+						type: PrismaFinishType.COLD
+					},
+					orderBy: {
+						price: 'asc'
+					},
+					take: 10,
+					skip: 0
+				})
+			);
+			expect(result).toEqual(
+				expect.arrayContaining([
+					{
+						id: record.id,
+						finish: expect.objectContaining({
+							type: newFinish.type,
+							description: newFinish.description,
+							price: newFinish.price,
+							originalPrice: newFinish.originalPrice,
+							createdById: newFinish.createdById
+						})
+					}
+				])
+			);
 		});
 	});
 
 	describe('Count All Found Finishes', () => {
 		it('should should find all finishes with the specified query options and  return a count of them successfully', async () => {
-			const expectedParams: Prisma.FinishCountArgs = {
-				where: {
-					type: PrismaFinishType.COLD
-				}
-			};
-
 			prismaMock.finish.count.mockResolvedValueOnce(1);
 
 			const result = await finishRepository.findAllCount({
 				type: DomainFinishType.COLD
 			});
 
-			expect(prismaMock.finish.count).toHaveBeenCalledExactlyOnceWith(expectedParams);
+			expect(prismaMock.finish.count).toHaveBeenCalledExactlyOnceWith(
+				expect.objectContaining({
+					where: {
+						type: PrismaFinishType.COLD
+					}
+				})
+			);
 			expect(result).toBe(1);
 		});
 	});
 
 	describe('Get Finish by ID', () => {
 		it('should get finish by id successfully', async () => {
-			const expectedParams: Prisma.FinishFindUniqueArgs = {
-				where: {
-					id: existingFinish.id!
-				}
-			};
-
 			prismaMock.finish.findUnique.mockResolvedValueOnce(record);
 
-			const result = await finishRepository.getById(existingFinish.id!);
+			const result = await finishRepository.getById(1);
 
-			expect(prismaMock.finish.findUnique).toHaveBeenCalledExactlyOnceWith(expectedParams);
-			expect(result).toEqual(existingFinish);
+			expect(prismaMock.finish.findUnique).toHaveBeenCalledExactlyOnceWith(
+				expect.objectContaining({
+					where: {
+						id: 1
+					}
+				})
+			);
+			expect(result).toEqual({
+				id: record.id,
+				finish: expect.objectContaining({
+					type: newFinish.type,
+					description: newFinish.description,
+					price: newFinish.price,
+					originalPrice: newFinish.originalPrice,
+					createdById: newFinish.createdById
+				})
+			});
 		});
 	});
 });
-
-function toPrismaFinish(finish: DomainFinish): Omit<PrismaFinish, 'id'> {
-	return {
-		type: finish.type,
-		description: finish.description,
-		price: finish.price,
-		originalPrice: finish.originalPrice,
-		buildingId: finish.buildingId,
-		createdAt: finish.createdAt,
-		updatedAt: finish.updatedAt,
-		deletedAt: finish.deletedAt,
-		createdById: finish.createdById,
-		updatedById: finish.updatedById,
-		deletedById: finish.deletedById
-	};
-}

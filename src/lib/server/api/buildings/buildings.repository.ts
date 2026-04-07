@@ -3,21 +3,16 @@ import type {
 	BuildingFilterOptions,
 	BuildingQueryOptions,
 	BuildingSortableFields,
+	BuildingWithId,
 	IBuildingsRepository
-} from './building.types';
-import type {
-	Prisma,
-	ConstructionType as PrismaConstructionType,
-	Building as PrismaBuilding
-} from '$lib/server/prisma/generated/client';
-import { ConstructionType as DomainConstructionType } from './building.domain';
-import { SortDirection, type DbClient, type SortOptions } from '$lib/server/prisma/prisma.types';
-
-const constructionTypeMap: Record<PrismaConstructionType, DomainConstructionType> = {
-	FRAME: DomainConstructionType.FRAME,
-	BARN: DomainConstructionType.BARN,
-	CONTAINER: DomainConstructionType.CONTAINER
-};
+} from '$lib/types/buildings/buildings.repository.types';
+import type { Prisma } from '$lib/server/api/prisma/generated/client';
+import {
+	SortDirection,
+	type DbClient,
+	type SortOptions
+} from '$lib/types/prisma/prisma.service.types';
+import { BuildingMapper } from './building.mapper';
 
 export class BuildingsRepository implements IBuildingsRepository {
 	constructor(private readonly _client: DbClient) {}
@@ -26,17 +21,20 @@ export class BuildingsRepository implements IBuildingsRepository {
 		return new BuildingsRepository(client);
 	}
 
-	async getById(id: number): Promise<DomainBuilding | null> {
+	async getById(id: number): Promise<BuildingWithId | null> {
 		const record = await this._client.building.findUnique({
 			where: { id }
 		});
 
 		if (!record) return null;
 
-		return this.toDomainBuilding(record);
+		return {
+			id: record.id,
+			building: BuildingMapper.toDomainFromPrisma(record)
+		};
 	}
 
-	async findAll(options?: BuildingQueryOptions): Promise<DomainBuilding[]> {
+	async findAll(options?: BuildingQueryOptions): Promise<BuildingWithId[]> {
 		const records = await this._client.building.findMany({
 			where: this.buildWhere(options?.filters),
 			orderBy: this.buildOrderBy(options?.sort),
@@ -44,7 +42,10 @@ export class BuildingsRepository implements IBuildingsRepository {
 			skip: options?.pagination?.offset
 		});
 
-		return records.map((r) => this.toDomainBuilding(r));
+		return records.map((r) => ({
+			id: r.id,
+			building: BuildingMapper.toDomainFromPrisma(r)
+		}));
 	}
 
 	async findAllCount(filters?: BuildingFilterOptions): Promise<number> {
@@ -54,66 +55,42 @@ export class BuildingsRepository implements IBuildingsRepository {
 		return count;
 	}
 
-	async create(building: DomainBuilding): Promise<DomainBuilding> {
+	async create(listingId: number, building: DomainBuilding): Promise<BuildingWithId> {
 		const record = await this._client.building.create({
 			data: {
-				constructionType: building.constructionType,
-				width: building.width,
-				length: building.length,
-				height: building.height,
-				bedrooms: building.bedrooms,
-				bathrooms: building.bathrooms,
-				floors: building.floors,
-				veranda: building.veranda,
-				createdAt: building.createdAt,
-				updatedAt: building.updatedAt,
-				deletedAt: building.deletedAt,
-				createdById: building.createdById,
-				updatedById: building.updatedById,
-				deletedById: building.deletedById
+				...BuildingMapper.toPrismaCreateFromDomain(building),
+				listing: {
+					connect: { id: listingId }
+				}
 			}
 		});
 
-		return this.toDomainBuilding(record);
+		return {
+			id: record.id,
+			building: BuildingMapper.toDomainFromPrisma(record)
+		};
 	}
 
-	async update(building: DomainBuilding): Promise<DomainBuilding> {
-		if (!building.id) {
-			throw new Error('Building ID is required for update');
-		}
-
-		const model = this.toPrismaBuildingNoId(building);
+	async update(id: number, building: DomainBuilding): Promise<BuildingWithId> {
+		const model = BuildingMapper.toPrismaFromDomain(building);
 
 		const record = await this._client.building.update({
-			where: { id: building.id },
+			where: { id },
 			data: {
 				...model
 			}
 		});
 
-		return this.toDomainBuilding(record);
+		return {
+			id: record.id,
+			building: BuildingMapper.toDomainFromPrisma(record)
+		};
 	}
 
-	async softDelete(building: DomainBuilding): Promise<void> {
-		await this._client.building.update({
-			where: {
-				id: building.id!
-			},
-			data: {
-				deletedAt: building.deletedAt,
-				deletedById: building.deletedById
-			}
-		});
-
-		return;
-	}
-
-	async delete(building: DomainBuilding): Promise<void> {
+	async delete(id: number): Promise<void> {
 		await this._client.building.delete({
-			where: { id: building.id! }
+			where: { id }
 		});
-
-		return;
 	}
 
 	private buildOrderBy(
@@ -130,6 +107,12 @@ export class BuildingsRepository implements IBuildingsRepository {
 
 	private buildWhere(filters?: BuildingFilterOptions): Prisma.BuildingWhereInput {
 		const where: Prisma.BuildingWhereInput = {};
+
+		if (filters?.includesDeleted) {
+			return where;
+		} else {
+			where.deletedAt = null;
+		}
 
 		if (!filters) return where;
 
@@ -166,32 +149,6 @@ export class BuildingsRepository implements IBuildingsRepository {
 		}
 
 		return where;
-	}
-
-	private toDomainBuilding(record: PrismaBuilding): DomainBuilding {
-		return DomainBuilding.fromPersistence({
-			...record,
-			constructionType: constructionTypeMap[record.constructionType]
-		});
-	}
-
-	private toPrismaBuildingNoId(building: DomainBuilding): Omit<PrismaBuilding, 'id'> {
-		return {
-			constructionType: building.constructionType,
-			width: building.width,
-			length: building.length,
-			height: building.height,
-			bedrooms: building.bedrooms,
-			bathrooms: building.bathrooms,
-			floors: building.floors,
-			veranda: building.veranda,
-			createdAt: building.createdAt,
-			updatedAt: building.updatedAt,
-			deletedAt: building.deletedAt,
-			createdById: building.createdById,
-			updatedById: building.updatedById,
-			deletedById: building.deletedById
-		};
 	}
 }
 

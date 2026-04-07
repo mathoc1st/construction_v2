@@ -7,11 +7,9 @@ describe('Listing Domain Unit', () => {
 
 	beforeEach(() => {
 		listing = Listing.fromPersistence({
-			id: 1,
 			title: 'Test Listing',
 			images: ['image1.jpg', 'image2.jpg'],
 			views: 0,
-			buildingId: 1,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			deletedAt: null,
@@ -25,9 +23,7 @@ describe('Listing Domain Unit', () => {
 		it('should create a listing with valid parameters', () => {
 			const listing = Listing.create({
 				title: 'Test Listing',
-
 				images: ['image1.jpg', 'image2.jpg'],
-				buildingId: 1,
 				createdById: 1
 			});
 
@@ -40,11 +36,9 @@ describe('Listing Domain Unit', () => {
 
 		it('should create a building from persistence', () => {
 			const listing = Listing.fromPersistence({
-				id: 1,
 				title: 'Test Listing',
 				images: ['image1.jpg', 'image2.jpg'],
 				views: 0,
-				buildingId: 1,
 				createdAt: new Date(),
 				updatedAt: new Date(),
 				deletedAt: null,
@@ -54,7 +48,6 @@ describe('Listing Domain Unit', () => {
 			});
 
 			expect(listing).toBeInstanceOf(Listing);
-			expect(listing.id).toBe(1);
 			expect(listing.title).toBe('Test Listing');
 			expect(listing.images).toEqual(['image1.jpg', 'image2.jpg']);
 			expect(listing.views).toBe(0);
@@ -71,7 +64,6 @@ describe('Listing Domain Unit', () => {
 				Listing.create({
 					title: '   ',
 					images: ['image1.jpg'],
-					buildingId: 1,
 					createdById: 1
 				})
 			).toThrow(EmptyStringError);
@@ -128,16 +120,6 @@ describe('Listing Domain Unit', () => {
 		it('should throw an error when marking an already deleted listing as deleted', () => {
 			listing.markDeleted(3);
 			expect(() => listing.markDeleted(4)).toThrow(Error);
-		});
-
-		it('should throw an error when marking a listing without id as deleted', () => {
-			const newListing = Listing.create({
-				title: 'New Listing',
-				images: ['image1.jpg'],
-				buildingId: 1,
-				createdById: 1
-			});
-			expect(() => newListing.markDeleted(3)).toThrow(Error);
 		});
 
 		it('should throw an error if marking deleted building twice', () => {

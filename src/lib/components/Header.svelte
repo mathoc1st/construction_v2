@@ -91,7 +91,7 @@
 			</li>
 			{#if isAdmin}<li class={navLi({ device: 'mobile' })}>
 					<a
-						href="/admin/modify/new"
+						href="/admin/add/listing"
 						data-sveltekit-reload
 						class={navLink()}
 						onclick={() => (isDrawerOpen = false)}>Добавить</a
