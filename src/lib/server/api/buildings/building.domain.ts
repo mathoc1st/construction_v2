@@ -2,13 +2,16 @@ import type { ConstructionType } from '$lib/types/buildings/building.domain.type
 import {
 	DeletedEntityModificationError,
 	EntityAlreadyDeletedError,
+	NegativeValueError,
 	NonPositiveValueError
 } from '../common/errors/errors.domain';
 import { v7 as uuidv7 } from 'uuid';
 import type { UserId } from '../users/user.domain';
-import type { UpdateBuildingParams } from '$lib/types/buildings/buildings.service.types';
-import { Finish } from '../finishes/finish.domain';
-import type { UpdateFinishParams } from '$lib/types/finishes/finishes.service.types';
+import { Finish, FinishId } from '../finishes/finish.domain';
+import type {
+	UpdateBuildingParams,
+	UpdateFinishParams
+} from '$lib/types/listings/listings.service.types';
 
 export class BuildingId {
 	constructor(public readonly value: string) {}
@@ -94,8 +97,8 @@ export class Building {
 		if (params.width <= 0) throw new NonPositiveValueError('width', params.width);
 		if (params.length <= 0) throw new NonPositiveValueError('length', params.length);
 		if (params.height <= 0) throw new NonPositiveValueError('height', params.height);
-		if (params.bedrooms < 0) throw new NonPositiveValueError('bedrooms', params.bedrooms);
-		if (params.bathrooms < 0) throw new NonPositiveValueError('bathrooms', params.bathrooms);
+		if (params.bedrooms < 0) throw new NegativeValueError('bedrooms', params.bedrooms);
+		if (params.bathrooms < 0) throw new NegativeValueError('bathrooms', params.bathrooms);
 		if (params.floors <= 0) throw new NonPositiveValueError('floors', params.floors);
 
 		return new Building({
@@ -224,38 +227,40 @@ export class Building {
 	}
 
 	reconcileFinishes(finishUpdates: UpdateFinishParams[], performedById: UserId) {
-		const existingFinishIds = this.finishes.map((f) => f.id);
-		const incomingFinishIds = finishUpdates.map((f) => f.id);
+		const updatedFinishes = this.finishes.filter((f) =>
+			finishUpdates.some((u) => u.id && f.id.equals(u.id))
+		);
 
-		const existingSet = new Set(existingFinishIds);
-		const incomingSet = new Set(incomingFinishIds);
-
-		const filteredFinishes = this.finishes.filter((f) => incomingSet.has(f.id));
-
-		const toAdd = finishUpdates.filter((f) => !f.id);
-
-		for (const finish of toAdd) {
-			filteredFinishes.push(
-				Finish.create({
-					type: finish.type,
-					description: finish.description!,
-					price: finish.price!,
-					originalPrice: finish.originalPrice,
-					createdById: performedById
-				})
-			);
+		for (const update of finishUpdates) {
+			if (!update.id) {
+				updatedFinishes.push(
+					Finish.create({
+						type: update.type,
+						description: update.description!,
+						price: update.price!,
+						originalPrice: update.originalPrice,
+						createdById: performedById
+					})
+				);
+			}
 		}
 
-		const toUpdate = finishUpdates.filter((f) => f.id && existingSet.has(f.id));
+		const updatesById = new Map(
+			finishUpdates
+				.filter((u): u is UpdateFinishParams & { id: FinishId } => !!u.id)
+				.map((u) => [u.id.value, u])
+		);
 
-		for (const update of toUpdate) {
-			for (const finish of filteredFinishes) {
-				if (finish.id !== update.id) continue;
+		for (const finish of updatedFinishes) {
+			const update = updatesById.get(finish.id.value);
+			if (update) {
 				finish.update(update, performedById);
 			}
 		}
 
-		this._finishes = filteredFinishes;
+		this._finishes = updatedFinishes;
+
+		this.markUpdated(performedById);
 	}
 
 	changeConstructionType(newType: ConstructionType, updatedById: UserId) {
@@ -268,7 +273,7 @@ export class Building {
 	changeWidth(newWidth: number, updatedById: UserId) {
 		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName);
 
-		this.validateDimension(newWidth);
+		this.validatePossitive(newWidth, 'width');
 		this._width = newWidth;
 		this.markUpdated(updatedById);
 	}
@@ -276,7 +281,7 @@ export class Building {
 	changeLength(newLength: number, updatedById: UserId) {
 		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName);
 
-		this.validateDimension(newLength);
+		this.validatePossitive(newLength, 'length');
 		this._length = newLength;
 		this.markUpdated(updatedById);
 	}
@@ -284,14 +289,14 @@ export class Building {
 	changeHeight(newHeight: number, updatedById: UserId) {
 		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName);
 
-		this.validateDimension(newHeight);
+		this.validatePossitive(newHeight, 'height');
 		this._height = newHeight;
 		this.markUpdated(updatedById);
 	}
 
 	changeBedrooms(newBedrooms: number, updatedById: UserId) {
 		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName);
-		this.validateDimension(newBedrooms);
+		this.validateNonNegative(newBedrooms, 'bedrooms');
 		this._bedrooms = newBedrooms;
 		this.markUpdated(updatedById);
 	}
@@ -299,7 +304,7 @@ export class Building {
 	changeBathrooms(newBathrooms: number, updatedById: UserId) {
 		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName);
 
-		this.validateDimension(newBathrooms);
+		this.validateNonNegative(newBathrooms, 'bathrooms');
 		this._bathrooms = newBathrooms;
 		this.markUpdated(updatedById);
 	}
@@ -307,7 +312,7 @@ export class Building {
 	changeFloors(newFloors: number, updatedById: UserId) {
 		if (this.isDeleted) throw new DeletedEntityModificationError(this.entityName);
 
-		this.validateDimension(newFloors);
+		this.validatePossitive(newFloors, 'floors');
 		this._floors = newFloors;
 		this.markUpdated(updatedById);
 	}
@@ -326,9 +331,15 @@ export class Building {
 		this._deletedById = deletedById;
 	}
 
-	private validateDimension(dimension: number) {
-		if (dimension <= 0) {
-			throw new NonPositiveValueError('dimension', dimension);
+	private validatePossitive(value: number, fieldName: string) {
+		if (value <= 0) {
+			throw new NonPositiveValueError(fieldName, value);
+		}
+	}
+
+	private validateNonNegative(value: number, fieldName: string) {
+		if (value < 0) {
+			throw new NegativeValueError(fieldName, value);
 		}
 	}
 

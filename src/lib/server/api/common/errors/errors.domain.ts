@@ -5,6 +5,13 @@ export class DomainError extends Error {
 	}
 }
 
+export class NegativeValueError extends DomainError {
+	constructor(fieldName: string, value: number) {
+		super(`Invalid value for ${fieldName}: ${value}. Must be a non-negative number.`);
+		this.name = 'NegativeValueError';
+	}
+}
+
 export class NonPositiveValueError extends DomainError {
 	constructor(fieldName: string, value: number) {
 		super(`Invalid value for ${fieldName}: ${value}. Must be a positive number.`);

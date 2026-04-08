@@ -16,7 +16,4 @@ export interface IMinioService {
 		destinationBucket: string,
 		destinationKey: string
 	): Promise<void>;
-	// uploadImage(file: File): Promise<Image>;
-	// finalizeImage(listingId: string, key: string): Promise<void>;
-	// archiveImage(listingId: string, key: string): Promise<void>;
 }

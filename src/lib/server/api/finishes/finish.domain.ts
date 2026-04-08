@@ -7,13 +7,17 @@ import {
 } from '../common/errors/errors.domain';
 import { v7 as uuidv7 } from 'uuid';
 import type { UserId } from '../users/user.domain';
-import type { UpdateFinishParams } from '$lib/types/finishes/finishes.service.types';
+import type { UpdateFinishParams } from '$lib/types/listings/listings.service.types';
 
 export class FinishId {
 	constructor(public readonly value: string) {}
 
 	static create(): FinishId {
 		return new FinishId(uuidv7());
+	}
+
+	equals(other: FinishId): boolean {
+		return this.value === other.value;
 	}
 }
 

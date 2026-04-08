@@ -1,8 +1,67 @@
+import type { FinishId } from '$lib/server/api/finishes/finish.domain';
 import type { ImageId } from '$lib/server/api/images/image.domain';
 import type { Listing, ListingId } from '$lib/server/api/listings/listing.domain';
 import type { UserId } from '$lib/server/api/users/user.domain';
-import type { AddBuildingParams, UpdateBuildingParams } from '../buildings/buildings.service.types';
+import type { ConstructionType } from '../buildings/building.domain.types';
+import type { FinishType } from '../finishes/finish.domain.types';
 import type { ListingQueryOptions } from './listings.repository.types';
+
+export type AddFinishParams = {
+	type: FinishType;
+	description: string;
+	price: number;
+	originalPrice?: number | null;
+};
+
+export type UpdateFinishParams = {
+	id?: FinishId;
+	type: FinishType;
+	description?: string;
+	price?: number;
+	originalPrice?: number | null;
+};
+
+export type ReconcileFinishParams = {
+	finishes: (Omit<UpdateFinishParams, 'performedById' | 'targetId'> & {
+		targetId?: number;
+	})[];
+	buildingId: number;
+	performedById: number;
+};
+
+export type DeleteFinishParams = {
+	targetId: number;
+	performedById: number;
+};
+
+export type AddBuildingParams = {
+	constructionType: ConstructionType;
+	width: number;
+	length: number;
+	height: number;
+	bedrooms: number;
+	bathrooms: number;
+	floors: number;
+	hasVeranda: boolean;
+	finishes: AddFinishParams[];
+};
+
+export type UpdateBuildingParams = {
+	constructionType?: ConstructionType;
+	width?: number;
+	length?: number;
+	height?: number;
+	bedrooms?: number;
+	bathrooms?: number;
+	floors?: number;
+	hasVeranda?: boolean;
+	finishes?: UpdateFinishParams[];
+};
+
+export type DeleteBuildingParams = {
+	targetId: number;
+	performedById: number;
+};
 
 export type AddImageParams = {
 	id: ImageId;
