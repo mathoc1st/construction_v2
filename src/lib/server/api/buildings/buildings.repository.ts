@@ -1,4 +1,4 @@
-import { Building as DomainBuilding } from './building.domain';
+import { BuildingId, Building as DomainBuilding } from './building.domain';
 import type {
 	BuildingFilterOptions,
 	BuildingQueryOptions,
@@ -13,57 +13,69 @@ import {
 	type SortOptions
 } from '$lib/types/prisma/prisma.service.types';
 import { BuildingMapper } from './building.mapper';
+import { ConstructionType as DomainConstructionType } from '$lib/types/buildings/building.domain.types';
+import { ConstructionType as PrismaConstructionType } from '$lib/server/api/prisma/generated/client';
+import { PrismaService } from '../prisma/prisma.service';
+import type { ListingId } from '../listings/listing.domain';
 
-export class BuildingsRepository implements IBuildingsRepository {
+export class PrismaBuildingsRepository implements IBuildingsRepository {
 	constructor(private readonly _client: DbClient) {}
 
 	withClient(client: DbClient): IBuildingsRepository {
-		return new BuildingsRepository(client);
+		return new PrismaBuildingsRepository(client);
 	}
 
-	async getById(id: number): Promise<BuildingWithId | null> {
-		const record = await this._client.building.findUnique({
-			where: { id }
-		});
+	async getById(id: BuildingId): Promise<DomainBuilding | null> {
+		const record = await PrismaService.safeExecuteOrThrow(() =>
+			this._client.building.findUnique({
+				where: { id: id.value }
+			})
+		);
 
 		if (!record) return null;
 
-		return {
-			id: record.id,
-			building: BuildingMapper.toDomainFromPrisma(record)
-		};
+		return BuildingMapper.toDomainFromPersistence({
+			...record,
+			constructionType: constructionTypePrismaMap[record.constructionType]
+		});
 	}
 
-	async findAll(options?: BuildingQueryOptions): Promise<BuildingWithId[]> {
-		const records = await this._client.building.findMany({
-			where: this.buildWhere(options?.filters),
-			orderBy: this.buildOrderBy(options?.sort),
-			take: options?.pagination?.limit,
-			skip: options?.pagination?.offset
-		});
+	async findAll(options?: BuildingQueryOptions): Promise<DomainBuilding[]> {
+		const records = await PrismaService.executeOrThrow(() =>
+			this._client.building.findMany({
+				where: this.buildWhere(options?.filters),
+				orderBy: this.buildOrderBy(options?.sort),
+				take: options?.pagination?.limit,
+				skip: options?.pagination?.offset
+			})
+		);
 
-		return records.map((r) => ({
-			id: r.id,
-			building: BuildingMapper.toDomainFromPrisma(r)
-		}));
+		return records.map((r) =>
+			BuildingMapper.toDomainFromPersistence({
+				...r,
+				constructionType: constructionTypePrismaMap[r.constructionType]
+			})
+		);
 	}
 
 	async findAllCount(filters?: BuildingFilterOptions): Promise<number> {
-		const count = await this._client.building.count({
-			where: this.buildWhere(filters)
-		});
+		const count = await PrismaService.executeOrThrow(() =>
+			this._client.building.count({
+				where: this.buildWhere(filters)
+			})
+		);
 		return count;
 	}
 
-	async create(listingId: number, building: DomainBuilding): Promise<BuildingWithId> {
-		const record = await this._client.building.create({
-			data: {
-				...BuildingMapper.toPrismaCreateFromDomain(building),
-				listing: {
-					connect: { id: listingId }
+	async create(listingId: ListingId, building: DomainBuilding): Promise<BuildingWithId> {
+		const record = await PrismaService.executeOrThrow(() =>
+			this._client.building.create({
+				data: {
+					...BuildingMapper.toPersistenceFromDomain(building),
+					listingId: listingId.value
 				}
-			}
-		});
+			})
+		);
 
 		return {
 			id: record.id,
@@ -144,8 +156,8 @@ export class BuildingsRepository implements IBuildingsRepository {
 			where.floors = filters.floors;
 		}
 
-		if (filters.veranda) {
-			where.veranda = filters.veranda;
+		if (filters.hasVeranda) {
+			where.veranda = filters.hasVeranda;
 		}
 
 		return where;
@@ -156,7 +168,7 @@ let buildingsRepository: IBuildingsRepository | null = null;
 
 export const getBuildingsRepository = (client: DbClient) => {
 	if (!buildingsRepository) {
-		buildingsRepository = new BuildingsRepository(client);
+		buildingsRepository = new PrismaBuildingsRepository(client);
 	}
 	return buildingsRepository;
 };

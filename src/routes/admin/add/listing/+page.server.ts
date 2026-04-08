@@ -1,10 +1,11 @@
 import { zod4 } from 'sveltekit-superforms/adapters';
 import { fail, message, superValidate } from 'sveltekit-superforms';
-import { getListingsService } from '$lib/server/api/listings/listings.service.js';
 import type { User } from '$lib/server/api/users/user.domain.js';
-import { addListingWithRelationsSchema } from '$lib/dtos/listing.dto';
 import type { Session } from '$lib/server/api/auth/session/session.domain';
 import { error } from '@sveltejs/kit';
+import { addListingSchema } from '$lib/dtos/listing.dto.js';
+import { getListingsService } from '$lib/server/api/listings/listings.service';
+import { ImageId } from '$lib/server/api/images/image.domain.js';
 
 export const load = async ({ locals }) => {
 	const user: User | null = locals.user;
@@ -13,7 +14,7 @@ export const load = async ({ locals }) => {
 		throw error(401, 'Unauthorized');
 	}
 
-	const form = await superValidate(zod4(addListingWithRelationsSchema), {
+	const form = await superValidate(zod4(addListingSchema), {
 		errors: false
 	});
 
@@ -28,18 +29,40 @@ export const actions = {
 			throw error(401, 'Unauthorized');
 		}
 
-		const form = await superValidate(request, zod4(addListingWithRelationsSchema));
+		const form = await superValidate(request, zod4(addListingSchema));
 
 		if (!form.valid) {
 			return fail(400, { form });
 		}
 
-		await getListingsService().addListingWithRelations({
-			finishes: form.data.finishes,
-			building: form.data.building,
-			listing: form.data.listing,
-			performedById: session.userId
-		});
+		await getListingsService().add(
+			{
+				title: form.data.title,
+				building: {
+					constructionType: form.data.building.constructionType,
+					width: form.data.building.width,
+					length: form.data.building.length,
+					height: form.data.building.height,
+					bedrooms: form.data.building.bedrooms,
+					bathrooms: form.data.building.bathrooms,
+					floors: form.data.building.floors,
+					hasVeranda: form.data.building.hasVeranda,
+					finishes: form.data.building.finishes.map((f) => ({
+						type: f.type,
+						description: f.description,
+						price: f.price,
+						originalPrice: f.originalPrice
+					}))
+				},
+				images: form.data.images.map((img) => ({
+					id: new ImageId(img.id),
+					folder: img.folder,
+					key: img.key,
+					bucket: img.bucket
+				}))
+			},
+			session.userId
+		);
 
 		return message(form, 'Form posted successfully!');
 	}

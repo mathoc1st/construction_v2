@@ -27,23 +27,20 @@ export const actions: Actions = {
 			return fail(400, { message: 'Invalid password' });
 		}
 
-		const userWithId = await getUsersService().getUserByUsername(username);
+		const user = await getUsersService().getUserByUsername(username);
 
-		if (!userWithId) {
+		if (!user) {
 			return fail(400, { message: 'Incorrect username or password' });
 		}
 
-		const validPassword = await getPasswordService().comparePassword(
-			password,
-			userWithId.user.passwordHash
-		);
+		const validPassword = await getPasswordService().comparePassword(password, user.passwordHash);
 
 		if (!validPassword) {
 			return fail(400, { message: 'Incorrect username or password' });
 		}
 
 		const { session, token } = await getSessionsService().createSession({
-			userId: userWithId.id
+			userId: user.id
 		});
 
 		event.cookies.set(SESSION_COOKIE_NAME, token, {

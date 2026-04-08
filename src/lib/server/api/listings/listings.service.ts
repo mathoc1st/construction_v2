@@ -1,285 +1,107 @@
-import { getPrismaService } from '$lib/server/api/prisma/prisma.service';
-import type { IPrismaService } from '$lib/types/prisma/prisma.service.types';
-import { Building } from '../buildings/building.domain';
-import { getBuildingsRepository } from '../buildings/buildings.repository';
-import { EntityNotFoundError } from '../common/errors/errors.service';
-import { Finish } from '../finishes/finish.domain';
-import { getFinishesRepository } from '../finishes/finishes.repository';
-import { Listing } from './listing.domain';
-import { getListingsRepository } from './listings.repository';
-import { getBuildingsService } from '../buildings/buildings.service';
-import { getFinishesService } from '../finishes/finishes.service';
-import type { Prisma } from '$lib/server/api/prisma/generated/client';
-import { getMinioService } from '../minio/minio.service';
+import { Listing, ListingId } from './listing.domain';
 import type {
 	AddListingParams,
-	AddListingWithRelationsParams,
-	DeleteListingParams,
-	FindListingsParams,
 	IListingsService,
-	UpdateListingParams,
-	UpdateListingWithRelationsParams
+	UpdateImageParams,
+	UpdateListingParams
 } from '$lib/types/listings/listings.service.types';
-import type { IBuildingsService } from '$lib/types/buildings/buildings.service.types';
-import type { IFinishesService } from '$lib/types/finishes/finishes.service.types';
-import type { IBuildingsRepository } from '$lib/types/buildings/buildings.repository.types';
-import type {
-	IListingsRepository,
-	ListingQueryOptions,
-	ListingWithId,
-	ListingWithRelations
-} from '$lib/types/listings/listings.repository.types';
-import type {
-	FinishWithId,
-	IFinishesRepository
-} from '$lib/types/finishes/finishes.repository.types';
-import type { IMinioService } from '$lib/types/minio/minio.service.types';
-import type { ConstructionType } from '$lib/types/buildings/building.domain.types';
+import type { IListingsRepository } from '$lib/types/listings/listings.repository.types';
+import type { UserId } from '../users/user.domain';
+import { Building } from '../buildings/building.domain';
+import { Finish } from '../finishes/finish.domain';
+import { getPrismaService } from '../prisma/prisma.service';
+import { getListingsRepository } from './listings.repository';
+import type { IImagesService } from '$lib/types/images/images.service.types';
+import type { Image } from '../images/image.domain';
+import { getImageService } from '../images/images.service';
 
 export class ListingsService implements IListingsService {
 	constructor(
-		private readonly _minioService: IMinioService,
-		private readonly _prismaService: IPrismaService,
-		private readonly _buildingService: IBuildingsService,
-		private readonly _finishService: IFinishesService,
 		private readonly _listingRepository: IListingsRepository,
-		private readonly _buildingRepository: IBuildingsRepository,
-		private readonly _finishRepository: IFinishesRepository
+		private readonly _imageService: IImagesService
 	) {}
 
-	withRepository(repository: IListingsRepository) {
-		return new ListingsService(
-			this._minioService,
-			this._prismaService,
-			this._buildingService,
-			this._finishService,
-			repository,
-			this._buildingRepository,
-			this._finishRepository
-		);
+	async getById(id: ListingId): Promise<Listing> {
+		const listing = await this._listingRepository.getById(id);
+
+		if (!listing) {
+			throw new Error(`Listing with id ${id.value} not found`);
+		}
+
+		return listing;
 	}
 
-	createTxContext(tx: Prisma.TransactionClient) {
-		const buildingRepo = this._buildingRepository.withClient(tx);
-		const finishRepo = this._finishRepository.withClient(tx);
-		const listingRepo = this._listingRepository.withClient(tx);
+	async add(params: AddListingParams, performedById: UserId): Promise<Listing> {
+		const finalizedImages = await this._imageService.finalizeImages(params.images, performedById);
 
-		return {
-			buildingService: this._buildingService.withRepository(buildingRepo),
-			finishService: this._finishService.withRepository(finishRepo),
-			listingService: this.withRepository(listingRepo)
-		};
-	}
-
-	async addListing(params: AddListingParams): Promise<ListingWithId> {
 		const listing = Listing.create({
-			title: params.title,
-			images: params.images,
-			createdById: params.performedById
-		});
-
-		return await this._listingRepository.create(params.buildingId, listing);
-	}
-
-	async addListingWithRelations(
-		params: AddListingWithRelationsParams
-	): Promise<ListingWithRelations> {
-		const result = await this._prismaService.transaction(async (tx) => {
-			const result = await this._listingRepository.withClient(tx).createListingWithRelations(
-				Listing.create({
-					title: params.listing.title,
-					images: params.listing.images,
-					createdById: params.performedById
-				}),
-				Building.create({
-					constructionType: params.building.constructionType,
-					width: params.building.width,
-					length: params.building.length,
-					height: params.building.height,
-					bedrooms: params.building.bedrooms,
-					bathrooms: params.building.bathrooms,
-					floors: params.building.floors,
-					veranda: params.building.veranda,
-					createdById: params.performedById
-				}),
-				params.finishes.map((f) =>
+			building: Building.create({
+				constructionType: params.building.constructionType,
+				width: params.building.width,
+				length: params.building.length,
+				height: params.building.height,
+				bedrooms: params.building.bedrooms,
+				bathrooms: params.building.bathrooms,
+				floors: params.building.floors,
+				hasVeranda: params.building.hasVeranda,
+				createdById: performedById,
+				finishes: params.building.finishes.map((f) =>
 					Finish.create({
 						type: f.type,
 						description: f.description,
 						price: f.price,
 						originalPrice: f.originalPrice,
-						createdById: params.performedById
+						createdById: performedById
 					})
 				)
-			);
-
-			return result;
+			}),
+			title: params.title,
+			images: finalizedImages,
+			createdById: performedById
 		});
 
-		return result;
+		return await this._listingRepository.create(listing);
 	}
 
-	async getListingWithRelations(id: number): Promise<ListingWithRelations> {
-		const listingWithRelations = await this._listingRepository.getListingByIdWithRelations(id);
+	async update(id: ListingId, updatedById: UserId, params: UpdateListingParams): Promise<Listing> {
+		const listing = await this._listingRepository.getById(id);
 
-		if (!listingWithRelations) throw new EntityNotFoundError('listing', id);
-
-		return {
-			listing: listingWithRelations.listing,
-			building: listingWithRelations.building,
-			finishes: listingWithRelations.finishes
-		};
-	}
-
-	async getListingById(id: number): Promise<ListingWithId> {
-		const listing = await this._listingRepository.getListingById(id);
-
-		if (!listing) throw new EntityNotFoundError('listing', id);
-
-		return listing;
-	}
-
-	async updateListingWithRelations(
-		params: UpdateListingWithRelationsParams
-	): Promise<ListingWithRelations> {
-		if (params.listing.images && params.listing.images.length > 0) {
-			await this.reconcileImages(
-				params.listing.targetId,
-				params.listing.images,
-				params.performedById
-			);
+		if (!listing) {
+			throw new Error(`Listing with id ${id.value} not found`);
 		}
 
-		return await this._prismaService.transaction(async (tx) => {
-			const { buildingService, finishService, listingService } = this.createTxContext(tx);
+		const newImages = await this.reconcileImages(listing, params.images);
 
-			const updatedBuilding = await buildingService.updateBuilding({
-				...params.building,
-				performedById: params.performedById,
-				targetId: params.building.targetId
-			});
+		listing.update(params, updatedById);
 
-			const updatedFinishes: FinishWithId[] = await finishService.reconcileFinishes({
-				finishes: params.finishes,
-				buildingId: params.building.targetId,
-				performedById: params.performedById
-			});
-
-			const updatedListing = await listingService.updateListing({
-				...params.listing,
-				performedById: params.performedById,
-				targetId: params.listing.targetId
-			});
-
-			return {
-				listing: {
-					id: updatedListing.id,
-					record: updatedListing.listing
-				},
-				building: {
-					id: updatedBuilding.id,
-					record: updatedBuilding.building
-				},
-				finishes: updatedFinishes.map((f) => ({
-					id: f.id,
-					record: f.finish
-				}))
-			};
-		});
+		return await this._listingRepository.save(listing, newImages);
 	}
 
-	async reconcileImages(
-		listingId: number,
-		newImages: string[],
-		performedById: number
-	): Promise<void> {
-		const listingResult = await this._listingRepository.getListingById(listingId);
-
-		if (!listingResult) {
-			throw new EntityNotFoundError('listing', listingId);
-		}
-
-		const listing = listingResult.listing;
-		const oldImages = listing.images;
-
-		const toDelete = oldImages.filter((key) => !newImages.includes(key));
-
-		for (const key of toDelete) {
-			await this._minioService.moveObject('images', key, 'images', `deleted/${key}`);
-		}
-
-		await this.updateListing({
-			targetId: listingId,
-			images: newImages,
-			performedById: performedById
-		});
+	async delete(id: ListingId): Promise<void> {
+		await this._listingRepository.delete(id);
 	}
 
-	async updateListing(params: UpdateListingParams): Promise<ListingWithId> {
-		return await this.update(
-			{ targetId: params.targetId, performedById: params.performedById },
-			async (listing, performedById) => {
-				if (params.title) listing.changeTitle(params.title, performedById);
-				if (params.images) {
-					listing.changeImages(params.images, performedById);
-				}
-			}
-		);
+	async reconcileImages(listing: Listing, updates: UpdateImageParams[]): Promise<Image[]> {
+		const existingImageIds = new Set(listing.images.map((img) => img.id.value));
+		const newImageIds = new Set(updates.map((img) => img.id.value));
+
+		const toAdd = updates.filter((img) => !existingImageIds.has(img.id.value));
+		const addedImages = await this._imageService.finalizeImages(toAdd, listing.updatedById);
+
+		const toDelete = listing.images.filter((img) => !newImageIds.has(img.id.value));
+		await this._imageService.deleteImages(toDelete, listing.updatedById);
+
+		return addedImages;
 	}
 
-	async softDeleteListing(params: DeleteListingParams): Promise<ListingWithId> {
-		return await this.update(
-			{ targetId: params.targetId, performedById: params.performedById },
-			(listing, performedById) => {
-				listing.markDeleted(performedById);
-			}
-		);
-	}
+	// async finalizeImages(listingId: ListingId, images: Image[]): Promise<Image[]> {
+	// 	for (const image of images) {
+	// 		await this._minioService.finalizeImage(listingId.value, image.filename);
+	// 		image.changeFolder(listingId.value);
+	// 	}
 
-	async deleteListing(params: DeleteListingParams): Promise<void> {
-		const targetListing = await this._listingRepository.getListingById(params.targetId);
-
-		if (!targetListing) {
-			throw new EntityNotFoundError('listing', params.targetId);
-		}
-
-		await this._listingRepository.delete(params.targetId);
-	}
-
-	async findListings(params: FindListingsParams): Promise<ListingWithId[]> {
-		const { filters, sort, pagination } = params;
-
-		return await this._listingRepository.findAll({
-			filters,
-			sort,
-			pagination
-		});
-	}
-
-	async findListingsByBuildingType(
-		type: ConstructionType,
-		options?: ListingQueryOptions
-	): Promise<ListingWithRelations[]> {
-		return await this._listingRepository.findListingsByBuildingType(type, options);
-	}
-
-	private async update(
-		params: { targetId: number; performedById: number },
-		updater: (listing: Listing, performedById: number) => Promise<void> | void
-	): Promise<ListingWithId> {
-		const listingWithId = await this._listingRepository.getListingById(params.targetId);
-		if (!listingWithId) {
-			throw new EntityNotFoundError('listing', params.targetId);
-		}
-
-		const targetListing = listingWithId.listing;
-
-		await updater(targetListing, params.performedById);
-
-		const updatedListing = await this._listingRepository.update(params.targetId, targetListing);
-
-		return updatedListing;
-	}
+	// 	return images;
+	// }
 }
 
 let listingsService: IListingsService | null = null;
@@ -289,13 +111,8 @@ export const getListingsService = () => {
 
 	if (!listingsService) {
 		listingsService = new ListingsService(
-			getMinioService(),
-			prismaService,
-			getBuildingsService(),
-			getFinishesService(),
 			getListingsRepository(prismaService.client),
-			getBuildingsRepository(prismaService.client),
-			getFinishesRepository(prismaService.client)
+			getImageService()
 		);
 	}
 	return listingsService;

@@ -8,7 +8,7 @@ import {
 	FinishType,
 	type Listing as PrismaListing
 } from '$lib/server/api/prisma/generated/client';
-import { ListingsRepository } from '../../listings.repository';
+import { ListingsRepository } from '../../../listings.repository';
 
 describe('Listing Repository Unit', () => {
 	const prismaMock = {
@@ -149,7 +149,7 @@ describe('Listing Repository Unit', () => {
 		it('should get a listing by id successfully', async () => {
 			vi.mocked(prismaMock.listing.findUnique).mockResolvedValue(listingRecord);
 
-			const result = await listingsRepository.getListingById(1);
+			const result = await listingsRepository.getById(1);
 
 			expect(prismaMock.listing.findUnique).toHaveBeenCalledExactlyOnceWith({
 				where: {

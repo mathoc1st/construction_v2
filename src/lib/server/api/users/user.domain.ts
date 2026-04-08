@@ -1,6 +1,16 @@
 import { EmptyStringError } from '../common/errors/errors.domain';
+import { v7 as uuidv7 } from 'uuid';
+
+export class UserId {
+	constructor(public readonly value: string) {}
+
+	static create(): UserId {
+		return new UserId(uuidv7());
+	}
+}
 
 export class User {
+	private readonly _id: UserId;
 	private _username: string;
 	private _passwordHash: string;
 
@@ -8,11 +18,13 @@ export class User {
 	private _updatedAt: Date;
 
 	private constructor(params: {
+		id: UserId;
 		username: string;
 		passwordHash: string;
 		createdAt: Date;
 		updatedAt: Date;
 	}) {
+		this._id = params.id;
 		this._username = params.username;
 		this._passwordHash = params.passwordHash;
 		this._createdAt = params.createdAt;
@@ -31,6 +43,7 @@ export class User {
 		const now = new Date();
 
 		return new User({
+			id: UserId.create(),
 			username: params.username,
 			passwordHash: params.passwordHash,
 			createdAt: now,
@@ -39,17 +52,23 @@ export class User {
 	}
 
 	static fromPersistence(params: {
+		id: UserId;
 		username: string;
 		passwordHash: string;
 		createdAt: Date;
 		updatedAt: Date;
 	}): User {
 		return new User({
+			id: params.id,
 			username: params.username,
 			passwordHash: params.passwordHash,
 			createdAt: params.createdAt,
 			updatedAt: params.updatedAt
 		});
+	}
+
+	get id() {
+		return this._id;
 	}
 
 	get username() {

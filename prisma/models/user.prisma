@@ -1,5 +1,5 @@
 model User {
-  id           Int    @id @default(autoincrement())
+  id           String @id @db.Uuid
   username     String @unique
   passwordHash String
 
@@ -15,6 +15,10 @@ model User {
   createdListings Listing[] @relation("CreatedBy")
   updatedListings Listing[] @relation("UpdatedBy")
   deletedListings Listing[] @relation("DeletedBy")
+
+  createdImages Image[] @relation("CreatedBy")
+  updatedImages Image[] @relation("UpdatedBy")
+  deletedImages Image[] @relation("DeletedBy")
 
   createdFinishes Finish[] @relation("CreatedBy")
   updatedFinishes Finish[] @relation("UpdatedBy")

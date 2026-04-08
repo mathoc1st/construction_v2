@@ -143,7 +143,7 @@ describe('Users Service Unit Tests', () => {
 			});
 
 			const params: UpdateUserParams = {
-				targetId: 1,
+				id: 1,
 				username: 'updateduser',
 				password: 'newpassword123'
 			};
@@ -166,7 +166,7 @@ describe('Users Service Unit Tests', () => {
 
 			const result = await usersService.updateUser(params);
 
-			expect(usersRepositoryMock.getById).toHaveBeenCalledWith(params.targetId);
+			expect(usersRepositoryMock.getById).toHaveBeenCalledWith(params.id);
 			expect(passwordServiceMock.hashPassword).toHaveBeenCalledWith(params.password);
 			expect(usersRepositoryMock.update).toHaveBeenCalledWith(
 				1,
@@ -187,13 +187,13 @@ describe('Users Service Unit Tests', () => {
 		it('should throw EntityNotFoundError when user to update does not exist', async () => {
 			usersRepositoryMock.getById.mockResolvedValue(null);
 			const params: UpdateUserParams = {
-				targetId: 999,
+				id: 999,
 				username: 'updateduser',
 				password: 'newpassword123'
 			};
 
 			await expect(usersService.updateUser(params)).rejects.toThrow(EntityNotFoundError);
-			expect(usersRepositoryMock.getById).toHaveBeenCalledWith(params.targetId);
+			expect(usersRepositoryMock.getById).toHaveBeenCalledWith(params.id);
 		});
 	});
 

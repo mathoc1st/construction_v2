@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { ImageDto } from '$lib/dtos/image.dto';
 	import Icon from '@iconify/svelte';
 	import {
 		Carousel,
@@ -13,7 +14,7 @@
 	import { onMount } from 'svelte';
 
 	interface Props {
-		images?: string[];
+		images?: ImageDto[];
 	}
 
 	let { images = $bindable() }: Props = $props();
@@ -40,8 +41,8 @@
 
 		(async () => {
 			const newPreviews = await Promise.all(
-				images.map(async (key) => {
-					const res = await fetch(`/api/uploads?key=${key}`);
+				images.map(async (image) => {
+					const res = await fetch(`/api/uploads?key=${image.folder}/${image.key}`);
 					const { url } = await res.json();
 
 					return { src: url };
@@ -72,9 +73,9 @@
 			body: formData
 		});
 
-		const uploads: { keys: string[] } = await res.json();
+		const uploads: ImageDto[] = await res.json();
 
-		images = [...(images ?? []), ...uploads.keys];
+		images = [...(images ?? []), ...uploads];
 	}
 
 	async function onImageDelete(_: Event, index: number) {

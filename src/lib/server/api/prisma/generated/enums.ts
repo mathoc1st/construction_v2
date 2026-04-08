@@ -26,3 +26,12 @@ export const FinishType = {
 } as const
 
 export type FinishType = (typeof FinishType)[keyof typeof FinishType]
+
+
+export const ImageStatus = {
+  TEMP: 'TEMP',
+  ACTIVE: 'ACTIVE',
+  DELETED: 'DELETED'
+} as const
+
+export type ImageStatus = (typeof ImageStatus)[keyof typeof ImageStatus]

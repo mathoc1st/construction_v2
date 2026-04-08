@@ -1,43 +1,32 @@
-import type { ConstructionType } from '../buildings/building.domain.types';
+import type { ImageId } from '$lib/server/api/images/image.domain';
+import type { Listing, ListingId } from '$lib/server/api/listings/listing.domain';
+import type { UserId } from '$lib/server/api/users/user.domain';
 import type { AddBuildingParams, UpdateBuildingParams } from '../buildings/buildings.service.types';
-import type { AddFinishParams, UpdateFinishParams } from '../finishes/finishes.service.types';
-import type {
-	IListingsRepository,
-	ListingQueryOptions,
-	ListingWithId,
-	ListingWithRelations
-} from './listings.repository.types';
+import type { ListingQueryOptions } from './listings.repository.types';
+
+export type AddImageParams = {
+	id: ImageId;
+	folder: string;
+	bucket: string;
+	key: string;
+};
+
+export type UpdateImageParams = AddImageParams;
 
 export type AddListingParams = {
 	title: string;
-	images: string[];
-	performedById: number;
-	buildingId: number;
-};
-
-export type AddListingWithRelationsParams = {
-	building: Omit<AddBuildingParams, 'performedById' | 'listingId'>;
-	listing: Omit<AddListingParams, 'performedById' | 'buildingId'>;
-	finishes: Omit<AddFinishParams, 'performedById' | 'buildingId'>[];
-	performedById: number;
-};
-
-export type UpdateListingWithRelationsParams = {
-	listing: Omit<UpdateListingParams, 'performedById'>;
-	building: Omit<UpdateBuildingParams, 'performedById'>;
-	finishes: (Omit<UpdateFinishParams, 'performedById' | 'targetId'> & { targetId?: number })[];
-	performedById: number;
+	images: AddImageParams[];
+	building: AddBuildingParams;
 };
 
 export type UpdateListingParams = {
-	targetId: number;
-	performedById: number;
 	title?: string;
-	images?: string[];
+	images: UpdateImageParams[];
+	building?: UpdateBuildingParams;
 };
 
 export type DeleteListingParams = {
-	targetId: number;
+	id: number;
 	performedById: number;
 };
 
@@ -46,20 +35,8 @@ export type FindListingsParams = ListingQueryOptions & {
 };
 
 export interface IListingsService {
-	addListingWithRelations(params: AddListingWithRelationsParams): Promise<ListingWithRelations>;
-	addListing(params: AddListingParams): Promise<ListingWithId>;
-	updateListingWithRelations(
-		params: UpdateListingWithRelationsParams
-	): Promise<ListingWithRelations>;
-	withRepository(repository: IListingsRepository): IListingsService;
-	getListingWithRelations(id: number): Promise<ListingWithRelations>;
-	getListingById(id: number): Promise<ListingWithId>;
-	updateListing(params: UpdateListingParams): Promise<ListingWithId>;
-	deleteListing(params: DeleteListingParams): Promise<void>;
-	findListings(params: FindListingsParams): Promise<ListingWithId[]>;
-	reconcileImages(listingId: number, newImages: string[], performedById: number): Promise<void>;
-	findListingsByBuildingType(
-		type: ConstructionType,
-		options?: ListingQueryOptions
-	): Promise<ListingWithRelations[]>;
+	update(id: ListingId, updatedById: UserId, params: UpdateListingParams): Promise<Listing>;
+	add(params: AddListingParams, performedById: UserId): Promise<Listing>;
+	getById(id: ListingId): Promise<Listing>;
+	delete(id: ListingId): Promise<void>;
 }

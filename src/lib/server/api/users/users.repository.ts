@@ -1,29 +1,25 @@
 import type { DbClient } from '$lib/types/prisma/prisma.service.types';
-import type { IUsersRepository, UserWithId } from '$lib/types/users/users.repository.types';
-import { User } from './user.domain';
+import type { IUsersRepository } from '$lib/types/users/users.repository.types';
+import { User, UserId } from './user.domain';
 
 export class UserRepository implements IUsersRepository {
 	constructor(private readonly _client: DbClient) {}
 
-	withClient(client: DbClient): IUsersRepository {
-		return new UserRepository(client);
-	}
-
-	async getById(id: number): Promise<UserWithId | null> {
+	async getById(id: UserId): Promise<User | null> {
 		const record = await this._client.user.findUnique({
-			where: { id }
+			where: { id: id.value }
 		});
 
 		if (!record) {
 			return null;
 		}
 
-		return {
-			id: record.id,
-			user: User.fromPersistence(record)
-		};
+		return User.fromPersistence({
+			...record,
+			id: new UserId(record.id)
+		});
 	}
-	async getByUsername(username: string): Promise<UserWithId | null> {
+	async getByUsername(username: string): Promise<User | null> {
 		const record = await this._client.user.findUnique({
 			where: { username }
 		});
@@ -32,38 +28,38 @@ export class UserRepository implements IUsersRepository {
 			return null;
 		}
 
-		return {
-			id: record.id,
-			user: User.fromPersistence(record)
-		};
+		return User.fromPersistence({
+			...record,
+			id: new UserId(record.id)
+		});
 	}
 
-	async create(user: User): Promise<UserWithId> {
+	async create(user: User): Promise<User> {
 		const record = await this._client.user.create({
-			data: { username: user.username, passwordHash: user.passwordHash }
+			data: { id: user.id.value, username: user.username, passwordHash: user.passwordHash }
 		});
 
-		return {
-			id: record.id,
-			user: User.fromPersistence(record)
-		};
+		return User.fromPersistence({
+			...record,
+			id: new UserId(record.id)
+		});
 	}
 
-	async update(id: number, user: User): Promise<UserWithId> {
+	async update(id: UserId, user: User): Promise<User> {
 		const record = await this._client.user.update({
-			where: { id },
+			where: { id: id.value },
 			data: { username: user.username, passwordHash: user.passwordHash }
 		});
 
-		return {
-			id: record.id,
-			user: User.fromPersistence(record)
-		};
+		return User.fromPersistence({
+			...record,
+			id: new UserId(record.id)
+		});
 	}
 
-	async delete(id: number): Promise<void> {
+	async delete(id: UserId): Promise<void> {
 		await this._client.user.delete({
-			where: { id }
+			where: { id: id.value }
 		});
 	}
 

@@ -1,16 +1,28 @@
+import type { UserId } from '../../users/user.domain';
+import { v7 as uuidv7 } from 'uuid';
+
+export class SessionId {
+	constructor(public readonly value: string) {}
+
+	static create(): SessionId {
+		return new SessionId(uuidv7());
+	}
+}
+
 export class Session {
-	private _id: number | null;
+	private readonly _id: SessionId;
 	private _tokenHash: string | null;
-	private _userId: number;
 	private _expiresAt: Date;
+
+	private _userId: UserId;
 
 	private _createdAt: Date;
 	private _updatedAt: Date | null;
 
 	private constructor(params: {
-		id: number | null;
+		id: SessionId;
 		tokenHash: string | null;
-		userId: number;
+		userId: UserId;
 		expiresAt: Date;
 		createdAt: Date;
 		updatedAt: Date | null;
@@ -23,22 +35,22 @@ export class Session {
 		this._updatedAt = params.updatedAt;
 	}
 
-	static create(params: { tokenHash: string; userId: number; expiresAt: Date }): Session {
+	static create(params: { tokenHash: string; userId: UserId; expiresAt: Date }): Session {
 		const now = new Date();
 		return new Session({
-			id: null,
+			id: SessionId.create(),
 			tokenHash: params.tokenHash,
 			userId: params.userId,
 			expiresAt: params.expiresAt,
 			createdAt: now,
-			updatedAt: null
+			updatedAt: now
 		});
 	}
 
 	static fromPersistence(params: {
-		id: number;
+		id: SessionId;
 		tokenHash: string;
-		userId: number;
+		userId: UserId;
 		expiresAt: Date;
 		createdAt: Date;
 		updatedAt: Date | null;
@@ -53,7 +65,7 @@ export class Session {
 		});
 	}
 
-	get id(): number | null {
+	get id(): SessionId {
 		return this._id;
 	}
 
@@ -61,7 +73,7 @@ export class Session {
 		return this._tokenHash;
 	}
 
-	get userId(): number {
+	get userId(): UserId {
 		return this._userId;
 	}
 

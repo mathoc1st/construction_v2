@@ -20,22 +20,12 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
-  _avg: UserAvgAggregateOutputType | null
-  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
 
-export type UserAvgAggregateOutputType = {
-  id: number | null
-}
-
-export type UserSumAggregateOutputType = {
-  id: number | null
-}
-
 export type UserMinAggregateOutputType = {
-  id: number | null
+  id: string | null
   username: string | null
   passwordHash: string | null
   createdAt: Date | null
@@ -43,7 +33,7 @@ export type UserMinAggregateOutputType = {
 }
 
 export type UserMaxAggregateOutputType = {
-  id: number | null
+  id: string | null
   username: string | null
   passwordHash: string | null
   createdAt: Date | null
@@ -59,14 +49,6 @@ export type UserCountAggregateOutputType = {
   _all: number
 }
 
-
-export type UserAvgAggregateInputType = {
-  id?: true
-}
-
-export type UserSumAggregateInputType = {
-  id?: true
-}
 
 export type UserMinAggregateInputType = {
   id?: true
@@ -131,18 +113,6 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: UserAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: UserSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -173,21 +143,17 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
-  _avg?: UserAvgAggregateInputType
-  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
 
 export type UserGroupByOutputType = {
-  id: number
+  id: string
   username: string
   passwordHash: string
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
-  _avg: UserAvgAggregateOutputType | null
-  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -211,7 +177,7 @@ export type UserWhereInput = {
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
-  id?: Prisma.IntFilter<"User"> | number
+  id?: Prisma.UuidFilter<"User"> | string
   username?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -223,6 +189,9 @@ export type UserWhereInput = {
   createdListings?: Prisma.ListingListRelationFilter
   updatedListings?: Prisma.ListingListRelationFilter
   deletedListings?: Prisma.ListingListRelationFilter
+  createdImages?: Prisma.ImageListRelationFilter
+  updatedImages?: Prisma.ImageListRelationFilter
+  deletedImages?: Prisma.ImageListRelationFilter
   createdFinishes?: Prisma.FinishListRelationFilter
   updatedFinishes?: Prisma.FinishListRelationFilter
   deletedFinishes?: Prisma.FinishListRelationFilter
@@ -241,13 +210,16 @@ export type UserOrderByWithRelationInput = {
   createdListings?: Prisma.ListingOrderByRelationAggregateInput
   updatedListings?: Prisma.ListingOrderByRelationAggregateInput
   deletedListings?: Prisma.ListingOrderByRelationAggregateInput
+  createdImages?: Prisma.ImageOrderByRelationAggregateInput
+  updatedImages?: Prisma.ImageOrderByRelationAggregateInput
+  deletedImages?: Prisma.ImageOrderByRelationAggregateInput
   createdFinishes?: Prisma.FinishOrderByRelationAggregateInput
   updatedFinishes?: Prisma.FinishOrderByRelationAggregateInput
   deletedFinishes?: Prisma.FinishOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
+  id?: string
   username?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
@@ -262,6 +234,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdListings?: Prisma.ListingListRelationFilter
   updatedListings?: Prisma.ListingListRelationFilter
   deletedListings?: Prisma.ListingListRelationFilter
+  createdImages?: Prisma.ImageListRelationFilter
+  updatedImages?: Prisma.ImageListRelationFilter
+  deletedImages?: Prisma.ImageListRelationFilter
   createdFinishes?: Prisma.FinishListRelationFilter
   updatedFinishes?: Prisma.FinishListRelationFilter
   deletedFinishes?: Prisma.FinishListRelationFilter
@@ -274,17 +249,15 @@ export type UserOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
-  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
-  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
   AND?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"User"> | number
+  id?: Prisma.UuidWithAggregatesFilter<"User"> | string
   username?: Prisma.StringWithAggregatesFilter<"User"> | string
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -292,6 +265,7 @@ export type UserScalarWhereWithAggregatesInput = {
 }
 
 export type UserCreateInput = {
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -303,13 +277,16 @@ export type UserCreateInput = {
   createdListings?: Prisma.ListingCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateInput = {
-  id?: number
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -321,12 +298,16 @@ export type UserUncheckedCreateInput = {
   createdListings?: Prisma.ListingUncheckedCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -338,13 +319,16 @@ export type UserUpdateInput = {
   createdListings?: Prisma.ListingUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -356,13 +340,16 @@ export type UserUncheckedUpdateInput = {
   createdListings?: Prisma.ListingUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserCreateManyInput = {
-  id?: number
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -370,6 +357,7 @@ export type UserCreateManyInput = {
 }
 
 export type UserUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -377,7 +365,7 @@ export type UserUpdateManyMutationInput = {
 }
 
 export type UserUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -402,10 +390,6 @@ export type UserCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type UserAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-}
-
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrder
@@ -420,10 +404,6 @@ export type UserMinOrderByAggregateInput = {
   passwordHash?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type UserSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
 }
 
 export type UserCreateNestedOneWithoutCreatedBuildingsInput = {
@@ -514,6 +494,50 @@ export type UserUpdateOneWithoutDeletedFinishesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDeletedFinishesInput, Prisma.UserUpdateWithoutDeletedFinishesInput>, Prisma.UserUncheckedUpdateWithoutDeletedFinishesInput>
 }
 
+export type UserCreateNestedOneWithoutCreatedImagesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedImagesInput, Prisma.UserUncheckedCreateWithoutCreatedImagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedImagesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutUpdatedImagesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUpdatedImagesInput, Prisma.UserUncheckedCreateWithoutUpdatedImagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUpdatedImagesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutDeletedImagesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeletedImagesInput, Prisma.UserUncheckedCreateWithoutDeletedImagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeletedImagesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCreatedImagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedImagesInput, Prisma.UserUncheckedCreateWithoutCreatedImagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedImagesInput
+  upsert?: Prisma.UserUpsertWithoutCreatedImagesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedImagesInput, Prisma.UserUpdateWithoutCreatedImagesInput>, Prisma.UserUncheckedUpdateWithoutCreatedImagesInput>
+}
+
+export type UserUpdateOneRequiredWithoutUpdatedImagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUpdatedImagesInput, Prisma.UserUncheckedCreateWithoutUpdatedImagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUpdatedImagesInput
+  upsert?: Prisma.UserUpsertWithoutUpdatedImagesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUpdatedImagesInput, Prisma.UserUpdateWithoutUpdatedImagesInput>, Prisma.UserUncheckedUpdateWithoutUpdatedImagesInput>
+}
+
+export type UserUpdateOneWithoutDeletedImagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeletedImagesInput, Prisma.UserUncheckedCreateWithoutDeletedImagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeletedImagesInput
+  upsert?: Prisma.UserUpsertWithoutDeletedImagesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDeletedImagesInput, Prisma.UserUpdateWithoutDeletedImagesInput>, Prisma.UserUncheckedUpdateWithoutDeletedImagesInput>
+}
+
 export type UserCreateNestedOneWithoutCreatedListingsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedListingsInput, Prisma.UserUncheckedCreateWithoutCreatedListingsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedListingsInput
@@ -573,6 +597,7 @@ export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
 }
 
 export type UserCreateWithoutCreatedBuildingsInput = {
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -583,13 +608,16 @@ export type UserCreateWithoutCreatedBuildingsInput = {
   createdListings?: Prisma.ListingCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutCreatedBuildingsInput = {
-  id?: number
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -600,6 +628,9 @@ export type UserUncheckedCreateWithoutCreatedBuildingsInput = {
   createdListings?: Prisma.ListingUncheckedCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
@@ -611,6 +642,7 @@ export type UserCreateOrConnectWithoutCreatedBuildingsInput = {
 }
 
 export type UserCreateWithoutUpdatedBuildingsInput = {
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -621,13 +653,16 @@ export type UserCreateWithoutUpdatedBuildingsInput = {
   createdListings?: Prisma.ListingCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutUpdatedBuildingsInput = {
-  id?: number
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -638,6 +673,9 @@ export type UserUncheckedCreateWithoutUpdatedBuildingsInput = {
   createdListings?: Prisma.ListingUncheckedCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
@@ -649,6 +687,7 @@ export type UserCreateOrConnectWithoutUpdatedBuildingsInput = {
 }
 
 export type UserCreateWithoutDeletedBuildingsInput = {
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -659,13 +698,16 @@ export type UserCreateWithoutDeletedBuildingsInput = {
   createdListings?: Prisma.ListingCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutDeletedBuildingsInput = {
-  id?: number
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -676,6 +718,9 @@ export type UserUncheckedCreateWithoutDeletedBuildingsInput = {
   createdListings?: Prisma.ListingUncheckedCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
@@ -698,6 +743,7 @@ export type UserUpdateToOneWithWhereWithoutCreatedBuildingsInput = {
 }
 
 export type UserUpdateWithoutCreatedBuildingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -708,13 +754,16 @@ export type UserUpdateWithoutCreatedBuildingsInput = {
   createdListings?: Prisma.ListingUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedBuildingsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -725,6 +774,9 @@ export type UserUncheckedUpdateWithoutCreatedBuildingsInput = {
   createdListings?: Prisma.ListingUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
@@ -742,6 +794,7 @@ export type UserUpdateToOneWithWhereWithoutUpdatedBuildingsInput = {
 }
 
 export type UserUpdateWithoutUpdatedBuildingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -752,13 +805,16 @@ export type UserUpdateWithoutUpdatedBuildingsInput = {
   createdListings?: Prisma.ListingUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUpdatedBuildingsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -769,6 +825,9 @@ export type UserUncheckedUpdateWithoutUpdatedBuildingsInput = {
   createdListings?: Prisma.ListingUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
@@ -786,6 +845,7 @@ export type UserUpdateToOneWithWhereWithoutDeletedBuildingsInput = {
 }
 
 export type UserUpdateWithoutDeletedBuildingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -796,13 +856,16 @@ export type UserUpdateWithoutDeletedBuildingsInput = {
   createdListings?: Prisma.ListingUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDeletedBuildingsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -813,12 +876,16 @@ export type UserUncheckedUpdateWithoutDeletedBuildingsInput = {
   createdListings?: Prisma.ListingUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserCreateWithoutCreatedFinishesInput = {
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -830,12 +897,15 @@ export type UserCreateWithoutCreatedFinishesInput = {
   createdListings?: Prisma.ListingCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageCreateNestedManyWithoutDeletedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutCreatedFinishesInput = {
-  id?: number
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -847,6 +917,9 @@ export type UserUncheckedCreateWithoutCreatedFinishesInput = {
   createdListings?: Prisma.ListingUncheckedCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutDeletedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
 }
@@ -857,6 +930,7 @@ export type UserCreateOrConnectWithoutCreatedFinishesInput = {
 }
 
 export type UserCreateWithoutUpdatedFinishesInput = {
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -868,12 +942,15 @@ export type UserCreateWithoutUpdatedFinishesInput = {
   createdListings?: Prisma.ListingCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutUpdatedFinishesInput = {
-  id?: number
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -885,6 +962,9 @@ export type UserUncheckedCreateWithoutUpdatedFinishesInput = {
   createdListings?: Prisma.ListingUncheckedCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
 }
@@ -895,6 +975,7 @@ export type UserCreateOrConnectWithoutUpdatedFinishesInput = {
 }
 
 export type UserCreateWithoutDeletedFinishesInput = {
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -906,12 +987,15 @@ export type UserCreateWithoutDeletedFinishesInput = {
   createdListings?: Prisma.ListingCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
 }
 
 export type UserUncheckedCreateWithoutDeletedFinishesInput = {
-  id?: number
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -923,6 +1007,9 @@ export type UserUncheckedCreateWithoutDeletedFinishesInput = {
   createdListings?: Prisma.ListingUncheckedCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
 }
@@ -944,6 +1031,7 @@ export type UserUpdateToOneWithWhereWithoutCreatedFinishesInput = {
 }
 
 export type UserUpdateWithoutCreatedFinishesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -955,12 +1043,15 @@ export type UserUpdateWithoutCreatedFinishesInput = {
   createdListings?: Prisma.ListingUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUpdateManyWithoutDeletedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedFinishesInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -972,6 +1063,9 @@ export type UserUncheckedUpdateWithoutCreatedFinishesInput = {
   createdListings?: Prisma.ListingUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUncheckedUpdateManyWithoutDeletedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
 }
@@ -988,6 +1082,7 @@ export type UserUpdateToOneWithWhereWithoutUpdatedFinishesInput = {
 }
 
 export type UserUpdateWithoutUpdatedFinishesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -999,12 +1094,15 @@ export type UserUpdateWithoutUpdatedFinishesInput = {
   createdListings?: Prisma.ListingUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUpdatedFinishesInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1016,6 +1114,9 @@ export type UserUncheckedUpdateWithoutUpdatedFinishesInput = {
   createdListings?: Prisma.ListingUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
 }
@@ -1032,6 +1133,7 @@ export type UserUpdateToOneWithWhereWithoutDeletedFinishesInput = {
 }
 
 export type UserUpdateWithoutDeletedFinishesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1043,12 +1145,15 @@ export type UserUpdateWithoutDeletedFinishesInput = {
   createdListings?: Prisma.ListingUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDeletedFinishesInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1060,11 +1165,303 @@ export type UserUncheckedUpdateWithoutDeletedFinishesInput = {
   createdListings?: Prisma.ListingUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
 }
 
+export type UserCreateWithoutCreatedImagesInput = {
+  id: string
+  username: string
+  passwordHash: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  createdBuildings?: Prisma.BuildingCreateNestedManyWithoutCreatedByInput
+  updatedBuildings?: Prisma.BuildingCreateNestedManyWithoutUpdatedByInput
+  deletedBuildings?: Prisma.BuildingCreateNestedManyWithoutDeletedByInput
+  createdListings?: Prisma.ListingCreateNestedManyWithoutCreatedByInput
+  updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
+  deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
+  updatedImages?: Prisma.ImageCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageCreateNestedManyWithoutDeletedByInput
+  createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
+  updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
+}
+
+export type UserUncheckedCreateWithoutCreatedImagesInput = {
+  id: string
+  username: string
+  passwordHash: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  createdBuildings?: Prisma.BuildingUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedBuildings?: Prisma.BuildingUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedBuildings?: Prisma.BuildingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdListings?: Prisma.ListingUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
+  updatedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutDeletedByInput
+  createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
+}
+
+export type UserCreateOrConnectWithoutCreatedImagesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedImagesInput, Prisma.UserUncheckedCreateWithoutCreatedImagesInput>
+}
+
+export type UserCreateWithoutUpdatedImagesInput = {
+  id: string
+  username: string
+  passwordHash: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  createdBuildings?: Prisma.BuildingCreateNestedManyWithoutCreatedByInput
+  updatedBuildings?: Prisma.BuildingCreateNestedManyWithoutUpdatedByInput
+  deletedBuildings?: Prisma.BuildingCreateNestedManyWithoutDeletedByInput
+  createdListings?: Prisma.ListingCreateNestedManyWithoutCreatedByInput
+  updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
+  deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageCreateNestedManyWithoutCreatedByInput
+  deletedImages?: Prisma.ImageCreateNestedManyWithoutDeletedByInput
+  createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
+  updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
+}
+
+export type UserUncheckedCreateWithoutUpdatedImagesInput = {
+  id: string
+  username: string
+  passwordHash: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  createdBuildings?: Prisma.BuildingUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedBuildings?: Prisma.BuildingUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedBuildings?: Prisma.BuildingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdListings?: Prisma.ListingUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageUncheckedCreateNestedManyWithoutCreatedByInput
+  deletedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutDeletedByInput
+  createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
+}
+
+export type UserCreateOrConnectWithoutUpdatedImagesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutUpdatedImagesInput, Prisma.UserUncheckedCreateWithoutUpdatedImagesInput>
+}
+
+export type UserCreateWithoutDeletedImagesInput = {
+  id: string
+  username: string
+  passwordHash: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  createdBuildings?: Prisma.BuildingCreateNestedManyWithoutCreatedByInput
+  updatedBuildings?: Prisma.BuildingCreateNestedManyWithoutUpdatedByInput
+  deletedBuildings?: Prisma.BuildingCreateNestedManyWithoutDeletedByInput
+  createdListings?: Prisma.ListingCreateNestedManyWithoutCreatedByInput
+  updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
+  deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageCreateNestedManyWithoutUpdatedByInput
+  createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
+  updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
+}
+
+export type UserUncheckedCreateWithoutDeletedImagesInput = {
+  id: string
+  username: string
+  passwordHash: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  createdBuildings?: Prisma.BuildingUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedBuildings?: Prisma.BuildingUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedBuildings?: Prisma.BuildingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdListings?: Prisma.ListingUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUpdatedByInput
+  createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
+}
+
+export type UserCreateOrConnectWithoutDeletedImagesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeletedImagesInput, Prisma.UserUncheckedCreateWithoutDeletedImagesInput>
+}
+
+export type UserUpsertWithoutCreatedImagesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedImagesInput, Prisma.UserUncheckedUpdateWithoutCreatedImagesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedImagesInput, Prisma.UserUncheckedCreateWithoutCreatedImagesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedImagesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedImagesInput, Prisma.UserUncheckedUpdateWithoutCreatedImagesInput>
+}
+
+export type UserUpdateWithoutCreatedImagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  createdBuildings?: Prisma.BuildingUpdateManyWithoutCreatedByNestedInput
+  updatedBuildings?: Prisma.BuildingUpdateManyWithoutUpdatedByNestedInput
+  deletedBuildings?: Prisma.BuildingUpdateManyWithoutDeletedByNestedInput
+  createdListings?: Prisma.ListingUpdateManyWithoutCreatedByNestedInput
+  updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
+  deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
+  updatedImages?: Prisma.ImageUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUpdateManyWithoutDeletedByNestedInput
+  createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
+  updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedImagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  createdBuildings?: Prisma.BuildingUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedBuildings?: Prisma.BuildingUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedBuildings?: Prisma.BuildingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdListings?: Prisma.ListingUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
+  updatedImages?: Prisma.ImageUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
+}
+
+export type UserUpsertWithoutUpdatedImagesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutUpdatedImagesInput, Prisma.UserUncheckedUpdateWithoutUpdatedImagesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutUpdatedImagesInput, Prisma.UserUncheckedCreateWithoutUpdatedImagesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutUpdatedImagesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutUpdatedImagesInput, Prisma.UserUncheckedUpdateWithoutUpdatedImagesInput>
+}
+
+export type UserUpdateWithoutUpdatedImagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  createdBuildings?: Prisma.BuildingUpdateManyWithoutCreatedByNestedInput
+  updatedBuildings?: Prisma.BuildingUpdateManyWithoutUpdatedByNestedInput
+  deletedBuildings?: Prisma.BuildingUpdateManyWithoutDeletedByNestedInput
+  createdListings?: Prisma.ListingUpdateManyWithoutCreatedByNestedInput
+  updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
+  deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUpdateManyWithoutCreatedByNestedInput
+  deletedImages?: Prisma.ImageUpdateManyWithoutDeletedByNestedInput
+  createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
+  updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutUpdatedImagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  createdBuildings?: Prisma.BuildingUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedBuildings?: Prisma.BuildingUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedBuildings?: Prisma.BuildingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdListings?: Prisma.ListingUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUncheckedUpdateManyWithoutCreatedByNestedInput
+  deletedImages?: Prisma.ImageUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
+}
+
+export type UserUpsertWithoutDeletedImagesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDeletedImagesInput, Prisma.UserUncheckedUpdateWithoutDeletedImagesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeletedImagesInput, Prisma.UserUncheckedCreateWithoutDeletedImagesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDeletedImagesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDeletedImagesInput, Prisma.UserUncheckedUpdateWithoutDeletedImagesInput>
+}
+
+export type UserUpdateWithoutDeletedImagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  createdBuildings?: Prisma.BuildingUpdateManyWithoutCreatedByNestedInput
+  updatedBuildings?: Prisma.BuildingUpdateManyWithoutUpdatedByNestedInput
+  deletedBuildings?: Prisma.BuildingUpdateManyWithoutDeletedByNestedInput
+  createdListings?: Prisma.ListingUpdateManyWithoutCreatedByNestedInput
+  updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
+  deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUpdateManyWithoutUpdatedByNestedInput
+  createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
+  updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDeletedImagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  createdBuildings?: Prisma.BuildingUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedBuildings?: Prisma.BuildingUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedBuildings?: Prisma.BuildingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdListings?: Prisma.ListingUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUncheckedUpdateManyWithoutUpdatedByNestedInput
+  createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
+}
+
 export type UserCreateWithoutCreatedListingsInput = {
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -1075,13 +1472,16 @@ export type UserCreateWithoutCreatedListingsInput = {
   deletedBuildings?: Prisma.BuildingCreateNestedManyWithoutDeletedByInput
   updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutCreatedListingsInput = {
-  id?: number
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -1092,6 +1492,9 @@ export type UserUncheckedCreateWithoutCreatedListingsInput = {
   deletedBuildings?: Prisma.BuildingUncheckedCreateNestedManyWithoutDeletedByInput
   updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
@@ -1103,6 +1506,7 @@ export type UserCreateOrConnectWithoutCreatedListingsInput = {
 }
 
 export type UserCreateWithoutUpdatedListingsInput = {
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -1113,13 +1517,16 @@ export type UserCreateWithoutUpdatedListingsInput = {
   deletedBuildings?: Prisma.BuildingCreateNestedManyWithoutDeletedByInput
   createdListings?: Prisma.ListingCreateNestedManyWithoutCreatedByInput
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutUpdatedListingsInput = {
-  id?: number
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -1130,6 +1537,9 @@ export type UserUncheckedCreateWithoutUpdatedListingsInput = {
   deletedBuildings?: Prisma.BuildingUncheckedCreateNestedManyWithoutDeletedByInput
   createdListings?: Prisma.ListingUncheckedCreateNestedManyWithoutCreatedByInput
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
@@ -1141,6 +1551,7 @@ export type UserCreateOrConnectWithoutUpdatedListingsInput = {
 }
 
 export type UserCreateWithoutDeletedListingsInput = {
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -1151,13 +1562,16 @@ export type UserCreateWithoutDeletedListingsInput = {
   deletedBuildings?: Prisma.BuildingCreateNestedManyWithoutDeletedByInput
   createdListings?: Prisma.ListingCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
+  createdImages?: Prisma.ImageCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutDeletedListingsInput = {
-  id?: number
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -1168,6 +1582,9 @@ export type UserUncheckedCreateWithoutDeletedListingsInput = {
   deletedBuildings?: Prisma.BuildingUncheckedCreateNestedManyWithoutDeletedByInput
   createdListings?: Prisma.ListingUncheckedCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
+  createdImages?: Prisma.ImageUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
@@ -1190,6 +1607,7 @@ export type UserUpdateToOneWithWhereWithoutCreatedListingsInput = {
 }
 
 export type UserUpdateWithoutCreatedListingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1200,13 +1618,16 @@ export type UserUpdateWithoutCreatedListingsInput = {
   deletedBuildings?: Prisma.BuildingUpdateManyWithoutDeletedByNestedInput
   updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedListingsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1217,6 +1638,9 @@ export type UserUncheckedUpdateWithoutCreatedListingsInput = {
   deletedBuildings?: Prisma.BuildingUncheckedUpdateManyWithoutDeletedByNestedInput
   updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
@@ -1234,6 +1658,7 @@ export type UserUpdateToOneWithWhereWithoutUpdatedListingsInput = {
 }
 
 export type UserUpdateWithoutUpdatedListingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1244,13 +1669,16 @@ export type UserUpdateWithoutUpdatedListingsInput = {
   deletedBuildings?: Prisma.BuildingUpdateManyWithoutDeletedByNestedInput
   createdListings?: Prisma.ListingUpdateManyWithoutCreatedByNestedInput
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUpdatedListingsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1261,6 +1689,9 @@ export type UserUncheckedUpdateWithoutUpdatedListingsInput = {
   deletedBuildings?: Prisma.BuildingUncheckedUpdateManyWithoutDeletedByNestedInput
   createdListings?: Prisma.ListingUncheckedUpdateManyWithoutCreatedByNestedInput
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
@@ -1278,6 +1709,7 @@ export type UserUpdateToOneWithWhereWithoutDeletedListingsInput = {
 }
 
 export type UserUpdateWithoutDeletedListingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1288,13 +1720,16 @@ export type UserUpdateWithoutDeletedListingsInput = {
   deletedBuildings?: Prisma.BuildingUpdateManyWithoutDeletedByNestedInput
   createdListings?: Prisma.ListingUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
+  createdImages?: Prisma.ImageUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDeletedListingsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1305,12 +1740,16 @@ export type UserUncheckedUpdateWithoutDeletedListingsInput = {
   deletedBuildings?: Prisma.BuildingUncheckedUpdateManyWithoutDeletedByNestedInput
   createdListings?: Prisma.ListingUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
+  createdImages?: Prisma.ImageUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -1321,13 +1760,16 @@ export type UserCreateWithoutSessionsInput = {
   createdListings?: Prisma.ListingCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishCreateNestedManyWithoutDeletedByInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
-  id?: number
+  id: string
   username: string
   passwordHash: string
   createdAt?: Date | string
@@ -1338,6 +1780,9 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   createdListings?: Prisma.ListingUncheckedCreateNestedManyWithoutCreatedByInput
   updatedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedListings?: Prisma.ListingUncheckedCreateNestedManyWithoutDeletedByInput
+  createdImages?: Prisma.ImageUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutUpdatedByInput
+  deletedImages?: Prisma.ImageUncheckedCreateNestedManyWithoutDeletedByInput
   createdFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutCreatedByInput
   updatedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutUpdatedByInput
   deletedFinishes?: Prisma.FinishUncheckedCreateNestedManyWithoutDeletedByInput
@@ -1360,6 +1805,7 @@ export type UserUpdateToOneWithWhereWithoutSessionsInput = {
 }
 
 export type UserUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1370,13 +1816,16 @@ export type UserUpdateWithoutSessionsInput = {
   createdListings?: Prisma.ListingUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1387,6 +1836,9 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   createdListings?: Prisma.ListingUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedListings?: Prisma.ListingUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedListings?: Prisma.ListingUncheckedUpdateManyWithoutDeletedByNestedInput
+  createdImages?: Prisma.ImageUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedImages?: Prisma.ImageUncheckedUpdateManyWithoutUpdatedByNestedInput
+  deletedImages?: Prisma.ImageUncheckedUpdateManyWithoutDeletedByNestedInput
   createdFinishes?: Prisma.FinishUncheckedUpdateManyWithoutCreatedByNestedInput
   updatedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutUpdatedByNestedInput
   deletedFinishes?: Prisma.FinishUncheckedUpdateManyWithoutDeletedByNestedInput
@@ -1405,6 +1857,9 @@ export type UserCountOutputType = {
   createdListings: number
   updatedListings: number
   deletedListings: number
+  createdImages: number
+  updatedImages: number
+  deletedImages: number
   createdFinishes: number
   updatedFinishes: number
   deletedFinishes: number
@@ -1418,6 +1873,9 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   createdListings?: boolean | UserCountOutputTypeCountCreatedListingsArgs
   updatedListings?: boolean | UserCountOutputTypeCountUpdatedListingsArgs
   deletedListings?: boolean | UserCountOutputTypeCountDeletedListingsArgs
+  createdImages?: boolean | UserCountOutputTypeCountCreatedImagesArgs
+  updatedImages?: boolean | UserCountOutputTypeCountUpdatedImagesArgs
+  deletedImages?: boolean | UserCountOutputTypeCountDeletedImagesArgs
   createdFinishes?: boolean | UserCountOutputTypeCountCreatedFinishesArgs
   updatedFinishes?: boolean | UserCountOutputTypeCountUpdatedFinishesArgs
   deletedFinishes?: boolean | UserCountOutputTypeCountDeletedFinishesArgs
@@ -1485,6 +1943,27 @@ export type UserCountOutputTypeCountDeletedListingsArgs<ExtArgs extends runtime.
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountCreatedImagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ImageWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountUpdatedImagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ImageWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDeletedImagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ImageWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountCreatedFinishesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.FinishWhereInput
 }
@@ -1517,6 +1996,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdListings?: boolean | Prisma.User$createdListingsArgs<ExtArgs>
   updatedListings?: boolean | Prisma.User$updatedListingsArgs<ExtArgs>
   deletedListings?: boolean | Prisma.User$deletedListingsArgs<ExtArgs>
+  createdImages?: boolean | Prisma.User$createdImagesArgs<ExtArgs>
+  updatedImages?: boolean | Prisma.User$updatedImagesArgs<ExtArgs>
+  deletedImages?: boolean | Prisma.User$deletedImagesArgs<ExtArgs>
   createdFinishes?: boolean | Prisma.User$createdFinishesArgs<ExtArgs>
   updatedFinishes?: boolean | Prisma.User$updatedFinishesArgs<ExtArgs>
   deletedFinishes?: boolean | Prisma.User$deletedFinishesArgs<ExtArgs>
@@ -1556,6 +2038,9 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   createdListings?: boolean | Prisma.User$createdListingsArgs<ExtArgs>
   updatedListings?: boolean | Prisma.User$updatedListingsArgs<ExtArgs>
   deletedListings?: boolean | Prisma.User$deletedListingsArgs<ExtArgs>
+  createdImages?: boolean | Prisma.User$createdImagesArgs<ExtArgs>
+  updatedImages?: boolean | Prisma.User$updatedImagesArgs<ExtArgs>
+  deletedImages?: boolean | Prisma.User$deletedImagesArgs<ExtArgs>
   createdFinishes?: boolean | Prisma.User$createdFinishesArgs<ExtArgs>
   updatedFinishes?: boolean | Prisma.User$updatedFinishesArgs<ExtArgs>
   deletedFinishes?: boolean | Prisma.User$deletedFinishesArgs<ExtArgs>
@@ -1574,12 +2059,15 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     createdListings: Prisma.$ListingPayload<ExtArgs>[]
     updatedListings: Prisma.$ListingPayload<ExtArgs>[]
     deletedListings: Prisma.$ListingPayload<ExtArgs>[]
+    createdImages: Prisma.$ImagePayload<ExtArgs>[]
+    updatedImages: Prisma.$ImagePayload<ExtArgs>[]
+    deletedImages: Prisma.$ImagePayload<ExtArgs>[]
     createdFinishes: Prisma.$FinishPayload<ExtArgs>[]
     updatedFinishes: Prisma.$FinishPayload<ExtArgs>[]
     deletedFinishes: Prisma.$FinishPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
+    id: string
     username: string
     passwordHash: string
     createdAt: Date
@@ -1985,6 +2473,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   createdListings<T extends Prisma.User$createdListingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdListingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   updatedListings<T extends Prisma.User$updatedListingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$updatedListingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   deletedListings<T extends Prisma.User$deletedListingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deletedListingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdImages<T extends Prisma.User$createdImagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdImagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  updatedImages<T extends Prisma.User$updatedImagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$updatedImagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deletedImages<T extends Prisma.User$deletedImagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deletedImagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdFinishes<T extends Prisma.User$createdFinishesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdFinishesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinishPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   updatedFinishes<T extends Prisma.User$updatedFinishesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$updatedFinishesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinishPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   deletedFinishes<T extends Prisma.User$deletedFinishesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deletedFinishesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinishPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2017,7 +2508,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
  * Fields of the User model
  */
 export interface UserFieldRefs {
-  readonly id: Prisma.FieldRef<"User", 'Int'>
+  readonly id: Prisma.FieldRef<"User", 'String'>
   readonly username: Prisma.FieldRef<"User", 'String'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
@@ -2580,6 +3071,78 @@ export type User$deletedListingsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.ListingScalarFieldEnum | Prisma.ListingScalarFieldEnum[]
+}
+
+/**
+ * User.createdImages
+ */
+export type User$createdImagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Image
+   */
+  select?: Prisma.ImageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Image
+   */
+  omit?: Prisma.ImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ImageInclude<ExtArgs> | null
+  where?: Prisma.ImageWhereInput
+  orderBy?: Prisma.ImageOrderByWithRelationInput | Prisma.ImageOrderByWithRelationInput[]
+  cursor?: Prisma.ImageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ImageScalarFieldEnum | Prisma.ImageScalarFieldEnum[]
+}
+
+/**
+ * User.updatedImages
+ */
+export type User$updatedImagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Image
+   */
+  select?: Prisma.ImageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Image
+   */
+  omit?: Prisma.ImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ImageInclude<ExtArgs> | null
+  where?: Prisma.ImageWhereInput
+  orderBy?: Prisma.ImageOrderByWithRelationInput | Prisma.ImageOrderByWithRelationInput[]
+  cursor?: Prisma.ImageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ImageScalarFieldEnum | Prisma.ImageScalarFieldEnum[]
+}
+
+/**
+ * User.deletedImages
+ */
+export type User$deletedImagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Image
+   */
+  select?: Prisma.ImageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Image
+   */
+  omit?: Prisma.ImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ImageInclude<ExtArgs> | null
+  where?: Prisma.ImageWhereInput
+  orderBy?: Prisma.ImageOrderByWithRelationInput | Prisma.ImageOrderByWithRelationInput[]
+  cursor?: Prisma.ImageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ImageScalarFieldEnum | Prisma.ImageScalarFieldEnum[]
 }
 
 /**

@@ -27,27 +27,17 @@ export type AggregateFinish = {
 }
 
 export type FinishAvgAggregateOutputType = {
-  id: number | null
   price: number | null
   originalPrice: number | null
-  createdById: number | null
-  updatedById: number | null
-  deletedById: number | null
-  buildingId: number | null
 }
 
 export type FinishSumAggregateOutputType = {
-  id: number | null
   price: number | null
   originalPrice: number | null
-  createdById: number | null
-  updatedById: number | null
-  deletedById: number | null
-  buildingId: number | null
 }
 
 export type FinishMinAggregateOutputType = {
-  id: number | null
+  id: string | null
   type: $Enums.FinishType | null
   description: string | null
   price: number | null
@@ -55,14 +45,14 @@ export type FinishMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
-  createdById: number | null
-  updatedById: number | null
-  deletedById: number | null
-  buildingId: number | null
+  createdById: string | null
+  updatedById: string | null
+  deletedById: string | null
+  buildingId: string | null
 }
 
 export type FinishMaxAggregateOutputType = {
-  id: number | null
+  id: string | null
   type: $Enums.FinishType | null
   description: string | null
   price: number | null
@@ -70,10 +60,10 @@ export type FinishMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
-  createdById: number | null
-  updatedById: number | null
-  deletedById: number | null
-  buildingId: number | null
+  createdById: string | null
+  updatedById: string | null
+  deletedById: string | null
+  buildingId: string | null
 }
 
 export type FinishCountAggregateOutputType = {
@@ -94,23 +84,13 @@ export type FinishCountAggregateOutputType = {
 
 
 export type FinishAvgAggregateInputType = {
-  id?: true
   price?: true
   originalPrice?: true
-  createdById?: true
-  updatedById?: true
-  deletedById?: true
-  buildingId?: true
 }
 
 export type FinishSumAggregateInputType = {
-  id?: true
   price?: true
   originalPrice?: true
-  createdById?: true
-  updatedById?: true
-  deletedById?: true
-  buildingId?: true
 }
 
 export type FinishMinAggregateInputType = {
@@ -246,7 +226,7 @@ export type FinishGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 export type FinishGroupByOutputType = {
-  id: number
+  id: string
   type: $Enums.FinishType
   description: string
   price: number
@@ -254,10 +234,10 @@ export type FinishGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
-  createdById: number
-  updatedById: number
-  deletedById: number | null
-  buildingId: number
+  createdById: string
+  updatedById: string
+  deletedById: string | null
+  buildingId: string
   _count: FinishCountAggregateOutputType | null
   _avg: FinishAvgAggregateOutputType | null
   _sum: FinishSumAggregateOutputType | null
@@ -284,7 +264,7 @@ export type FinishWhereInput = {
   AND?: Prisma.FinishWhereInput | Prisma.FinishWhereInput[]
   OR?: Prisma.FinishWhereInput[]
   NOT?: Prisma.FinishWhereInput | Prisma.FinishWhereInput[]
-  id?: Prisma.IntFilter<"Finish"> | number
+  id?: Prisma.UuidFilter<"Finish"> | string
   type?: Prisma.EnumFinishTypeFilter<"Finish"> | $Enums.FinishType
   description?: Prisma.StringFilter<"Finish"> | string
   price?: Prisma.IntFilter<"Finish"> | number
@@ -292,10 +272,10 @@ export type FinishWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Finish"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Finish"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Finish"> | Date | string | null
-  createdById?: Prisma.IntFilter<"Finish"> | number
-  updatedById?: Prisma.IntFilter<"Finish"> | number
-  deletedById?: Prisma.IntNullableFilter<"Finish"> | number | null
-  buildingId?: Prisma.IntFilter<"Finish"> | number
+  createdById?: Prisma.UuidFilter<"Finish"> | string
+  updatedById?: Prisma.UuidFilter<"Finish"> | string
+  deletedById?: Prisma.UuidNullableFilter<"Finish"> | string | null
+  buildingId?: Prisma.UuidFilter<"Finish"> | string
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   updatedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   deletedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -322,8 +302,8 @@ export type FinishOrderByWithRelationInput = {
 }
 
 export type FinishWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
-  type_buildingId?: Prisma.FinishTypeBuildingIdCompoundUniqueInput
+  id?: string
+  type_buildingId_deletedAt?: Prisma.FinishTypeBuildingIdDeletedAtCompoundUniqueInput
   AND?: Prisma.FinishWhereInput | Prisma.FinishWhereInput[]
   OR?: Prisma.FinishWhereInput[]
   NOT?: Prisma.FinishWhereInput | Prisma.FinishWhereInput[]
@@ -334,15 +314,15 @@ export type FinishWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Finish"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Finish"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Finish"> | Date | string | null
-  createdById?: Prisma.IntFilter<"Finish"> | number
-  updatedById?: Prisma.IntFilter<"Finish"> | number
-  deletedById?: Prisma.IntNullableFilter<"Finish"> | number | null
-  buildingId?: Prisma.IntFilter<"Finish"> | number
+  createdById?: Prisma.UuidFilter<"Finish"> | string
+  updatedById?: Prisma.UuidFilter<"Finish"> | string
+  deletedById?: Prisma.UuidNullableFilter<"Finish"> | string | null
+  buildingId?: Prisma.UuidFilter<"Finish"> | string
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   updatedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   deletedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   building?: Prisma.XOR<Prisma.BuildingScalarRelationFilter, Prisma.BuildingWhereInput>
-}, "id" | "type_buildingId">
+}, "id" | "type_buildingId_deletedAt">
 
 export type FinishOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -368,7 +348,7 @@ export type FinishScalarWhereWithAggregatesInput = {
   AND?: Prisma.FinishScalarWhereWithAggregatesInput | Prisma.FinishScalarWhereWithAggregatesInput[]
   OR?: Prisma.FinishScalarWhereWithAggregatesInput[]
   NOT?: Prisma.FinishScalarWhereWithAggregatesInput | Prisma.FinishScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"Finish"> | number
+  id?: Prisma.UuidWithAggregatesFilter<"Finish"> | string
   type?: Prisma.EnumFinishTypeWithAggregatesFilter<"Finish"> | $Enums.FinishType
   description?: Prisma.StringWithAggregatesFilter<"Finish"> | string
   price?: Prisma.IntWithAggregatesFilter<"Finish"> | number
@@ -376,13 +356,14 @@ export type FinishScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Finish"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Finish"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Finish"> | Date | string | null
-  createdById?: Prisma.IntWithAggregatesFilter<"Finish"> | number
-  updatedById?: Prisma.IntWithAggregatesFilter<"Finish"> | number
-  deletedById?: Prisma.IntNullableWithAggregatesFilter<"Finish"> | number | null
-  buildingId?: Prisma.IntWithAggregatesFilter<"Finish"> | number
+  createdById?: Prisma.UuidWithAggregatesFilter<"Finish"> | string
+  updatedById?: Prisma.UuidWithAggregatesFilter<"Finish"> | string
+  deletedById?: Prisma.UuidNullableWithAggregatesFilter<"Finish"> | string | null
+  buildingId?: Prisma.UuidWithAggregatesFilter<"Finish"> | string
 }
 
 export type FinishCreateInput = {
+  id: string
   type: $Enums.FinishType
   description: string
   price: number
@@ -397,7 +378,7 @@ export type FinishCreateInput = {
 }
 
 export type FinishUncheckedCreateInput = {
-  id?: number
+  id: string
   type: $Enums.FinishType
   description: string
   price: number
@@ -405,13 +386,14 @@ export type FinishUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  createdById: number
-  updatedById: number
-  deletedById?: number | null
-  buildingId: number
+  createdById: string
+  updatedById: string
+  deletedById?: string | null
+  buildingId: string
 }
 
 export type FinishUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -426,7 +408,7 @@ export type FinishUpdateInput = {
 }
 
 export type FinishUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -434,14 +416,14 @@ export type FinishUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.IntFieldUpdateOperationsInput | number
-  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
-  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  buildingId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  buildingId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type FinishCreateManyInput = {
-  id?: number
+  id: string
   type: $Enums.FinishType
   description: string
   price: number
@@ -449,13 +431,14 @@ export type FinishCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  createdById: number
-  updatedById: number
-  deletedById?: number | null
-  buildingId: number
+  createdById: string
+  updatedById: string
+  deletedById?: string | null
+  buildingId: string
 }
 
 export type FinishUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -466,7 +449,7 @@ export type FinishUpdateManyMutationInput = {
 }
 
 export type FinishUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -474,10 +457,10 @@ export type FinishUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.IntFieldUpdateOperationsInput | number
-  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
-  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  buildingId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  buildingId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type FinishListRelationFilter = {
@@ -490,9 +473,10 @@ export type FinishOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type FinishTypeBuildingIdCompoundUniqueInput = {
+export type FinishTypeBuildingIdDeletedAtCompoundUniqueInput = {
   type: $Enums.FinishType
-  buildingId: number
+  buildingId: string
+  deletedAt: Date | string
 }
 
 export type FinishCountOrderByAggregateInput = {
@@ -511,13 +495,8 @@ export type FinishCountOrderByAggregateInput = {
 }
 
 export type FinishAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   price?: Prisma.SortOrder
   originalPrice?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
-  updatedById?: Prisma.SortOrder
-  deletedById?: Prisma.SortOrder
-  buildingId?: Prisma.SortOrder
 }
 
 export type FinishMaxOrderByAggregateInput = {
@@ -551,13 +530,8 @@ export type FinishMinOrderByAggregateInput = {
 }
 
 export type FinishSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   price?: Prisma.SortOrder
   originalPrice?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
-  updatedById?: Prisma.SortOrder
-  deletedById?: Prisma.SortOrder
-  buildingId?: Prisma.SortOrder
 }
 
 export type FinishCreateNestedManyWithoutBuildingInput = {
@@ -606,8 +580,12 @@ export type EnumFinishTypeFieldUpdateOperationsInput = {
   set?: $Enums.FinishType
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type FinishCreateNestedManyWithoutCreatedByInput = {
@@ -737,6 +715,7 @@ export type FinishUncheckedUpdateManyWithoutDeletedByNestedInput = {
 }
 
 export type FinishCreateWithoutBuildingInput = {
+  id: string
   type: $Enums.FinishType
   description: string
   price: number
@@ -750,7 +729,7 @@ export type FinishCreateWithoutBuildingInput = {
 }
 
 export type FinishUncheckedCreateWithoutBuildingInput = {
-  id?: number
+  id: string
   type: $Enums.FinishType
   description: string
   price: number
@@ -758,9 +737,9 @@ export type FinishUncheckedCreateWithoutBuildingInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  createdById: number
-  updatedById: number
-  deletedById?: number | null
+  createdById: string
+  updatedById: string
+  deletedById?: string | null
 }
 
 export type FinishCreateOrConnectWithoutBuildingInput = {
@@ -793,7 +772,7 @@ export type FinishScalarWhereInput = {
   AND?: Prisma.FinishScalarWhereInput | Prisma.FinishScalarWhereInput[]
   OR?: Prisma.FinishScalarWhereInput[]
   NOT?: Prisma.FinishScalarWhereInput | Prisma.FinishScalarWhereInput[]
-  id?: Prisma.IntFilter<"Finish"> | number
+  id?: Prisma.UuidFilter<"Finish"> | string
   type?: Prisma.EnumFinishTypeFilter<"Finish"> | $Enums.FinishType
   description?: Prisma.StringFilter<"Finish"> | string
   price?: Prisma.IntFilter<"Finish"> | number
@@ -801,13 +780,14 @@ export type FinishScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Finish"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Finish"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Finish"> | Date | string | null
-  createdById?: Prisma.IntFilter<"Finish"> | number
-  updatedById?: Prisma.IntFilter<"Finish"> | number
-  deletedById?: Prisma.IntNullableFilter<"Finish"> | number | null
-  buildingId?: Prisma.IntFilter<"Finish"> | number
+  createdById?: Prisma.UuidFilter<"Finish"> | string
+  updatedById?: Prisma.UuidFilter<"Finish"> | string
+  deletedById?: Prisma.UuidNullableFilter<"Finish"> | string | null
+  buildingId?: Prisma.UuidFilter<"Finish"> | string
 }
 
 export type FinishCreateWithoutCreatedByInput = {
+  id: string
   type: $Enums.FinishType
   description: string
   price: number
@@ -821,7 +801,7 @@ export type FinishCreateWithoutCreatedByInput = {
 }
 
 export type FinishUncheckedCreateWithoutCreatedByInput = {
-  id?: number
+  id: string
   type: $Enums.FinishType
   description: string
   price: number
@@ -829,9 +809,9 @@ export type FinishUncheckedCreateWithoutCreatedByInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  updatedById: number
-  deletedById?: number | null
-  buildingId: number
+  updatedById: string
+  deletedById?: string | null
+  buildingId: string
 }
 
 export type FinishCreateOrConnectWithoutCreatedByInput = {
@@ -845,6 +825,7 @@ export type FinishCreateManyCreatedByInputEnvelope = {
 }
 
 export type FinishCreateWithoutUpdatedByInput = {
+  id: string
   type: $Enums.FinishType
   description: string
   price: number
@@ -858,7 +839,7 @@ export type FinishCreateWithoutUpdatedByInput = {
 }
 
 export type FinishUncheckedCreateWithoutUpdatedByInput = {
-  id?: number
+  id: string
   type: $Enums.FinishType
   description: string
   price: number
@@ -866,9 +847,9 @@ export type FinishUncheckedCreateWithoutUpdatedByInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  createdById: number
-  deletedById?: number | null
-  buildingId: number
+  createdById: string
+  deletedById?: string | null
+  buildingId: string
 }
 
 export type FinishCreateOrConnectWithoutUpdatedByInput = {
@@ -882,6 +863,7 @@ export type FinishCreateManyUpdatedByInputEnvelope = {
 }
 
 export type FinishCreateWithoutDeletedByInput = {
+  id: string
   type: $Enums.FinishType
   description: string
   price: number
@@ -895,7 +877,7 @@ export type FinishCreateWithoutDeletedByInput = {
 }
 
 export type FinishUncheckedCreateWithoutDeletedByInput = {
-  id?: number
+  id: string
   type: $Enums.FinishType
   description: string
   price: number
@@ -903,9 +885,9 @@ export type FinishUncheckedCreateWithoutDeletedByInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  createdById: number
-  updatedById: number
-  buildingId: number
+  createdById: string
+  updatedById: string
+  buildingId: string
 }
 
 export type FinishCreateOrConnectWithoutDeletedByInput = {
@@ -967,7 +949,7 @@ export type FinishUpdateManyWithWhereWithoutDeletedByInput = {
 }
 
 export type FinishCreateManyBuildingInput = {
-  id?: number
+  id: string
   type: $Enums.FinishType
   description: string
   price: number
@@ -975,12 +957,13 @@ export type FinishCreateManyBuildingInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  createdById: number
-  updatedById: number
-  deletedById?: number | null
+  createdById: string
+  updatedById: string
+  deletedById?: string | null
 }
 
 export type FinishUpdateWithoutBuildingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -994,7 +977,7 @@ export type FinishUpdateWithoutBuildingInput = {
 }
 
 export type FinishUncheckedUpdateWithoutBuildingInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1002,13 +985,13 @@ export type FinishUncheckedUpdateWithoutBuildingInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.IntFieldUpdateOperationsInput | number
-  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
-  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type FinishUncheckedUpdateManyWithoutBuildingInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1016,13 +999,13 @@ export type FinishUncheckedUpdateManyWithoutBuildingInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.IntFieldUpdateOperationsInput | number
-  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
-  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type FinishCreateManyCreatedByInput = {
-  id?: number
+  id: string
   type: $Enums.FinishType
   description: string
   price: number
@@ -1030,13 +1013,13 @@ export type FinishCreateManyCreatedByInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  updatedById: number
-  deletedById?: number | null
-  buildingId: number
+  updatedById: string
+  deletedById?: string | null
+  buildingId: string
 }
 
 export type FinishCreateManyUpdatedByInput = {
-  id?: number
+  id: string
   type: $Enums.FinishType
   description: string
   price: number
@@ -1044,13 +1027,13 @@ export type FinishCreateManyUpdatedByInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  createdById: number
-  deletedById?: number | null
-  buildingId: number
+  createdById: string
+  deletedById?: string | null
+  buildingId: string
 }
 
 export type FinishCreateManyDeletedByInput = {
-  id?: number
+  id: string
   type: $Enums.FinishType
   description: string
   price: number
@@ -1058,12 +1041,13 @@ export type FinishCreateManyDeletedByInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  createdById: number
-  updatedById: number
-  buildingId: number
+  createdById: string
+  updatedById: string
+  buildingId: string
 }
 
 export type FinishUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1077,7 +1061,7 @@ export type FinishUpdateWithoutCreatedByInput = {
 }
 
 export type FinishUncheckedUpdateWithoutCreatedByInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1085,13 +1069,13 @@ export type FinishUncheckedUpdateWithoutCreatedByInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
-  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  buildingId?: Prisma.IntFieldUpdateOperationsInput | number
+  updatedById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  buildingId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type FinishUncheckedUpdateManyWithoutCreatedByInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1099,12 +1083,13 @@ export type FinishUncheckedUpdateManyWithoutCreatedByInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
-  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  buildingId?: Prisma.IntFieldUpdateOperationsInput | number
+  updatedById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  buildingId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type FinishUpdateWithoutUpdatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1118,7 +1103,7 @@ export type FinishUpdateWithoutUpdatedByInput = {
 }
 
 export type FinishUncheckedUpdateWithoutUpdatedByInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1126,13 +1111,13 @@ export type FinishUncheckedUpdateWithoutUpdatedByInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.IntFieldUpdateOperationsInput | number
-  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  buildingId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  buildingId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type FinishUncheckedUpdateManyWithoutUpdatedByInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1140,12 +1125,13 @@ export type FinishUncheckedUpdateManyWithoutUpdatedByInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.IntFieldUpdateOperationsInput | number
-  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  buildingId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  buildingId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type FinishUpdateWithoutDeletedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1159,7 +1145,7 @@ export type FinishUpdateWithoutDeletedByInput = {
 }
 
 export type FinishUncheckedUpdateWithoutDeletedByInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1167,13 +1153,13 @@ export type FinishUncheckedUpdateWithoutDeletedByInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.IntFieldUpdateOperationsInput | number
-  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
-  buildingId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedById?: Prisma.StringFieldUpdateOperationsInput | string
+  buildingId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type FinishUncheckedUpdateManyWithoutDeletedByInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumFinishTypeFieldUpdateOperationsInput | $Enums.FinishType
   description?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1181,9 +1167,9 @@ export type FinishUncheckedUpdateManyWithoutDeletedByInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.IntFieldUpdateOperationsInput | number
-  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
-  buildingId?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedById?: Prisma.StringFieldUpdateOperationsInput | string
+  buildingId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -1289,7 +1275,7 @@ export type $FinishPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     building: Prisma.$BuildingPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
+    id: string
     type: $Enums.FinishType
     description: string
     price: number
@@ -1297,10 +1283,10 @@ export type $FinishPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
-    createdById: number
-    updatedById: number
-    deletedById: number | null
-    buildingId: number
+    createdById: string
+    updatedById: string
+    deletedById: string | null
+    buildingId: string
   }, ExtArgs["result"]["finish"]>
   composites: {}
 }
@@ -1728,7 +1714,7 @@ export interface Prisma__FinishClient<T, Null = never, ExtArgs extends runtime.T
  * Fields of the Finish model
  */
 export interface FinishFieldRefs {
-  readonly id: Prisma.FieldRef<"Finish", 'Int'>
+  readonly id: Prisma.FieldRef<"Finish", 'String'>
   readonly type: Prisma.FieldRef<"Finish", 'FinishType'>
   readonly description: Prisma.FieldRef<"Finish", 'String'>
   readonly price: Prisma.FieldRef<"Finish", 'Int'>
@@ -1736,10 +1722,10 @@ export interface FinishFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Finish", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Finish", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"Finish", 'DateTime'>
-  readonly createdById: Prisma.FieldRef<"Finish", 'Int'>
-  readonly updatedById: Prisma.FieldRef<"Finish", 'Int'>
-  readonly deletedById: Prisma.FieldRef<"Finish", 'Int'>
-  readonly buildingId: Prisma.FieldRef<"Finish", 'Int'>
+  readonly createdById: Prisma.FieldRef<"Finish", 'String'>
+  readonly updatedById: Prisma.FieldRef<"Finish", 'String'>
+  readonly deletedById: Prisma.FieldRef<"Finish", 'String'>
+  readonly buildingId: Prisma.FieldRef<"Finish", 'String'>
 }
     
 

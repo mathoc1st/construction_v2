@@ -4,9 +4,12 @@ CREATE TYPE "ConstructionType" AS ENUM ('FRAME', 'BARN', 'CONTAINER');
 -- CreateEnum
 CREATE TYPE "FinishType" AS ENUM ('COLD', 'WARM_100', 'WARM_150', 'WARM_200');
 
+-- CreateEnum
+CREATE TYPE "ImageStatus" AS ENUM ('TEMP', 'ACTIVE', 'DELETED');
+
 -- CreateTable
 CREATE TABLE "Building" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL,
     "constructionType" "ConstructionType" NOT NULL,
     "width" INTEGER NOT NULL,
     "length" INTEGER NOT NULL,
@@ -14,21 +17,21 @@ CREATE TABLE "Building" (
     "bedrooms" INTEGER NOT NULL,
     "bathrooms" INTEGER NOT NULL,
     "floors" INTEGER NOT NULL,
-    "veranda" BOOLEAN NOT NULL,
+    "hasVeranda" BOOLEAN NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
-    "listingId" INTEGER NOT NULL,
-    "createdById" INTEGER NOT NULL,
-    "updatedById" INTEGER NOT NULL,
-    "deletedById" INTEGER,
+    "listingId" UUID NOT NULL,
+    "createdById" UUID NOT NULL,
+    "updatedById" UUID NOT NULL,
+    "deletedById" UUID,
 
     CONSTRAINT "Building_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Finish" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL,
     "type" "FinishType" NOT NULL,
     "description" TEXT NOT NULL,
     "price" INTEGER NOT NULL,
@@ -36,36 +39,53 @@ CREATE TABLE "Finish" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
-    "createdById" INTEGER NOT NULL,
-    "updatedById" INTEGER NOT NULL,
-    "deletedById" INTEGER,
-    "buildingId" INTEGER NOT NULL,
+    "createdById" UUID NOT NULL,
+    "updatedById" UUID NOT NULL,
+    "deletedById" UUID,
+    "buildingId" UUID NOT NULL,
 
     CONSTRAINT "Finish_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
+CREATE TABLE "Image" (
+    "id" UUID NOT NULL,
+    "folder" TEXT NOT NULL,
+    "key" TEXT NOT NULL,
+    "bucket" TEXT NOT NULL,
+    "status" "ImageStatus" NOT NULL DEFAULT 'TEMP',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
+    "createdById" UUID NOT NULL,
+    "updatedById" UUID NOT NULL,
+    "deletedById" UUID,
+    "listingId" UUID,
+
+    CONSTRAINT "Image_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Listing" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL,
     "title" TEXT NOT NULL,
-    "images" TEXT[],
     "views" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
-    "createdById" INTEGER NOT NULL,
-    "updatedById" INTEGER NOT NULL,
-    "deletedById" INTEGER,
+    "createdById" UUID NOT NULL,
+    "updatedById" UUID NOT NULL,
+    "deletedById" UUID,
 
     CONSTRAINT "Listing_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Session" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL,
     "tokenHash" TEXT NOT NULL,
-    "userId" INTEGER NOT NULL,
     "expiresAt" TIMESTAMP(3) NOT NULL,
+    "userId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -74,7 +94,7 @@ CREATE TABLE "Session" (
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL,
     "username" TEXT NOT NULL,
     "passwordHash" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -87,7 +107,7 @@ CREATE TABLE "User" (
 CREATE UNIQUE INDEX "Building_listingId_key" ON "Building"("listingId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Finish_type_buildingId_key" ON "Finish"("type", "buildingId");
+CREATE UNIQUE INDEX "Finish_type_buildingId_deletedAt_key" ON "Finish"("type", "buildingId", "deletedAt");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Session_tokenHash_key" ON "Session"("tokenHash");
@@ -118,6 +138,18 @@ ALTER TABLE "Finish" ADD CONSTRAINT "Finish_deletedById_fkey" FOREIGN KEY ("dele
 
 -- AddForeignKey
 ALTER TABLE "Finish" ADD CONSTRAINT "Finish_buildingId_fkey" FOREIGN KEY ("buildingId") REFERENCES "Building"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Image" ADD CONSTRAINT "Image_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Image" ADD CONSTRAINT "Image_updatedById_fkey" FOREIGN KEY ("updatedById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Image" ADD CONSTRAINT "Image_deletedById_fkey" FOREIGN KEY ("deletedById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Image" ADD CONSTRAINT "Image_listingId_fkey" FOREIGN KEY ("listingId") REFERENCES "Listing"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Listing" ADD CONSTRAINT "Listing_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

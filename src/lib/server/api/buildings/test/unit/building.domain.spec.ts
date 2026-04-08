@@ -18,7 +18,7 @@ describe('Building Domain Unit', () => {
 			bedrooms: 2,
 			bathrooms: 1,
 			floors: 1,
-			veranda: false,
+			hasVeranda: false,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			deletedAt: null,
@@ -38,7 +38,7 @@ describe('Building Domain Unit', () => {
 				bedrooms: 2,
 				bathrooms: 1,
 				floors: 1,
-				veranda: false,
+				hasVeranda: false,
 				createdById: 1
 			});
 
@@ -50,7 +50,7 @@ describe('Building Domain Unit', () => {
 			expect(building.bedrooms).toBe(2);
 			expect(building.bathrooms).toBe(1);
 			expect(building.floors).toBe(1);
-			expect(building.veranda).toBe(false);
+			expect(building.hasVeranda).toBe(false);
 			expect(building.createdById).toEqual(1);
 			expect(building.createdAt).toBeInstanceOf(Date);
 			expect(building.updatedAt).toBeInstanceOf(Date);
@@ -58,7 +58,7 @@ describe('Building Domain Unit', () => {
 			expect(building.updatedById).toEqual(1);
 			expect(building.deletedById).toBeNull();
 			expect(building.isDeleted).toBe(false);
-			expect(building.veranda).toBe(false);
+			expect(building.hasVeranda).toBe(false);
 		});
 
 		it('should create a building from persistence', () => {
@@ -70,7 +70,7 @@ describe('Building Domain Unit', () => {
 				bedrooms: 2,
 				bathrooms: 1,
 				floors: 1,
-				veranda: false,
+				hasVeranda: false,
 				createdAt: new Date(),
 				updatedAt: new Date(),
 				deletedAt: null,
@@ -87,7 +87,7 @@ describe('Building Domain Unit', () => {
 			expect(building.bedrooms).toBe(2);
 			expect(building.bathrooms).toBe(1);
 			expect(building.floors).toBe(1);
-			expect(building.veranda).toBe(false);
+			expect(building.hasVeranda).toBe(false);
 			expect(building.createdAt).toBeInstanceOf(Date);
 			expect(building.updatedAt).toBeInstanceOf(Date);
 			expect(building.deletedAt).toBeNull();
@@ -106,7 +106,7 @@ describe('Building Domain Unit', () => {
 					bedrooms: 2,
 					bathrooms: 1,
 					floors: 1,
-					veranda: false,
+					hasVeranda: false,
 					createdById: 1
 				})
 			).toThrow(NonPositiveValueError);
@@ -122,7 +122,7 @@ describe('Building Domain Unit', () => {
 					bedrooms: 2,
 					bathrooms: 1,
 					floors: 1,
-					veranda: false,
+					hasVeranda: false,
 					createdById: 1
 				})
 			).toThrow(NonPositiveValueError);
@@ -138,7 +138,7 @@ describe('Building Domain Unit', () => {
 					bedrooms: 2,
 					bathrooms: 1,
 					floors: 1,
-					veranda: false,
+					hasVeranda: false,
 					createdById: 1
 				})
 			).toThrow(NonPositiveValueError);
@@ -154,7 +154,7 @@ describe('Building Domain Unit', () => {
 					bedrooms: -1,
 					bathrooms: 1,
 					floors: 1,
-					veranda: false,
+					hasVeranda: false,
 					createdById: 1
 				})
 			).toThrow(NonPositiveValueError);
@@ -170,7 +170,7 @@ describe('Building Domain Unit', () => {
 					bedrooms: 2,
 					bathrooms: -1,
 					floors: 1,
-					veranda: false,
+					hasVeranda: false,
 					createdById: 1
 				})
 			).toThrow(NonPositiveValueError);
@@ -186,7 +186,7 @@ describe('Building Domain Unit', () => {
 					bedrooms: 2,
 					bathrooms: 1,
 					floors: 0,
-					veranda: false,
+					hasVeranda: false,
 					createdById: 1
 				})
 			).toThrow(NonPositiveValueError);
@@ -307,7 +307,7 @@ describe('Building Domain Unit', () => {
 	describe('Changing Veranda', () => {
 		it('should change the veranda status of the building', () => {
 			building.changeVeranda(true, 1);
-			expect(building.veranda).toBe(true);
+			expect(building.hasVeranda).toBe(true);
 			expect(building.updatedById).toEqual(1);
 			expect(building.updatedAt).toBeInstanceOf(Date);
 		});

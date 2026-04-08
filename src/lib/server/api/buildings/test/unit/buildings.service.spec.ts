@@ -38,7 +38,7 @@ describe('Building Service Unit', () => {
 			bedrooms: 2,
 			bathrooms: 1,
 			floors: 1,
-			veranda: false,
+			hasVeranda: false,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			deletedAt: null,
@@ -60,7 +60,7 @@ describe('Building Service Unit', () => {
 				bedrooms: 2,
 				bathrooms: 1,
 				floors: 1,
-				veranda: false,
+				hasVeranda: false,
 				performedById: 1,
 				listingId: 1
 			};
@@ -87,7 +87,7 @@ describe('Building Service Unit', () => {
 					bedrooms: params.bedrooms,
 					bathrooms: params.bathrooms,
 					floors: params.floors,
-					veranda: params.veranda
+					veranda: params.hasVeranda
 				})
 			);
 			expect(result).toEqual({
@@ -100,7 +100,7 @@ describe('Building Service Unit', () => {
 	describe('Update Building', () => {
 		it('should update a building successfully', async () => {
 			const params: UpdateBuildingParams = {
-				targetId: 1,
+				listingId: 1,
 				performedById: 1,
 				constructionType: ConstructionType.BARN,
 				width: 10,
@@ -109,7 +109,7 @@ describe('Building Service Unit', () => {
 				bedrooms: 2,
 				bathrooms: 1,
 				floors: 1,
-				veranda: false
+				hasVeranda: false
 			};
 
 			buildingRepositoryMock.getById.mockResolvedValueOnce({ building, id: 1 });
@@ -122,7 +122,7 @@ describe('Building Service Unit', () => {
 				bedrooms: params.bedrooms!,
 				bathrooms: params.bathrooms!,
 				floors: params.floors!,
-				veranda: params.veranda!,
+				hasVeranda: params.hasVeranda!,
 				createdAt: building.createdAt,
 				updatedAt: new Date(),
 				deletedAt: null,
@@ -138,7 +138,7 @@ describe('Building Service Unit', () => {
 
 			const result = await buildingService.updateBuilding(params);
 
-			expect(buildingRepositoryMock.getById).toHaveBeenCalledWith(params.targetId);
+			expect(buildingRepositoryMock.getById).toHaveBeenCalledWith(params.listingId);
 			expect(buildingRepositoryMock.update).toHaveBeenCalledWith(
 				1,
 				expect.objectContaining({
@@ -149,7 +149,7 @@ describe('Building Service Unit', () => {
 					bedrooms: params.bedrooms,
 					bathrooms: params.bathrooms,
 					floors: params.floors,
-					veranda: params.veranda
+					veranda: params.hasVeranda
 				})
 			);
 			expect(result).toEqual({

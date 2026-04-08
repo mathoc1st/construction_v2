@@ -1,5 +1,5 @@
 import { getPrismaService } from '$lib/server/api/prisma/prisma.service';
-import type { IUsersRepository, UserWithId } from '$lib/types/users/users.repository.types';
+import type { IUsersRepository } from '$lib/types/users/users.repository.types';
 import type {
 	AddUserParams,
 	DeleteUserParams,
@@ -9,7 +9,7 @@ import type {
 import type { IPasswordService } from '../auth/auth.type';
 import { getPasswordService } from '../auth/password.service';
 import { EntityNotFoundError } from '../common/errors/errors.service';
-import { User } from './user.domain';
+import { User, UserId } from './user.domain';
 import { getUsersRepository } from './users.repository';
 
 export class UsersService implements IUsersService {
@@ -18,23 +18,23 @@ export class UsersService implements IUsersService {
 		private readonly _passwordService: IPasswordService
 	) {}
 
-	async getUserById(id: number): Promise<UserWithId> {
-		const userWithId = await this._usersRepository.getById(id);
+	async getUserById(id: UserId): Promise<User> {
+		const user = await this._usersRepository.getById(id);
 
-		if (!userWithId) throw new EntityNotFoundError('User', id);
+		if (!user) throw new Error('User not found');
 
-		return userWithId;
+		return user;
 	}
 
-	async getUserByUsername(username: string): Promise<UserWithId> {
-		const userWithId = await this._usersRepository.getByUsername(username);
+	async getUserByUsername(username: string): Promise<User> {
+		const user = await this._usersRepository.getByUsername(username);
 
-		if (!userWithId) throw new EntityNotFoundError('User', 1);
+		if (!user) throw new EntityNotFoundError('User', 1);
 
-		return userWithId;
+		return user;
 	}
 
-	async addUser(params: AddUserParams): Promise<UserWithId> {
+	async addUser(params: AddUserParams): Promise<User> {
 		const passwordHash = await this._passwordService.hashPassword(params.password);
 
 		const newUser = User.create({
@@ -45,12 +45,10 @@ export class UsersService implements IUsersService {
 		return await this._usersRepository.create(newUser);
 	}
 
-	async updateUser(params: UpdateUserParams): Promise<UserWithId> {
-		const userWithId = await this._usersRepository.getById(params.targetId);
+	async updateUser(params: UpdateUserParams): Promise<User> {
+		const user = await this._usersRepository.getById(params.id);
 
-		if (!userWithId) throw new EntityNotFoundError('User', params.targetId);
-
-		const user = userWithId.user;
+		if (!user) throw new Error('User not found');
 
 		if (params.username) user.changeUsername(params.username);
 		if (params.password) {
@@ -58,15 +56,15 @@ export class UsersService implements IUsersService {
 			user.changePasswordHash(passwordHash);
 		}
 
-		return await this._usersRepository.update(params.targetId, user);
+		return await this._usersRepository.update(params.id, user);
 	}
 
 	async deleteUser(params: DeleteUserParams): Promise<void> {
-		const userWithId = await this._usersRepository.getById(params.targetId);
+		const user = await this._usersRepository.getById(params.id);
 
-		if (!userWithId) throw new EntityNotFoundError('User', params.targetId);
+		if (!user) throw new Error('User not found');
 
-		return this._usersRepository.delete(params.targetId);
+		return this._usersRepository.delete(params.id);
 	}
 }
 

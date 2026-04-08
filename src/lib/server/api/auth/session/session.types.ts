@@ -1,4 +1,4 @@
-import type { User } from '../../users/user.domain';
+import type { User, UserId } from '../../users/user.domain';
 import type { Session } from './session.domain';
 
 export interface ISessionsRepository {
@@ -10,7 +10,7 @@ export interface ISessionsRepository {
 }
 
 export type CreateSessionParams = {
-	userId: number;
+	userId: UserId;
 };
 
 export type ValidateSessionParams = {

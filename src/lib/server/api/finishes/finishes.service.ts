@@ -35,9 +35,9 @@ export class FinishesService implements IFinishesService {
 		return createdFinish;
 	}
 	async updateFinish(params: UpdateFinishParams): Promise<FinishWithId> {
-		const finishWithId = await this.finishesRepository.getById(params.targetId);
+		const finishWithId = await this.finishesRepository.getById(params.id);
 
-		if (!finishWithId) throw new EntityNotFoundError('Finish', params.targetId);
+		if (!finishWithId) throw new EntityNotFoundError('Finish', params.id);
 
 		const { finish } = finishWithId;
 
@@ -46,7 +46,7 @@ export class FinishesService implements IFinishesService {
 		if (params.originalPrice !== undefined && params.originalPrice !== null)
 			finish.changeOriginalPrice(params.originalPrice, params.performedById);
 
-		const updatedFinish = await this.finishesRepository.update(params.targetId, finish);
+		const updatedFinish = await this.finishesRepository.update(params.id, finish);
 
 		return updatedFinish;
 	}
@@ -114,7 +114,7 @@ export class FinishesService implements IFinishesService {
 
 		for (const finish of toUpdate) {
 			const finishWithId = await this.updateFinish({
-				targetId: finish.targetId!,
+				id: finish.targetId!,
 				type: finish.type,
 				description: finish.description,
 				price: finish.price,

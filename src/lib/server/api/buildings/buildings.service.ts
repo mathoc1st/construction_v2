@@ -42,7 +42,7 @@ export class BuildingsService implements IBuildingsService {
 
 	async updateBuilding(params: UpdateBuildingParams): Promise<BuildingWithId> {
 		return await this.update(
-			{ targetId: params.targetId, performedById: params.performedById },
+			{ targetId: params.listingId, performedById: params.performedById },
 			(building, performedById) => {
 				if (params.constructionType)
 					building.changeConstructionType(params.constructionType, performedById);

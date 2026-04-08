@@ -28,6 +28,11 @@ export type Building = Prisma.BuildingModel
  */
 export type Finish = Prisma.FinishModel
 /**
+ * Model Image
+ * 
+ */
+export type Image = Prisma.ImageModel
+/**
  * Model Listing
  * 
  */

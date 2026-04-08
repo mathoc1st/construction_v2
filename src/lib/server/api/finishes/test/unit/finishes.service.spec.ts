@@ -322,7 +322,7 @@ describe('Finishes Service Unit Tests', () => {
 		it('should update an existing finish successfully', async () => {
 			const params: UpdateFinishParams = {
 				type: FinishType.COLD,
-				targetId: 1,
+				id: 1,
 				description: 'New Description',
 				price: 150,
 				performedById: 2
@@ -342,17 +342,17 @@ describe('Finishes Service Unit Tests', () => {
 			});
 
 			finishesRepositoryMock.getById.mockResolvedValue({
-				id: params.targetId,
+				id: params.id,
 				finish: existingFinish
 			});
 			finishesRepositoryMock.update.mockResolvedValue({
-				id: params.targetId,
+				id: params.id,
 				finish: updatedFinish
 			});
 
 			const result = await finishesService.updateFinish(params);
 
-			expect(finishesRepositoryMock.getById).toHaveBeenCalledWith(params.targetId);
+			expect(finishesRepositoryMock.getById).toHaveBeenCalledWith(params.id);
 			expect(finishesRepositoryMock.update).toHaveBeenCalledWith(
 				1,
 				expect.objectContaining({
@@ -365,7 +365,7 @@ describe('Finishes Service Unit Tests', () => {
 			);
 
 			expect(result).toEqual({
-				id: params.targetId,
+				id: params.id,
 				finish: expect.objectContaining({
 					type: updatedFinish.type,
 					description: updatedFinish.description,

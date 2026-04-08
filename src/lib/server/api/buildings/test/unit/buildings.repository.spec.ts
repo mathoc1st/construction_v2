@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { BuildingsRepository } from '../../buildings.repository';
+import { PrismaBuildingsRepository } from '../../buildings.repository';
 import {
 	type Building as PrismaBuilding,
 	ConstructionType as PrismaConstructionType
@@ -37,7 +37,7 @@ describe('Buildings Repository Unit', () => {
 		}
 	};
 
-	const buildingsRepository = new BuildingsRepository(prismaMock as unknown as DbClient);
+	const buildingsRepository = new PrismaBuildingsRepository(prismaMock as unknown as DbClient);
 
 	const record: PrismaBuilding = {
 		id: 1,
@@ -85,7 +85,7 @@ describe('Buildings Repository Unit', () => {
 						bedrooms: building.bedrooms,
 						bathrooms: building.bathrooms,
 						floors: building.floors,
-						veranda: building.veranda
+						veranda: building.hasVeranda
 					})
 				})
 			);
@@ -150,7 +150,7 @@ describe('Buildings Repository Unit', () => {
 						bedrooms: updatedBuilding.bedrooms,
 						bathrooms: updatedBuilding.bathrooms,
 						floors: updatedBuilding.floors,
-						veranda: updatedBuilding.veranda
+						veranda: updatedBuilding.hasVeranda
 					})
 				})
 			);
@@ -194,7 +194,7 @@ describe('Buildings Repository Unit', () => {
 			prismaMock.building.findMany.mockResolvedValue([record]);
 
 			const filters: BuildingQueryOptions = {
-				filters: { bedrooms: 3, veranda: true },
+				filters: { bedrooms: 3, hasVeranda: true },
 				sort: {
 					field: BuildingSortableFields.CREATED_AT,
 					direction: SortDirection.DESC
@@ -238,7 +238,7 @@ describe('Buildings Repository Unit', () => {
 		it('should return count of buildings with filters', async () => {
 			const filters: BuildingFilterOptions = {
 				bedrooms: 3,
-				veranda: true
+				hasVeranda: true
 			};
 			prismaMock.building.count.mockResolvedValue(5);
 

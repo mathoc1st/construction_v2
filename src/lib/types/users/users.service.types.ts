@@ -1,4 +1,4 @@
-import type { UserWithId } from './users.repository.types';
+import type { User, UserId } from '$lib/server/api/users/user.domain';
 
 export type AddUserParams = {
 	username: string;
@@ -6,19 +6,19 @@ export type AddUserParams = {
 };
 
 export type UpdateUserParams = {
-	targetId: number;
+	id: UserId;
 	username?: string;
 	password?: string;
 };
 
 export type DeleteUserParams = {
-	targetId: number;
+	id: UserId;
 };
 
 export interface IUsersService {
-	getUserById(id: number): Promise<UserWithId>;
-	getUserByUsername(username: string): Promise<UserWithId>;
-	addUser(params: AddUserParams): Promise<UserWithId>;
-	updateUser(params: UpdateUserParams): Promise<UserWithId>;
+	getUserById(id: UserId): Promise<User>;
+	getUserByUsername(username: string): Promise<User>;
+	addUser(params: AddUserParams): Promise<User>;
+	updateUser(params: UpdateUserParams): Promise<User>;
 	deleteUser(params: DeleteUserParams): Promise<void>;
 }

@@ -10,6 +10,7 @@
  */
 export type * from './models/Building.ts'
 export type * from './models/Finish.ts'
+export type * from './models/Image.ts'
 export type * from './models/Listing.ts'
 export type * from './models/Session.ts'
 export type * from './models/User.ts'

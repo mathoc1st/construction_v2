@@ -1,3 +1,4 @@
+import type { AddFinishParams, UpdateFinishParams } from '../finishes/finishes.service.types';
 import type { ConstructionType } from './building.domain.types';
 import type {
 	BuildingQueryOptions,
@@ -13,14 +14,11 @@ export type AddBuildingParams = {
 	bedrooms: number;
 	bathrooms: number;
 	floors: number;
-	veranda: boolean;
-	performedById: number;
-	listingId: number;
+	hasVeranda: boolean;
+	finishes: AddFinishParams[];
 };
 
 export type UpdateBuildingParams = {
-	targetId: number;
-	performedById: number;
 	constructionType?: ConstructionType;
 	width?: number;
 	length?: number;
@@ -28,7 +26,8 @@ export type UpdateBuildingParams = {
 	bedrooms?: number;
 	bathrooms?: number;
 	floors?: number;
-	veranda?: boolean;
+	hasVeranda?: boolean;
+	finishes?: UpdateFinishParams[];
 };
 
 export type DeleteBuildingParams = {

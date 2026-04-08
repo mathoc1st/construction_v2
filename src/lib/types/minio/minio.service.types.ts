@@ -8,6 +8,7 @@ export interface IMinioService {
 		objectKey: string,
 		expiresInSeconds?: number
 	): Promise<string>;
+	uploadObject(bucketName: string, folder: string, key: string, file: File): Promise<void>;
 
 	moveObject(
 		sourceBucket: string,
@@ -15,5 +16,7 @@ export interface IMinioService {
 		destinationBucket: string,
 		destinationKey: string
 	): Promise<void>;
-	uploadImages(file: File): Promise<string>;
+	// uploadImage(file: File): Promise<Image>;
+	// finalizeImage(listingId: string, key: string): Promise<void>;
+	// archiveImage(listingId: string, key: string): Promise<void>;
 }

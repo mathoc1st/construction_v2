@@ -34,38 +34,17 @@ class MinioService implements IMinioService {
 		return url;
 	}
 
-	async uploadImages(file: File): Promise<string> {
+	async uploadObject(bucketName: string, folder: string, key: string, file: File): Promise<void> {
 		const buffer = Buffer.from(await file.arrayBuffer());
 
-		const key = `${crypto.randomUUID()}-${file.name}`;
-
 		const command = new PutObjectCommand({
-			Bucket: 'images',
-			Key: key,
+			Bucket: bucketName,
+			Key: `${folder}/${key}`,
 			Body: buffer,
 			ContentType: file.type
 		});
 
 		await this._client.send(command);
-
-		return key;
-	}
-
-	async uploadTemporaryImage(file: File): Promise<string> {
-		const buffer = Buffer.from(await file.arrayBuffer());
-
-		const key = `${crypto.randomUUID()}-${file.name}`;
-
-		const command = new PutObjectCommand({
-			Bucket: 'images',
-			Key: `temp/${key}`,
-			Body: buffer,
-			ContentType: file.type
-		});
-
-		await this._client.send(command);
-
-		return key;
 	}
 
 	async moveObject(

@@ -1,39 +1,50 @@
-import path from 'path';
-import {
-	EmptyStringError,
-	EntityAlreadyDeletedError,
-	InvalidImageExtensionError,
-	InvalidPathError
-} from '../common/errors/errors.domain';
+import { EmptyStringError, EntityAlreadyDeletedError } from '../common/errors/errors.domain';
+import { v7 as uuidv7 } from 'uuid';
+import type { Building } from '../buildings/building.domain';
+import type { UserId } from '../users/user.domain';
+import type { UpdateListingParams } from '$lib/types/listings/listings.service.types';
+import type { Image } from '../images/image.domain';
 
-const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
+export class ListingId {
+	constructor(public readonly value: string) {}
+
+	static create(): ListingId {
+		return new ListingId(uuidv7());
+	}
+}
 
 export class Listing {
+	private readonly _id: ListingId;
+	private readonly _building: Building;
 	private _title: string;
-	private _images: string[];
+	private _images: Image[];
 	private _views: number;
 
 	private _createdAt: Date;
 	private _updatedAt: Date;
 	private _deletedAt: Date | null;
 
-	private _createdById: number;
-	private _updatedById: number;
-	private _deletedById: number | null;
+	private _createdById: UserId;
+	private _updatedById: UserId;
+	private _deletedById: UserId | null;
 
 	private constructor(params: {
+		id: ListingId;
+		building: Building;
 		title: string;
-		images: string[];
+		images: Image[];
 		views: number;
 
 		createdAt: Date;
 		updatedAt: Date;
 		deletedAt: Date | null;
 
-		createdById: number;
-		updatedById: number;
-		deletedById: number | null;
+		createdById: UserId;
+		updatedById: UserId;
+		deletedById: UserId | null;
 	}) {
+		this._id = params.id;
+		this._building = params.building;
 		this._title = params.title;
 		this._images = params.images;
 		this._views = params.views;
@@ -45,11 +56,18 @@ export class Listing {
 		this._deletedById = params.deletedById;
 	}
 
-	public static create(params: { title: string; images: string[]; createdById: number }): Listing {
+	public static create(params: {
+		building: Building;
+		title: string;
+		images: Image[];
+		createdById: UserId;
+	}): Listing {
 		if (!params.title || params.title.trim() === '') throw new EmptyStringError('Title');
 
 		const now = new Date();
 		return new Listing({
+			id: ListingId.create(),
+			building: params.building,
 			title: params.title,
 			images: params.images,
 			views: 0,
@@ -63,19 +81,23 @@ export class Listing {
 	}
 
 	public static fromPersistence(params: {
+		id: ListingId;
+		building: Building;
 		title: string;
-		images: string[];
+		images: Image[];
 		views: number;
 
 		createdAt: Date;
 		updatedAt: Date;
 		deletedAt: Date | null;
 
-		createdById: number;
-		updatedById: number;
-		deletedById: number | null;
+		createdById: UserId;
+		updatedById: UserId;
+		deletedById: UserId | null;
 	}): Listing {
 		return new Listing({
+			id: params.id,
+			building: params.building,
 			title: params.title,
 			images: params.images,
 			views: params.views,
@@ -88,11 +110,19 @@ export class Listing {
 		});
 	}
 
+	get id(): ListingId {
+		return this._id;
+	}
+
+	get building(): Building {
+		return this._building;
+	}
+
 	get title(): string {
 		return this._title;
 	}
 
-	get images(): string[] {
+	get images(): Image[] {
 		return this._images;
 	}
 
@@ -112,15 +142,15 @@ export class Listing {
 		return this._deletedAt;
 	}
 
-	get createdById(): number {
+	get createdById(): UserId {
 		return this._createdById;
 	}
 
-	get updatedById(): number {
+	get updatedById(): UserId {
 		return this._updatedById;
 	}
 
-	get deletedById(): number | null {
+	get deletedById(): UserId | null {
 		return this._deletedById;
 	}
 
@@ -132,7 +162,14 @@ export class Listing {
 		return 'Listing';
 	}
 
-	changeTitle(newTitle: string, updatedById: number) {
+	update(params: UpdateListingParams, updatedById: UserId) {
+		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName);
+
+		if (params.building) this._building.update(params.building, updatedById);
+		if (params.title) this.changeTitle(params.title, updatedById);
+	}
+
+	changeTitle(newTitle: string, updatedById: UserId) {
 		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName);
 
 		this.validateString('title', newTitle);
@@ -146,57 +183,18 @@ export class Listing {
 		this._views += 1;
 	}
 
-	changeImages(newImages: string[], updatedById: number) {
-		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName);
-
-		if (!newImages || newImages.length === 0) {
-			this._images = [];
-			this.markUpdated(updatedById);
-			return;
-		}
-
-		newImages.forEach((name, index) => {
-			this.validateImage(name, index);
-		});
-		this._images = newImages;
-		this.markUpdated(updatedById);
-	}
-
-	markDeleted(deletedById: number) {
+	markDeleted(deletedById: UserId) {
 		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName);
 
 		this._deletedById = deletedById;
 		this._deletedAt = new Date();
 	}
 
-	private validateImage(name: string, index: number) {
-		this.validateString(`images[${index}]`, name);
-		if (!this.isValidPath(name)) {
-			throw new InvalidPathError(`images[${index}]`, name);
-		}
-		if (!this.hasImageExtension(name)) {
-			throw new InvalidImageExtensionError(`images[${index}]`, name);
-		}
-	}
-
 	private validateString(fieldName: string, str: string) {
 		if (str.trim().length == 0) throw new EmptyStringError(fieldName);
 	}
 
-	private isValidPath(p: string): boolean {
-		try {
-			path.parse(p);
-			return true;
-		} catch {
-			return false;
-		}
-	}
-
-	private hasImageExtension(p: string): boolean {
-		return IMAGE_EXTENSIONS.includes(path.extname(p).toLowerCase());
-	}
-
-	private markUpdated(updatedById: number) {
+	private markUpdated(updatedById: UserId) {
 		this._updatedById = updatedById;
 		this._updatedAt = new Date();
 	}

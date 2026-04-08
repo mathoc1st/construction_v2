@@ -3,6 +3,7 @@ import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../src/lib/server/api/prisma/generated/client';
 import { getPasswordService } from '../src/lib/server/api/auth/password.service';
+import { v7 as uuidv7 } from 'uuid';
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const pool = new Pool({ connectionString });
@@ -24,6 +25,7 @@ async function main() {
 
 	await prisma.user.create({
 		data: {
+			id: uuidv7(),
 			username: adminUsername,
 			passwordHash: await getPasswordService().hashPassword(adminPassword)
 		}

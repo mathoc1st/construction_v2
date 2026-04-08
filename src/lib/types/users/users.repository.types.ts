@@ -1,5 +1,4 @@
-import type { User } from '$lib/server/api/users/user.domain';
-import type { DbClient } from '../prisma/prisma.service.types';
+import type { User, UserId } from '$lib/server/api/users/user.domain';
 
 export type UserWithId = {
 	id: number;
@@ -10,10 +9,9 @@ export type UserFilterOptions = {
 	username?: string;
 };
 export interface IUsersRepository {
-	withClient(client: DbClient): IUsersRepository;
-	getById(id: number): Promise<UserWithId | null>;
-	getByUsername(username: string): Promise<UserWithId | null>;
-	create(user: User): Promise<UserWithId>;
-	update(id: number, user: User): Promise<UserWithId>;
-	delete(id: number): Promise<void>;
+	getById(id: UserId): Promise<User | null>;
+	getByUsername(username: string): Promise<User | null>;
+	create(user: User): Promise<User>;
+	update(id: UserId, user: User): Promise<User>;
+	delete(id: UserId): Promise<void>;
 }

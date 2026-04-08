@@ -6,7 +6,7 @@ enum FinishType {
 }
 
 model Finish {
-  id            Int        @id @default(autoincrement())
+  id            String     @id @db.Uuid
   type          FinishType
   description   String
   price         Int
@@ -16,17 +16,17 @@ model Finish {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  createdBy   User @relation("CreatedBy", fields: [createdById], references: [id])
-  createdById Int
+  createdBy   User   @relation("CreatedBy", fields: [createdById], references: [id])
+  createdById String @db.Uuid
 
-  updatedBy   User @relation("UpdatedBy", fields: [updatedById], references: [id])
-  updatedById Int
+  updatedBy   User   @relation("UpdatedBy", fields: [updatedById], references: [id])
+  updatedById String @db.Uuid
 
-  deletedBy   User? @relation("DeletedBy", fields: [deletedById], references: [id])
-  deletedById Int?
+  deletedBy   User?   @relation("DeletedBy", fields: [deletedById], references: [id])
+  deletedById String? @db.Uuid
 
   building   Building @relation(fields: [buildingId], references: [id])
-  buildingId Int
+  buildingId String   @db.Uuid
 
   @@unique([type, buildingId, deletedAt])
 }

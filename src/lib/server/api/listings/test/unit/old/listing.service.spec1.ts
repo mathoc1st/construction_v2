@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi, type Mocked } from 'vitest';
-import { ListingsService } from '../../listings.service';
+import { ListingsService } from '../../../listings.service';
 import {
 	type AddListingParams,
 	type AddListingWithRelationsParams,
@@ -9,7 +9,7 @@ import {
 	type UpdateListingParams,
 	type UpdateListingWithRelationsParams
 } from '$lib/types/listings/listings.service.types';
-import { Listing } from '../../listing.domain';
+import { Listing } from '../../../listing.domain';
 import { SortDirection, type IPrismaService } from '$lib/types/prisma/prisma.service.types';
 import { type IFinishesService } from '$lib/types/finishes/finishes.service.types';
 import type { IBuildingsService } from '$lib/types/buildings/buildings.service.types';
@@ -69,7 +69,7 @@ describe('Listing Service Unit', () => {
 
 	const listingRepositoryMock: Mocked<IListingsRepository> = {
 		getListingByIdWithRelations: vi.fn(),
-		getListingById: vi.fn(),
+		getById: vi.fn(),
 		findAll: vi.fn(),
 		create: vi.fn(),
 		update: vi.fn(),
@@ -275,7 +275,7 @@ describe('Listing Service Unit', () => {
 			const params: UpdateListingWithRelationsParams = {
 				performedById: 1,
 				building: {
-					targetId: 1,
+					listingId: 1,
 					constructionType: ConstructionType.CONTAINER,
 					width: 15,
 					length: 25,
@@ -283,7 +283,7 @@ describe('Listing Service Unit', () => {
 					bedrooms: 3,
 					bathrooms: 2,
 					floors: 2,
-					veranda: true
+					hasVeranda: true
 				},
 				finishes: [
 					{
@@ -308,7 +308,7 @@ describe('Listing Service Unit', () => {
 				bedrooms: 3,
 				bathrooms: 2,
 				floors: 2,
-				veranda: true,
+				hasVeranda: true,
 				createdById: 1,
 				updatedAt: new Date(),
 				createdAt: new Date(),
@@ -352,7 +352,7 @@ describe('Listing Service Unit', () => {
 					finish
 				}
 			]);
-			listingRepositoryMock.getListingById.mockResolvedValue({
+			listingRepositoryMock.getById.mockResolvedValue({
 				id: 1,
 				listing: Listing.create({
 					title: 'Test Listing',
@@ -410,7 +410,7 @@ describe('Listing Service Unit', () => {
 				images: ['updated_image.jpg']
 			};
 
-			listingRepositoryMock.getListingById.mockResolvedValueOnce({
+			listingRepositoryMock.getById.mockResolvedValueOnce({
 				id: 1,
 				listing
 			});
@@ -424,7 +424,7 @@ describe('Listing Service Unit', () => {
 				})
 			});
 
-			const result = await listingService.updateListing(params);
+			const result = await listingService.update(params);
 
 			expect(result).toEqual({
 				id: 1,
@@ -439,11 +439,11 @@ describe('Listing Service Unit', () => {
 	describe('Delete Listing', () => {
 		it('should delete a listing successfully', async () => {
 			const params: DeleteListingParams = {
-				targetId: 1,
+				id: 1,
 				performedById: 1
 			};
 
-			listingRepositoryMock.getListingById.mockResolvedValueOnce({
+			listingRepositoryMock.getById.mockResolvedValueOnce({
 				id: 1,
 				listing: Listing.create({
 					title: 'Test Listing',
@@ -519,7 +519,7 @@ describe('Listing Service Unit', () => {
 			const newImages = ['image2.jpg', 'image3.jpg'];
 			const performedById = 1;
 
-			listingRepositoryMock.getListingById.mockResolvedValueOnce({
+			listingRepositoryMock.getById.mockResolvedValueOnce({
 				id: listingId,
 				listing: Listing.create({
 					title: 'Test Listing',
@@ -530,7 +530,7 @@ describe('Listing Service Unit', () => {
 
 			await listingService.reconcileImages(listingId, newImages, performedById);
 
-			expect(listingRepositoryMock.getListingById).toHaveBeenCalledWith(listingId);
+			expect(listingRepositoryMock.getById).toHaveBeenCalledWith(listingId);
 
 			expect(listingRepositoryMock.update).toHaveBeenCalledWith(
 				listingId,

@@ -5,9 +5,9 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { SuperValidated } from 'sveltekit-superforms/client';
 	import ImageEditor from './ImageEditor.svelte';
-	import type { ListingWithRelationsDto } from '$lib/dtos/listing.dto';
 	import { ConstructionType } from '$lib/types/buildings/building.domain.types';
 	import { FinishType } from '$lib/types/finishes/finish.domain.types';
+	import type { ImageDto, ListingDto } from '$lib/dtos/listing.dto';
 
 	const lable = tv({
 		variants: {
@@ -36,7 +36,7 @@
 
 	interface Props {
 		data: {
-			form: SuperValidated<ListingWithRelationsDto>;
+			form: SuperValidated<ListingDto>;
 		};
 	}
 
@@ -72,13 +72,11 @@
 		}
 	}
 
-	let imagesState = $state<string[]>($form.listing.images ?? []);
+	let imagesState = $state<ImageDto[]>($form.images ?? []);
 
 	$effect(() => {
-		$form.listing.images = imagesState;
+		$form.images = imagesState;
 	});
-
-	$inspect($form.finishes);
 </script>
 
 <form
@@ -93,12 +91,12 @@
 		<input
 			class={input({
 				type: 'text',
-				state: $errors.listing?.title ? 'error' : 'default'
+				state: $errors?.title ? 'error' : 'default'
 			})}
 			placeholder="Название"
 			name="listingTitle"
 			id="listingTitle"
-			bind:value={$form.listing.title}
+			bind:value={$form.title}
 			required
 			autocomplete="off"
 		/>
@@ -250,7 +248,7 @@
 					name="buildingVeranda"
 					id="buildingVeranda"
 					class={input({ type: 'checkbox' })}
-					bind:checked={$form.building.veranda}
+					bind:checked={$form.building.hasVeranda}
 					autocomplete="off"
 				/>
 			</lable>
@@ -274,10 +272,12 @@
 				{/each}
 			</select>
 
-			{#if $form.finishes.some((finish) => finish.type === selectedFinish)}
+			{#if $form.building.finishes.some((finish) => finish.type === selectedFinish)}
 				<button
 					onclick={() => {
-						$form.finishes = $form.finishes.filter((finish) => finish.type !== selectedFinish);
+						$form.building.finishes = $form.building.finishes.filter(
+							(finish) => finish.type !== selectedFinish
+						);
 					}}
 					type="button"
 					class="bg-dark-brown text-off-white hover:bg-light-brown ml-2 w-max rounded-xl px-[0.900rem] py-1 text-lg"
@@ -286,8 +286,8 @@
 			{:else}
 				<button
 					onclick={() => {
-						$form.finishes = [
-							...$form.finishes,
+						$form.building.finishes = [
+							...$form.building.finishes,
 							{ type: selectedFinish, description: '', price: 0 }
 						];
 					}}
@@ -298,7 +298,7 @@
 			{/if}
 		</div>
 
-		{#each $form.finishes as finish (finish.type)}
+		{#each $form.building.finishes as finish (finish.type)}
 			{#if finish.type === selectedFinish}
 				<Textarea
 					divClass="w-3/4 max-[450px]:w-[90%] min-h-64 *:w-full *:h-full"

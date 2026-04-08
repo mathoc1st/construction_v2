@@ -27,49 +27,40 @@ export type AggregateListing = {
 }
 
 export type ListingAvgAggregateOutputType = {
-  id: number | null
   views: number | null
-  createdById: number | null
-  updatedById: number | null
-  deletedById: number | null
 }
 
 export type ListingSumAggregateOutputType = {
-  id: number | null
   views: number | null
-  createdById: number | null
-  updatedById: number | null
-  deletedById: number | null
 }
 
 export type ListingMinAggregateOutputType = {
-  id: number | null
+  id: string | null
   title: string | null
   views: number | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
-  createdById: number | null
-  updatedById: number | null
-  deletedById: number | null
+  createdById: string | null
+  updatedById: string | null
+  deletedById: string | null
 }
 
 export type ListingMaxAggregateOutputType = {
-  id: number | null
+  id: string | null
   title: string | null
   views: number | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
-  createdById: number | null
-  updatedById: number | null
-  deletedById: number | null
+  createdById: string | null
+  updatedById: string | null
+  deletedById: string | null
 }
 
 export type ListingCountAggregateOutputType = {
   id: number
   title: number
-  images: number
   views: number
   createdAt: number
   updatedAt: number
@@ -82,19 +73,11 @@ export type ListingCountAggregateOutputType = {
 
 
 export type ListingAvgAggregateInputType = {
-  id?: true
   views?: true
-  createdById?: true
-  updatedById?: true
-  deletedById?: true
 }
 
 export type ListingSumAggregateInputType = {
-  id?: true
   views?: true
-  createdById?: true
-  updatedById?: true
-  deletedById?: true
 }
 
 export type ListingMinAggregateInputType = {
@@ -124,7 +107,6 @@ export type ListingMaxAggregateInputType = {
 export type ListingCountAggregateInputType = {
   id?: true
   title?: true
-  images?: true
   views?: true
   createdAt?: true
   updatedAt?: true
@@ -222,16 +204,15 @@ export type ListingGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 export type ListingGroupByOutputType = {
-  id: number
+  id: string
   title: string
-  images: string[]
   views: number
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
-  createdById: number
-  updatedById: number
-  deletedById: number | null
+  createdById: string
+  updatedById: string
+  deletedById: string | null
   _count: ListingCountAggregateOutputType | null
   _avg: ListingAvgAggregateOutputType | null
   _sum: ListingSumAggregateOutputType | null
@@ -258,26 +239,25 @@ export type ListingWhereInput = {
   AND?: Prisma.ListingWhereInput | Prisma.ListingWhereInput[]
   OR?: Prisma.ListingWhereInput[]
   NOT?: Prisma.ListingWhereInput | Prisma.ListingWhereInput[]
-  id?: Prisma.IntFilter<"Listing"> | number
+  id?: Prisma.UuidFilter<"Listing"> | string
   title?: Prisma.StringFilter<"Listing"> | string
-  images?: Prisma.StringNullableListFilter<"Listing">
   views?: Prisma.IntFilter<"Listing"> | number
   createdAt?: Prisma.DateTimeFilter<"Listing"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Listing"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Listing"> | Date | string | null
-  createdById?: Prisma.IntFilter<"Listing"> | number
-  updatedById?: Prisma.IntFilter<"Listing"> | number
-  deletedById?: Prisma.IntNullableFilter<"Listing"> | number | null
+  createdById?: Prisma.UuidFilter<"Listing"> | string
+  updatedById?: Prisma.UuidFilter<"Listing"> | string
+  deletedById?: Prisma.UuidNullableFilter<"Listing"> | string | null
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   updatedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   deletedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   building?: Prisma.XOR<Prisma.BuildingNullableScalarRelationFilter, Prisma.BuildingWhereInput> | null
+  images?: Prisma.ImageListRelationFilter
 }
 
 export type ListingOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  images?: Prisma.SortOrder
   views?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -289,32 +269,32 @@ export type ListingOrderByWithRelationInput = {
   updatedBy?: Prisma.UserOrderByWithRelationInput
   deletedBy?: Prisma.UserOrderByWithRelationInput
   building?: Prisma.BuildingOrderByWithRelationInput
+  images?: Prisma.ImageOrderByRelationAggregateInput
 }
 
 export type ListingWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
+  id?: string
   AND?: Prisma.ListingWhereInput | Prisma.ListingWhereInput[]
   OR?: Prisma.ListingWhereInput[]
   NOT?: Prisma.ListingWhereInput | Prisma.ListingWhereInput[]
   title?: Prisma.StringFilter<"Listing"> | string
-  images?: Prisma.StringNullableListFilter<"Listing">
   views?: Prisma.IntFilter<"Listing"> | number
   createdAt?: Prisma.DateTimeFilter<"Listing"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Listing"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Listing"> | Date | string | null
-  createdById?: Prisma.IntFilter<"Listing"> | number
-  updatedById?: Prisma.IntFilter<"Listing"> | number
-  deletedById?: Prisma.IntNullableFilter<"Listing"> | number | null
+  createdById?: Prisma.UuidFilter<"Listing"> | string
+  updatedById?: Prisma.UuidFilter<"Listing"> | string
+  deletedById?: Prisma.UuidNullableFilter<"Listing"> | string | null
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   updatedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   deletedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   building?: Prisma.XOR<Prisma.BuildingNullableScalarRelationFilter, Prisma.BuildingWhereInput> | null
+  images?: Prisma.ImageListRelationFilter
 }, "id">
 
 export type ListingOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  images?: Prisma.SortOrder
   views?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -333,21 +313,20 @@ export type ListingScalarWhereWithAggregatesInput = {
   AND?: Prisma.ListingScalarWhereWithAggregatesInput | Prisma.ListingScalarWhereWithAggregatesInput[]
   OR?: Prisma.ListingScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ListingScalarWhereWithAggregatesInput | Prisma.ListingScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"Listing"> | number
+  id?: Prisma.UuidWithAggregatesFilter<"Listing"> | string
   title?: Prisma.StringWithAggregatesFilter<"Listing"> | string
-  images?: Prisma.StringNullableListFilter<"Listing">
   views?: Prisma.IntWithAggregatesFilter<"Listing"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Listing"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Listing"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Listing"> | Date | string | null
-  createdById?: Prisma.IntWithAggregatesFilter<"Listing"> | number
-  updatedById?: Prisma.IntWithAggregatesFilter<"Listing"> | number
-  deletedById?: Prisma.IntNullableWithAggregatesFilter<"Listing"> | number | null
+  createdById?: Prisma.UuidWithAggregatesFilter<"Listing"> | string
+  updatedById?: Prisma.UuidWithAggregatesFilter<"Listing"> | string
+  deletedById?: Prisma.UuidNullableWithAggregatesFilter<"Listing"> | string | null
 }
 
 export type ListingCreateInput = {
+  id: string
   title: string
-  images?: Prisma.ListingCreateimagesInput | string[]
   views: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -356,25 +335,26 @@ export type ListingCreateInput = {
   updatedBy: Prisma.UserCreateNestedOneWithoutUpdatedListingsInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedListingsInput
   building?: Prisma.BuildingCreateNestedOneWithoutListingInput
+  images?: Prisma.ImageCreateNestedManyWithoutListingInput
 }
 
 export type ListingUncheckedCreateInput = {
-  id?: number
+  id: string
   title: string
-  images?: Prisma.ListingCreateimagesInput | string[]
   views: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  createdById: number
-  updatedById: number
-  deletedById?: number | null
+  createdById: string
+  updatedById: string
+  deletedById?: string | null
   building?: Prisma.BuildingUncheckedCreateNestedOneWithoutListingInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutListingInput
 }
 
 export type ListingUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  images?: Prisma.ListingUpdateimagesInput | string[]
   views?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -383,38 +363,38 @@ export type ListingUpdateInput = {
   updatedBy?: Prisma.UserUpdateOneRequiredWithoutUpdatedListingsNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedListingsNestedInput
   building?: Prisma.BuildingUpdateOneWithoutListingNestedInput
+  images?: Prisma.ImageUpdateManyWithoutListingNestedInput
 }
 
 export type ListingUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  images?: Prisma.ListingUpdateimagesInput | string[]
   views?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.IntFieldUpdateOperationsInput | number
-  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
-  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   building?: Prisma.BuildingUncheckedUpdateOneWithoutListingNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutListingNestedInput
 }
 
 export type ListingCreateManyInput = {
-  id?: number
+  id: string
   title: string
-  images?: Prisma.ListingCreateimagesInput | string[]
   views: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  createdById: number
-  updatedById: number
-  deletedById?: number | null
+  createdById: string
+  updatedById: string
+  deletedById?: string | null
 }
 
 export type ListingUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  images?: Prisma.ListingUpdateimagesInput | string[]
   views?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -422,16 +402,15 @@ export type ListingUpdateManyMutationInput = {
 }
 
 export type ListingUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  images?: Prisma.ListingUpdateimagesInput | string[]
   views?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.IntFieldUpdateOperationsInput | number
-  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
-  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ListingScalarRelationFilter = {
@@ -439,18 +418,14 @@ export type ListingScalarRelationFilter = {
   isNot?: Prisma.ListingWhereInput
 }
 
-export type StringNullableListFilter<$PrismaModel = never> = {
-  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
-  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
-  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  isEmpty?: boolean
+export type ListingNullableScalarRelationFilter = {
+  is?: Prisma.ListingWhereInput | null
+  isNot?: Prisma.ListingWhereInput | null
 }
 
 export type ListingCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  images?: Prisma.SortOrder
   views?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -461,11 +436,7 @@ export type ListingCountOrderByAggregateInput = {
 }
 
 export type ListingAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   views?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
-  updatedById?: Prisma.SortOrder
-  deletedById?: Prisma.SortOrder
 }
 
 export type ListingMaxOrderByAggregateInput = {
@@ -493,11 +464,7 @@ export type ListingMinOrderByAggregateInput = {
 }
 
 export type ListingSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   views?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
-  updatedById?: Prisma.SortOrder
-  deletedById?: Prisma.SortOrder
 }
 
 export type ListingListRelationFilter = {
@@ -524,13 +491,20 @@ export type ListingUpdateOneRequiredWithoutBuildingNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ListingUpdateToOneWithWhereWithoutBuildingInput, Prisma.ListingUpdateWithoutBuildingInput>, Prisma.ListingUncheckedUpdateWithoutBuildingInput>
 }
 
-export type ListingCreateimagesInput = {
-  set: string[]
+export type ListingCreateNestedOneWithoutImagesInput = {
+  create?: Prisma.XOR<Prisma.ListingCreateWithoutImagesInput, Prisma.ListingUncheckedCreateWithoutImagesInput>
+  connectOrCreate?: Prisma.ListingCreateOrConnectWithoutImagesInput
+  connect?: Prisma.ListingWhereUniqueInput
 }
 
-export type ListingUpdateimagesInput = {
-  set?: string[]
-  push?: string | string[]
+export type ListingUpdateOneWithoutImagesNestedInput = {
+  create?: Prisma.XOR<Prisma.ListingCreateWithoutImagesInput, Prisma.ListingUncheckedCreateWithoutImagesInput>
+  connectOrCreate?: Prisma.ListingCreateOrConnectWithoutImagesInput
+  upsert?: Prisma.ListingUpsertWithoutImagesInput
+  disconnect?: Prisma.ListingWhereInput | boolean
+  delete?: Prisma.ListingWhereInput | boolean
+  connect?: Prisma.ListingWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ListingUpdateToOneWithWhereWithoutImagesInput, Prisma.ListingUpdateWithoutImagesInput>, Prisma.ListingUncheckedUpdateWithoutImagesInput>
 }
 
 export type ListingCreateNestedManyWithoutCreatedByInput = {
@@ -660,8 +634,8 @@ export type ListingUncheckedUpdateManyWithoutDeletedByNestedInput = {
 }
 
 export type ListingCreateWithoutBuildingInput = {
+  id: string
   title: string
-  images?: Prisma.ListingCreateimagesInput | string[]
   views: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -669,19 +643,20 @@ export type ListingCreateWithoutBuildingInput = {
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedListingsInput
   updatedBy: Prisma.UserCreateNestedOneWithoutUpdatedListingsInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedListingsInput
+  images?: Prisma.ImageCreateNestedManyWithoutListingInput
 }
 
 export type ListingUncheckedCreateWithoutBuildingInput = {
-  id?: number
+  id: string
   title: string
-  images?: Prisma.ListingCreateimagesInput | string[]
   views: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  createdById: number
-  updatedById: number
-  deletedById?: number | null
+  createdById: string
+  updatedById: string
+  deletedById?: string | null
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutListingInput
 }
 
 export type ListingCreateOrConnectWithoutBuildingInput = {
@@ -701,8 +676,8 @@ export type ListingUpdateToOneWithWhereWithoutBuildingInput = {
 }
 
 export type ListingUpdateWithoutBuildingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  images?: Prisma.ListingUpdateimagesInput | string[]
   views?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -710,24 +685,93 @@ export type ListingUpdateWithoutBuildingInput = {
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedListingsNestedInput
   updatedBy?: Prisma.UserUpdateOneRequiredWithoutUpdatedListingsNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedListingsNestedInput
+  images?: Prisma.ImageUpdateManyWithoutListingNestedInput
 }
 
 export type ListingUncheckedUpdateWithoutBuildingInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  images?: Prisma.ListingUpdateimagesInput | string[]
   views?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.IntFieldUpdateOperationsInput | number
-  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
-  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  images?: Prisma.ImageUncheckedUpdateManyWithoutListingNestedInput
+}
+
+export type ListingCreateWithoutImagesInput = {
+  id: string
+  title: string
+  views: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  createdBy: Prisma.UserCreateNestedOneWithoutCreatedListingsInput
+  updatedBy: Prisma.UserCreateNestedOneWithoutUpdatedListingsInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedListingsInput
+  building?: Prisma.BuildingCreateNestedOneWithoutListingInput
+}
+
+export type ListingUncheckedCreateWithoutImagesInput = {
+  id: string
+  title: string
+  views: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  createdById: string
+  updatedById: string
+  deletedById?: string | null
+  building?: Prisma.BuildingUncheckedCreateNestedOneWithoutListingInput
+}
+
+export type ListingCreateOrConnectWithoutImagesInput = {
+  where: Prisma.ListingWhereUniqueInput
+  create: Prisma.XOR<Prisma.ListingCreateWithoutImagesInput, Prisma.ListingUncheckedCreateWithoutImagesInput>
+}
+
+export type ListingUpsertWithoutImagesInput = {
+  update: Prisma.XOR<Prisma.ListingUpdateWithoutImagesInput, Prisma.ListingUncheckedUpdateWithoutImagesInput>
+  create: Prisma.XOR<Prisma.ListingCreateWithoutImagesInput, Prisma.ListingUncheckedCreateWithoutImagesInput>
+  where?: Prisma.ListingWhereInput
+}
+
+export type ListingUpdateToOneWithWhereWithoutImagesInput = {
+  where?: Prisma.ListingWhereInput
+  data: Prisma.XOR<Prisma.ListingUpdateWithoutImagesInput, Prisma.ListingUncheckedUpdateWithoutImagesInput>
+}
+
+export type ListingUpdateWithoutImagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  views?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedListingsNestedInput
+  updatedBy?: Prisma.UserUpdateOneRequiredWithoutUpdatedListingsNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedListingsNestedInput
+  building?: Prisma.BuildingUpdateOneWithoutListingNestedInput
+}
+
+export type ListingUncheckedUpdateWithoutImagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  views?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  building?: Prisma.BuildingUncheckedUpdateOneWithoutListingNestedInput
 }
 
 export type ListingCreateWithoutCreatedByInput = {
+  id: string
   title: string
-  images?: Prisma.ListingCreateimagesInput | string[]
   views: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -735,19 +779,20 @@ export type ListingCreateWithoutCreatedByInput = {
   updatedBy: Prisma.UserCreateNestedOneWithoutUpdatedListingsInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedListingsInput
   building?: Prisma.BuildingCreateNestedOneWithoutListingInput
+  images?: Prisma.ImageCreateNestedManyWithoutListingInput
 }
 
 export type ListingUncheckedCreateWithoutCreatedByInput = {
-  id?: number
+  id: string
   title: string
-  images?: Prisma.ListingCreateimagesInput | string[]
   views: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  updatedById: number
-  deletedById?: number | null
+  updatedById: string
+  deletedById?: string | null
   building?: Prisma.BuildingUncheckedCreateNestedOneWithoutListingInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutListingInput
 }
 
 export type ListingCreateOrConnectWithoutCreatedByInput = {
@@ -761,8 +806,8 @@ export type ListingCreateManyCreatedByInputEnvelope = {
 }
 
 export type ListingCreateWithoutUpdatedByInput = {
+  id: string
   title: string
-  images?: Prisma.ListingCreateimagesInput | string[]
   views: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -770,19 +815,20 @@ export type ListingCreateWithoutUpdatedByInput = {
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedListingsInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedListingsInput
   building?: Prisma.BuildingCreateNestedOneWithoutListingInput
+  images?: Prisma.ImageCreateNestedManyWithoutListingInput
 }
 
 export type ListingUncheckedCreateWithoutUpdatedByInput = {
-  id?: number
+  id: string
   title: string
-  images?: Prisma.ListingCreateimagesInput | string[]
   views: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  createdById: number
-  deletedById?: number | null
+  createdById: string
+  deletedById?: string | null
   building?: Prisma.BuildingUncheckedCreateNestedOneWithoutListingInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutListingInput
 }
 
 export type ListingCreateOrConnectWithoutUpdatedByInput = {
@@ -796,8 +842,8 @@ export type ListingCreateManyUpdatedByInputEnvelope = {
 }
 
 export type ListingCreateWithoutDeletedByInput = {
+  id: string
   title: string
-  images?: Prisma.ListingCreateimagesInput | string[]
   views: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -805,19 +851,20 @@ export type ListingCreateWithoutDeletedByInput = {
   createdBy: Prisma.UserCreateNestedOneWithoutCreatedListingsInput
   updatedBy: Prisma.UserCreateNestedOneWithoutUpdatedListingsInput
   building?: Prisma.BuildingCreateNestedOneWithoutListingInput
+  images?: Prisma.ImageCreateNestedManyWithoutListingInput
 }
 
 export type ListingUncheckedCreateWithoutDeletedByInput = {
-  id?: number
+  id: string
   title: string
-  images?: Prisma.ListingCreateimagesInput | string[]
   views: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  createdById: number
-  updatedById: number
+  createdById: string
+  updatedById: string
   building?: Prisma.BuildingUncheckedCreateNestedOneWithoutListingInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutListingInput
 }
 
 export type ListingCreateOrConnectWithoutDeletedByInput = {
@@ -850,16 +897,15 @@ export type ListingScalarWhereInput = {
   AND?: Prisma.ListingScalarWhereInput | Prisma.ListingScalarWhereInput[]
   OR?: Prisma.ListingScalarWhereInput[]
   NOT?: Prisma.ListingScalarWhereInput | Prisma.ListingScalarWhereInput[]
-  id?: Prisma.IntFilter<"Listing"> | number
+  id?: Prisma.UuidFilter<"Listing"> | string
   title?: Prisma.StringFilter<"Listing"> | string
-  images?: Prisma.StringNullableListFilter<"Listing">
   views?: Prisma.IntFilter<"Listing"> | number
   createdAt?: Prisma.DateTimeFilter<"Listing"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Listing"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Listing"> | Date | string | null
-  createdById?: Prisma.IntFilter<"Listing"> | number
-  updatedById?: Prisma.IntFilter<"Listing"> | number
-  deletedById?: Prisma.IntNullableFilter<"Listing"> | number | null
+  createdById?: Prisma.UuidFilter<"Listing"> | string
+  updatedById?: Prisma.UuidFilter<"Listing"> | string
+  deletedById?: Prisma.UuidNullableFilter<"Listing"> | string | null
 }
 
 export type ListingUpsertWithWhereUniqueWithoutUpdatedByInput = {
@@ -895,44 +941,41 @@ export type ListingUpdateManyWithWhereWithoutDeletedByInput = {
 }
 
 export type ListingCreateManyCreatedByInput = {
-  id?: number
+  id: string
   title: string
-  images?: Prisma.ListingCreateimagesInput | string[]
   views: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  updatedById: number
-  deletedById?: number | null
+  updatedById: string
+  deletedById?: string | null
 }
 
 export type ListingCreateManyUpdatedByInput = {
-  id?: number
+  id: string
   title: string
-  images?: Prisma.ListingCreateimagesInput | string[]
   views: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  createdById: number
-  deletedById?: number | null
+  createdById: string
+  deletedById?: string | null
 }
 
 export type ListingCreateManyDeletedByInput = {
-  id?: number
+  id: string
   title: string
-  images?: Prisma.ListingCreateimagesInput | string[]
   views: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
-  createdById: number
-  updatedById: number
+  createdById: string
+  updatedById: string
 }
 
 export type ListingUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  images?: Prisma.ListingUpdateimagesInput | string[]
   views?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -940,36 +983,36 @@ export type ListingUpdateWithoutCreatedByInput = {
   updatedBy?: Prisma.UserUpdateOneRequiredWithoutUpdatedListingsNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedListingsNestedInput
   building?: Prisma.BuildingUpdateOneWithoutListingNestedInput
+  images?: Prisma.ImageUpdateManyWithoutListingNestedInput
 }
 
 export type ListingUncheckedUpdateWithoutCreatedByInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  images?: Prisma.ListingUpdateimagesInput | string[]
   views?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
-  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  updatedById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   building?: Prisma.BuildingUncheckedUpdateOneWithoutListingNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutListingNestedInput
 }
 
 export type ListingUncheckedUpdateManyWithoutCreatedByInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  images?: Prisma.ListingUpdateimagesInput | string[]
   views?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
-  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  updatedById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ListingUpdateWithoutUpdatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  images?: Prisma.ListingUpdateimagesInput | string[]
   views?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -977,36 +1020,36 @@ export type ListingUpdateWithoutUpdatedByInput = {
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedListingsNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedListingsNestedInput
   building?: Prisma.BuildingUpdateOneWithoutListingNestedInput
+  images?: Prisma.ImageUpdateManyWithoutListingNestedInput
 }
 
 export type ListingUncheckedUpdateWithoutUpdatedByInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  images?: Prisma.ListingUpdateimagesInput | string[]
   views?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.IntFieldUpdateOperationsInput | number
-  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   building?: Prisma.BuildingUncheckedUpdateOneWithoutListingNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutListingNestedInput
 }
 
 export type ListingUncheckedUpdateManyWithoutUpdatedByInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  images?: Prisma.ListingUpdateimagesInput | string[]
   views?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.IntFieldUpdateOperationsInput | number
-  deletedById?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ListingUpdateWithoutDeletedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  images?: Prisma.ListingUpdateimagesInput | string[]
   views?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1014,39 +1057,67 @@ export type ListingUpdateWithoutDeletedByInput = {
   createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedListingsNestedInput
   updatedBy?: Prisma.UserUpdateOneRequiredWithoutUpdatedListingsNestedInput
   building?: Prisma.BuildingUpdateOneWithoutListingNestedInput
+  images?: Prisma.ImageUpdateManyWithoutListingNestedInput
 }
 
 export type ListingUncheckedUpdateWithoutDeletedByInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  images?: Prisma.ListingUpdateimagesInput | string[]
   views?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.IntFieldUpdateOperationsInput | number
-  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedById?: Prisma.StringFieldUpdateOperationsInput | string
   building?: Prisma.BuildingUncheckedUpdateOneWithoutListingNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutListingNestedInput
 }
 
 export type ListingUncheckedUpdateManyWithoutDeletedByInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  images?: Prisma.ListingUpdateimagesInput | string[]
   views?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.IntFieldUpdateOperationsInput | number
-  updatedById?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedById?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
+
+/**
+ * Count Type ListingCountOutputType
+ */
+
+export type ListingCountOutputType = {
+  images: number
+}
+
+export type ListingCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  images?: boolean | ListingCountOutputTypeCountImagesArgs
+}
+
+/**
+ * ListingCountOutputType without action
+ */
+export type ListingCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ListingCountOutputType
+   */
+  select?: Prisma.ListingCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ListingCountOutputType without action
+ */
+export type ListingCountOutputTypeCountImagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ImageWhereInput
+}
 
 
 export type ListingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
-  images?: boolean
   views?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1058,12 +1129,13 @@ export type ListingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   updatedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   deletedBy?: boolean | Prisma.Listing$deletedByArgs<ExtArgs>
   building?: boolean | Prisma.Listing$buildingArgs<ExtArgs>
+  images?: boolean | Prisma.Listing$imagesArgs<ExtArgs>
+  _count?: boolean | Prisma.ListingCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["listing"]>
 
 export type ListingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
-  images?: boolean
   views?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1079,7 +1151,6 @@ export type ListingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type ListingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
-  images?: boolean
   views?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1095,7 +1166,6 @@ export type ListingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type ListingSelectScalar = {
   id?: boolean
   title?: boolean
-  images?: boolean
   views?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1105,12 +1175,14 @@ export type ListingSelectScalar = {
   deletedById?: boolean
 }
 
-export type ListingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "images" | "views" | "createdAt" | "updatedAt" | "deletedAt" | "createdById" | "updatedById" | "deletedById", ExtArgs["result"]["listing"]>
+export type ListingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "views" | "createdAt" | "updatedAt" | "deletedAt" | "createdById" | "updatedById" | "deletedById", ExtArgs["result"]["listing"]>
 export type ListingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   updatedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   deletedBy?: boolean | Prisma.Listing$deletedByArgs<ExtArgs>
   building?: boolean | Prisma.Listing$buildingArgs<ExtArgs>
+  images?: boolean | Prisma.Listing$imagesArgs<ExtArgs>
+  _count?: boolean | Prisma.ListingCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ListingIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1130,18 +1202,18 @@ export type $ListingPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     updatedBy: Prisma.$UserPayload<ExtArgs>
     deletedBy: Prisma.$UserPayload<ExtArgs> | null
     building: Prisma.$BuildingPayload<ExtArgs> | null
+    images: Prisma.$ImagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
+    id: string
     title: string
-    images: string[]
     views: number
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
-    createdById: number
-    updatedById: number
-    deletedById: number | null
+    createdById: string
+    updatedById: string
+    deletedById: string | null
   }, ExtArgs["result"]["listing"]>
   composites: {}
 }
@@ -1540,6 +1612,7 @@ export interface Prisma__ListingClient<T, Null = never, ExtArgs extends runtime.
   updatedBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   deletedBy<T extends Prisma.Listing$deletedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Listing$deletedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   building<T extends Prisma.Listing$buildingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Listing$buildingArgs<ExtArgs>>): Prisma.Prisma__BuildingClient<runtime.Types.Result.GetResult<Prisma.$BuildingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  images<T extends Prisma.Listing$imagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Listing$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1569,16 +1642,15 @@ export interface Prisma__ListingClient<T, Null = never, ExtArgs extends runtime.
  * Fields of the Listing model
  */
 export interface ListingFieldRefs {
-  readonly id: Prisma.FieldRef<"Listing", 'Int'>
+  readonly id: Prisma.FieldRef<"Listing", 'String'>
   readonly title: Prisma.FieldRef<"Listing", 'String'>
-  readonly images: Prisma.FieldRef<"Listing", 'String[]'>
   readonly views: Prisma.FieldRef<"Listing", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Listing", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Listing", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"Listing", 'DateTime'>
-  readonly createdById: Prisma.FieldRef<"Listing", 'Int'>
-  readonly updatedById: Prisma.FieldRef<"Listing", 'Int'>
-  readonly deletedById: Prisma.FieldRef<"Listing", 'Int'>
+  readonly createdById: Prisma.FieldRef<"Listing", 'String'>
+  readonly updatedById: Prisma.FieldRef<"Listing", 'String'>
+  readonly deletedById: Prisma.FieldRef<"Listing", 'String'>
 }
     
 
@@ -2015,6 +2087,30 @@ export type Listing$buildingArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   include?: Prisma.BuildingInclude<ExtArgs> | null
   where?: Prisma.BuildingWhereInput
+}
+
+/**
+ * Listing.images
+ */
+export type Listing$imagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Image
+   */
+  select?: Prisma.ImageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Image
+   */
+  omit?: Prisma.ImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ImageInclude<ExtArgs> | null
+  where?: Prisma.ImageWhereInput
+  orderBy?: Prisma.ImageOrderByWithRelationInput | Prisma.ImageOrderByWithRelationInput[]
+  cursor?: Prisma.ImageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ImageScalarFieldEnum | Prisma.ImageScalarFieldEnum[]
 }
 
 /**

@@ -5,7 +5,7 @@ enum ConstructionType {
 }
 
 model Building {
-  id               Int              @id @default(autoincrement())
+  id               String           @id @db.Uuid
   constructionType ConstructionType
   width            Int
   length           Int
@@ -13,23 +13,23 @@ model Building {
   bedrooms         Int
   bathrooms        Int
   floors           Int
-  veranda          Boolean
+  hasVeranda       Boolean
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
   listing   Listing @relation(fields: [listingId], references: [id])
-  listingId Int     @unique
+  listingId String  @unique @db.Uuid
 
   finishes Finish[]
 
-  createdBy   User @relation("CreatedBy", fields: [createdById], references: [id])
-  createdById Int
+  createdBy   User   @relation("CreatedBy", fields: [createdById], references: [id])
+  createdById String @db.Uuid
 
-  updatedBy   User @relation("UpdatedBy", fields: [updatedById], references: [id])
-  updatedById Int
+  updatedBy   User   @relation("UpdatedBy", fields: [updatedById], references: [id])
+  updatedById String @db.Uuid
 
-  deletedBy   User? @relation("DeletedBy", fields: [deletedById], references: [id])
-  deletedById Int?
+  deletedBy   User?   @relation("DeletedBy", fields: [deletedById], references: [id])
+  deletedById String? @db.Uuid
 }
