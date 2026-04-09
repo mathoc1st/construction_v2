@@ -2,6 +2,7 @@
 	import Icon from '@iconify/svelte';
 	import { tv } from 'tailwind-variants';
 	import { Drawer } from 'flowbite-svelte';
+	import { resolve } from '$app/paths';
 
 	let { isAdmin }: { isAdmin: boolean } = $props();
 
@@ -23,29 +24,31 @@
 
 <header class="bg-dark-olive relative top-0 h-16 w-screen">
 	<div
-		class="mx-auto flex h-full max-w-[1440px] justify-around overflow-hidden px-5 max-[1200px]:justify-between"
+		class="mx-auto flex h-full max-w-360 justify-around overflow-hidden px-5 max-[1200px]:justify-between"
 	>
-		<a href="/" class="flex h-full items-center gap-2">
+		<a href={resolve('/')} class="flex h-full items-center gap-2">
 			<img src="/images/logo.jpg" alt="" class="w-14" />
 			<span class="text-off-white text-lg font-semibold">СК РУС ДОМ</span>
 		</a>
 		<nav class="h-full max-[1200px]:hidden">
 			<ul class="flex h-full items-center gap-[clamp(0rem,1vw,2rem)]">
 				<li class={navLi()}>
-					<a href="/" class={navLink()}>Главная</a>
+					<a href={resolve('/')} class={navLink()}>Главная</a>
 				</li>
 				<li class={navLi()}>
-					<a href="/catalog" class={navLink()}>Каталог</a>
+					<a href={resolve('/catalog')} class={navLink()}>Каталог</a>
 				</li>
 				<!-- <li class={navLi()}>
 					<a href="/works" class={navLink()}>Наши работы</a>
 				</li> -->
 
 				<li class={navLi()}>
-					<a href="/#contacts" class={navLink()}>Контакты</a>
+					<a href={resolve('/#contacts')} class={navLink()}>Контакты</a>
 				</li>
 				{#if isAdmin}<li class={navLi()}>
-						<a href="/admin/modify/new" class={navLink()} data-sveltekit-reload>Добавить</a>
+						<a href={resolve('/admin/add/listing')} class={navLink()} data-sveltekit-reload
+							>Добавить</a
+						>
 					</li>
 				{/if}
 			</ul>
@@ -81,17 +84,21 @@
 	<nav class="h-full">
 		<ul class="flex h-full flex-col items-center gap-6">
 			<li class={navLi({ device: 'mobile' })}>
-				<a href="/" class={navLink()} onclick={() => (isDrawerOpen = false)}>Главная</a>
+				<a href={resolve('/')} class={navLink()} onclick={() => (isDrawerOpen = false)}>Главная</a>
 			</li>
 			<li class={navLi({ device: 'mobile' })}>
-				<a href="/catalog" class={navLink()} onclick={() => (isDrawerOpen = false)}>Каталог</a>
+				<a href={resolve('/catalog')} class={navLink()} onclick={() => (isDrawerOpen = false)}
+					>Каталог</a
+				>
 			</li>
 			<li class={navLi({ device: 'mobile' })}>
-				<a href="/#contacts" class={navLink()} onclick={() => (isDrawerOpen = false)}>Контакты</a>
+				<a href={resolve('/#contacts')} class={navLink()} onclick={() => (isDrawerOpen = false)}
+					>Контакты</a
+				>
 			</li>
 			{#if isAdmin}<li class={navLi({ device: 'mobile' })}>
 					<a
-						href="/admin/add/listing"
+						href={resolve('/admin/add/listing')}
 						data-sveltekit-reload
 						class={navLink()}
 						onclick={() => (isDrawerOpen = false)}>Добавить</a

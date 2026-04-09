@@ -9,4 +9,6 @@ export const finishSchema = z.object({
 	originalPrice: z.number().positive().nullish()
 });
 
+export type FinishDto = z.infer<typeof finishSchema>;
+
 export const addFinishSchema = finishSchema.omit({ id: true });

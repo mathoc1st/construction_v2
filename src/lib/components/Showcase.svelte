@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ListingWithRelationsDto } from '$lib/dtos/listing.dto';
+	import type { ListingDto } from '$lib/dtos/listing.dto';
 	import { ConstructionType } from '$lib/types/buildings/building.domain.types';
 	import BuildingCard from './ui/BuildingCard.svelte';
 
@@ -8,9 +8,9 @@
 		popularBarn,
 		popularContainer
 	}: {
-		popularFrame: ListingWithRelationsDto[];
-		popularBarn: ListingWithRelationsDto[];
-		popularContainer: ListingWithRelationsDto[];
+		popularFrame: ListingDto[];
+		popularBarn: ListingDto[];
+		popularContainer: ListingDto[];
 	} = $props();
 
 	let selectedType: ConstructionType = $state(ConstructionType.FRAME);
@@ -62,18 +62,18 @@
 	</ul>
 	<div class="mt-12 flex flex-wrap justify-center gap-4">
 		{#if selectedType === ConstructionType.FRAME}
-			{#each popularFrame as record (record.listing.id)}
-				<BuildingCard data={record} />
+			{#each popularFrame as record (record.id)}
+				<BuildingCard listing={record} />
 			{/each}
 		{/if}
 		{#if selectedType === ConstructionType.BARN}
-			{#each popularBarn as record (record.listing.id)}
-				<BuildingCard data={record} />
+			{#each popularBarn as record (record.id)}
+				<BuildingCard listing={record} />
 			{/each}
 		{/if}
 		{#if selectedType === ConstructionType.CONTAINER}
-			{#each popularContainer as record (record.listing.id)}
-				<BuildingCard data={record} />
+			{#each popularContainer as record (record.id)}
+				<BuildingCard listing={record} />
 			{/each}
 		{/if}
 	</div>

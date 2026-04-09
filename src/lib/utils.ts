@@ -1,7 +1,6 @@
 import type z from 'zod';
-import type { ConstructionType } from './server/api/buildings/building.types';
-import type { FinishType } from './server/api/finishes/finish.types';
-import type { ServiceError } from './server/api/common/errors/errors.service';
+import { ConstructionType } from './types/buildings/building.domain.types';
+import { FinishType } from './types/finishes/finish.domain.types';
 
 export class ServiceException extends Error {
 	status: number;
@@ -21,41 +20,26 @@ export function createEnumRecord<T extends string, V>(values: T[], defaultValue:
 	return Object.fromEntries(values.map((v) => [v, defaultValue])) as Record<T, V>;
 }
 
-export function toServiceError(err: unknown): ServiceError {
-	// If it is already a ServiceException → pass it through
-	if (err instanceof ServiceException) {
-		return { status: err.status, message: err.message };
-	}
-
-	// If it's a normal Error
-	if (err instanceof Error) {
-		return { status: 500, message: err.message };
-	}
-
-	// Something unknown (string thrown, object thrown, etc.)
-	return { status: 500, message: String(err) };
-}
-
 export function getBuildingTypeName(type: ConstructionType): string {
 	switch (type) {
-		case 'FRAME':
+		case ConstructionType.FRAME:
 			return 'Каркасные дома';
-		case 'BARN':
+		case ConstructionType.BARN:
 			return 'Барнхаусы';
-		case 'CONTAINER':
+		case ConstructionType.CONTAINER:
 			return 'Бытовки';
 	}
 }
 
 export function getFinishTypeName(type: FinishType): string {
 	switch (type) {
-		case 'COLD':
+		case FinishType.COLD:
 			return 'Холодный контур';
-		case 'WARM_100':
+		case FinishType.WARM_100:
 			return 'Теплый контур 100мм';
-		case 'WARM_150':
+		case FinishType.WARM_150:
 			return 'Теплый контур 150мм';
-		case 'WARM_200':
+		case FinishType.WARM_200:
 			return 'Теплый контур 200мм';
 	}
 }
@@ -74,15 +58,15 @@ export const prettyPrice = new Intl.NumberFormat('ru-RU', {
 	currency: 'rub'
 });
 
-export function getTabIcon(type: FinishType) {
+export function getTabIcon(type: FinishType): string {
 	switch (type) {
-		case 'COLD':
+		case FinishType.COLD:
 			return 'fa-solid:thermometer-empty';
-		case 'WARM_100':
+		case FinishType.WARM_100:
 			return 'fa-solid:thermometer-quarter';
-		case 'WARM_150':
+		case FinishType.WARM_150:
 			return 'fa-solid:thermometer-three-quarters';
-		case 'WARM_200':
+		case FinishType.WARM_200:
 			return 'fa-solid:thermometer-full';
 	}
 }

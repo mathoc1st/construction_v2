@@ -32,7 +32,8 @@ export const POST = async ({ request, locals }) => {
 		id: img.id.value,
 		folder: img.folder,
 		bucket: img.bucket,
-		key: img.key
+		key: img.key,
+		createdAt: img.createdAt
 	}));
 
 	return new Response(JSON.stringify(imageDtos));

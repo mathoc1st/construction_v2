@@ -1,4 +1,5 @@
 import type {
+	AllBuildingDetails,
 	BuildingFilterOptions,
 	BuildingSortableFields,
 	FinishFilterOptions,
@@ -190,7 +191,7 @@ export class ListingsRepository implements IListingsRepository {
 		);
 	}
 
-	async find(options?: ListingQueryOptions) {
+	async find(options?: ListingQueryOptions): Promise<DomainListing[]> {
 		const orderBy =
 			options?.sort?.type === 'listing'
 				? this.buildListingOrderBy(options.sort.sort)
@@ -205,10 +206,12 @@ export class ListingsRepository implements IListingsRepository {
 				where: {
 					...this.buildListingWhere(options?.filters?.listing),
 					building: {
-						...this.buildBuildingWhere,
-						finishes: {
-							...this.buildFinishWhere
-						}
+						...this.buildBuildingWhere(options?.filters?.building)
+						// finishes: {
+						// 	some: {
+						// 		...this.buildFinishWhere(options?.filters?.finish)
+						// 	}
+						// }
 					}
 				},
 				orderBy,
@@ -228,6 +231,64 @@ export class ListingsRepository implements IListingsRepository {
 		return record.map((r) => {
 			return this.toDomainFromPrisma(r);
 		});
+	}
+
+	async getAllBuildingDetailsByType(type: DomainConstructionType): Promise<AllBuildingDetails> {
+		return await PrismaService.executeOrThrow(() =>
+			this._client.building.findMany({
+				where: {
+					deletedAt: null,
+					constructionType: constructionTypePrismaMap[type]
+				},
+				select: {
+					width: true,
+					length: true,
+					floors: true,
+					bedrooms: true,
+					bathrooms: true,
+					hasVeranda: true
+				},
+				distinct: ['width', 'length']
+			})
+		);
+	}
+
+	async getBuildingsByTypeCount(type: DomainConstructionType): Promise<number> {
+		const buildings = await PrismaService.executeOrThrow(() =>
+			this._client.building.count({
+				where: {
+					deletedAt: null,
+					constructionType: constructionTypePrismaMap[type]
+				}
+			})
+		);
+
+		return buildings;
+	}
+
+	async getAllFinishTypesByType(type: DomainConstructionType): Promise<DomainFinishType[]> {
+		const buildings = await PrismaService.executeOrThrow(() =>
+			this._client.building.findFirst({
+				where: {
+					deletedAt: null,
+					constructionType: constructionTypePrismaMap[type]
+				},
+				select: {
+					finishes: {
+						select: {
+							type: true
+						},
+						distinct: ['type']
+					}
+				}
+			})
+		);
+
+		if (!buildings) {
+			return [];
+		}
+
+		return buildings.finishes.map((f) => finishTypePrismaMap[f.type]);
 	}
 
 	private buildListingWhere(filters?: ListingFilterOptions): Prisma.ListingWhereInput {
@@ -250,15 +311,19 @@ export class ListingsRepository implements IListingsRepository {
 		const where: Prisma.FinishWhereInput = {};
 
 		if (filters?.includesDeleted) {
-			return where;
-		} else {
 			where.deletedAt = null;
+		} else {
+			return where;
 		}
 
 		if (!filters) return where;
 
 		if (filters.type) {
-			where.type = finishTypePrismaMap[filters.type];
+			where.type = {
+				in: filters.type.map((t) => {
+					return finishTypePrismaMap[t];
+				})
+			};
 		}
 
 		if (filters.price_from) {
@@ -315,8 +380,10 @@ export class ListingsRepository implements IListingsRepository {
 			where.bathrooms = filters.bathrooms;
 		}
 
-		if (filters.floors) {
-			where.floors = filters.floors;
+		if (filters.floors && filters.floors.length > 0) {
+			where.floors = {
+				in: filters.floors
+			};
 		}
 
 		if (filters.hasVeranda) {

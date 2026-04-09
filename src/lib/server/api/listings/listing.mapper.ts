@@ -1,3 +1,4 @@
+import type { ListingDto } from '$lib/dtos/listing.dto';
 import { type ListingPersistence } from '$lib/types/listings/listing.domain.types';
 import { BuildingMapper } from '../buildings/building.mapper';
 import { ImageMapper } from '../images/image.mapper';
@@ -31,5 +32,15 @@ export class ListingMapper {
 			images: record.images.map((img) => ImageMapper.toDomainFromPersistence(img)),
 			building: BuildingMapper.toDomainFromPersistence(record.building)
 		});
+	}
+
+	static toDtoFromDomain(listing: Listing): ListingDto {
+		return {
+			id: listing.id.value,
+			title: listing.title,
+			views: listing.views,
+			images: listing.images.map(ImageMapper.toDtoFromDomain),
+			building: BuildingMapper.toDtoFromDomain(listing.building)
+		};
 	}
 }

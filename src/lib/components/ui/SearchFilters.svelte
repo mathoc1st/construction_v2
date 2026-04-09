@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { getBuildingDetailsByType } from '$lib/server/db/queries/building';
-	import { FinishType, type Building, type Finish } from '$lib/types';
+	import type { FinishType } from '$lib/types/finishes/finish.domain.types';
+	import type { AllBuildingDetailsWithTypes } from '$lib/types/listings/listings.repository.types';
 	import { getFinishTypeName } from '$lib/utils';
 	import type { Snapshot } from '@sveltejs/kit';
 	import { Drawer, AccordionItem, Accordion } from 'flowbite-svelte';
@@ -12,17 +12,21 @@
 		sizesFilter = $bindable(),
 		verandaFilter = $bindable()
 	}: {
-		details: Awaited<ReturnType<typeof getBuildingDetailsByType>>;
+		details: AllBuildingDetailsWithTypes;
 		floorsFilter: number[];
 		finishesFilter: FinishType[];
 		sizesFilter: string[];
 		verandaFilter: boolean | null;
 	} = $props();
 
+	$effect(() => {
+		console.log('Details changed:', details);
+	});
+
 	let isDrawerOpen = $state(false);
 	let floors = $derived([
 		...new Set(
-			details.map((b) => {
+			details.details.map((b) => {
 				return b.floors;
 			})
 		)
@@ -30,10 +34,8 @@
 
 	let finishes = $derived.by(() => {
 		const foundFinishes: FinishType[] = [];
-		for (const detail of details) {
-			for (const finish of detail.finishes) {
-				foundFinishes.push(finish.type);
-			}
+		for (const finish of details.types) {
+			foundFinishes.push(finish);
 		}
 
 		return [...new Set(foundFinishes)];
@@ -41,8 +43,8 @@
 
 	let sizes = $derived([
 		...new Set(
-			details.map((b) => {
-				return b.size;
+			details.details.map((b) => {
+				return `${b.length}x${b.width}`;
 			})
 		)
 	]);

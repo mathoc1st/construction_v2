@@ -2,6 +2,7 @@ import { Building, BuildingId } from './building.domain';
 import { type BuildingPersistence } from '$lib/types/buildings/building.domain.types';
 import { UserId } from '../users/user.domain';
 import { FinishMapper } from '../finishes/finish.mapper';
+import type { BuildingDto } from '$lib/dtos/building.dto';
 
 export class BuildingMapper {
 	static toDomainFromPersistence(record: BuildingPersistence): Building {
@@ -47,6 +48,21 @@ export class BuildingMapper {
 				updatedById: finish.updatedById.value,
 				deletedById: finish.deletedById ? finish.deletedById.value : null
 			}))
+		};
+	}
+
+	static toDtoFromDomain(building: Building): BuildingDto {
+		return {
+			id: building.id.value,
+			constructionType: building.constructionType,
+			width: building.width,
+			length: building.length,
+			height: building.height,
+			bedrooms: building.bedrooms,
+			bathrooms: building.bathrooms,
+			floors: building.floors,
+			hasVeranda: building.hasVeranda,
+			finishes: building.finishes.map(FinishMapper.toDtoFromDomain)
 		};
 	}
 }

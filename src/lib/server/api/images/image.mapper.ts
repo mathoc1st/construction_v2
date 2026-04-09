@@ -1,3 +1,4 @@
+import type { ImageDto } from '$lib/dtos/image.dto';
 import type { ImagePersistence } from '$lib/types/images/image.domain.types';
 import { UserId } from '../users/user.domain';
 import { Image } from './image.domain';
@@ -33,5 +34,14 @@ export class ImageMapper {
 			updatedById: new UserId(record.updatedById),
 			deletedById: record.deletedById ? new UserId(record.deletedById) : null
 		});
+	}
+
+	static toDtoFromDomain(image: Image): ImageDto {
+		return {
+			id: image.id.value,
+			folder: image.folder,
+			key: image.key,
+			bucket: image.bucket
+		};
 	}
 }

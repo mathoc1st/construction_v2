@@ -15,7 +15,7 @@ export enum FinishSortableFields {
 }
 
 export type FinishFilterOptions = {
-	type?: FinishType;
+	type?: FinishType[];
 	price_from?: number;
 	price_to?: number;
 	description?: string;
@@ -44,7 +44,7 @@ export type BuildingFilterOptions = {
 	height?: number;
 	bedrooms?: number;
 	bathrooms?: number;
-	floors?: number;
+	floors?: number[];
 	hasVeranda?: boolean;
 	includesDeleted?: boolean;
 };
@@ -94,9 +94,28 @@ export type ListingWithBuildingAndFinishes = {
 	finishes: Finish[];
 };
 
+export type AllBuildingDetails = {
+	width: number;
+	length: number;
+	floors: number;
+	bedrooms: number;
+	bathrooms: number;
+	hasVeranda: boolean;
+	finishes: FinishType[];
+}[];
+
+export type AllBuildingDetailsWithTypes = {
+	details: AllBuildingDetails;
+	types: FinishType[];
+};
+
 export interface IListingsRepository {
 	create(listing: Listing): Promise<Listing>;
 	getById(id: ListingId): Promise<Listing | null>;
 	save(listing: Listing, newImages: Image[]): Promise<Listing>;
 	delete(id: ListingId): Promise<void>;
+	find(options?: ListingQueryOptions): Promise<Listing[]>;
+	getAllBuildingDetailsByType(type: ConstructionType): Promise<AllBuildingDetails>;
+	getAllFinishTypesByType(type: ConstructionType): Promise<FinishType[]>;
+	getBuildingsByTypeCount(type: ConstructionType): Promise<number>;
 }

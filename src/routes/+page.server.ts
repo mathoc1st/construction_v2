@@ -1,3 +1,4 @@
+import type { ListingDto } from '$lib/dtos/listing.dto';
 import { ListingMapper } from '$lib/server/api/listings/listing.mapper';
 import { getListingsService } from '$lib/server/api/listings/listings.service';
 import { ConstructionType } from '$lib/types/buildings/building.domain.types';
@@ -6,25 +7,38 @@ import { SortDirection } from '$lib/types/prisma/prisma.service.types';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
-	const filter = {
-		sort: { field: ListingSortableFields.VIEWS, direction: SortDirection.DESC },
-		pagination: { limit: 3 }
-	};
+	const listingService = getListingsService();
+
 	const [popularFrames, popularBarns, popularContainers] = await Promise.all([
-		getListingsService().findListingsByBuildingType(ConstructionType.FRAME, filter),
-		getListingsService().findListingsByBuildingType(ConstructionType.BARN, filter),
-		getListingsService().findListingsByBuildingType(ConstructionType.CONTAINER, filter)
+		listingService.find({
+			filters: { building: { constructionType: ConstructionType.FRAME } },
+			sort: {
+				type: 'listing',
+				sort: { field: ListingSortableFields.VIEWS, direction: SortDirection.DESC }
+			},
+			pagination: { limit: 3 }
+		}),
+		listingService.find({
+			filters: { building: { constructionType: ConstructionType.BARN } },
+			sort: {
+				type: 'listing',
+				sort: { field: ListingSortableFields.VIEWS, direction: SortDirection.DESC }
+			},
+			pagination: { limit: 3 }
+		}),
+		listingService.find({
+			filters: { building: { constructionType: ConstructionType.CONTAINER } },
+			sort: {
+				type: 'listing',
+				sort: { field: ListingSortableFields.VIEWS, direction: SortDirection.DESC }
+			},
+			pagination: { limit: 3 }
+		})
 	]);
 
-	const popularFramesDto = popularFrames.map((listing) =>
-		ListingMapper.toDtoWithRelationsFromDomain(listing)
-	);
-	const popularBarnsDto = popularBarns.map((listing) =>
-		ListingMapper.toDtoWithRelationsFromDomain(listing)
-	);
-	const popularContainersDto = popularContainers.map((listing) =>
-		ListingMapper.toDtoWithRelationsFromDomain(listing)
-	);
+	const popularFramesDto: ListingDto[] = popularFrames.map(ListingMapper.toDtoFromDomain);
+	const popularBarnsDto: ListingDto[] = popularBarns.map(ListingMapper.toDtoFromDomain);
+	const popularContainersDto: ListingDto[] = popularContainers.map(ListingMapper.toDtoFromDomain);
 
 	return { popularFramesDto, popularBarnsDto, popularContainersDto };
 };

@@ -326,6 +326,9 @@ export class Building {
 
 	markDeleted(deletedById: UserId) {
 		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName);
+		for (const finish of this.finishes) {
+			finish.markDeleted(deletedById);
+		}
 
 		this._deletedAt = new Date();
 		this._deletedById = deletedById;

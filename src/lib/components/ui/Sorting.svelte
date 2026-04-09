@@ -1,11 +1,44 @@
 <script lang="ts">
-	import { SortBy } from '$lib/types';
+	import {
+		FinishSortableFields,
+		ListingSortableFields,
+		type SortOptionsUnion
+	} from '$lib/types/listings/listings.repository.types';
+	import { SortDirection } from '$lib/types/prisma/prisma.service.types';
 	import Icon from '@iconify/svelte';
 	import { Dropdown, DropdownItem } from 'flowbite-svelte';
 
-	let { sortBy = $bindable() }: { sortBy: SortBy } = $props();
+	let { sortBy = $bindable() }: { sortBy: SortOptionsUnion } = $props();
 
 	let isOpen: boolean = $state(false);
+
+	function changeSortByPopularity() {
+		sortBy.type = 'listing';
+
+		if (sortBy.sort?.field === ListingSortableFields.VIEWS) {
+			sortBy.sort.direction =
+				sortBy.sort.direction === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC;
+		} else {
+			sortBy.sort = {
+				field: ListingSortableFields.VIEWS,
+				direction: SortDirection.DESC
+			};
+		}
+	}
+
+	function changeSortByPrice() {
+		sortBy.type = 'finish';
+
+		if (sortBy.sort?.field === FinishSortableFields.PRICE) {
+			sortBy.sort.direction =
+				sortBy.sort.direction === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC;
+		} else {
+			sortBy.sort = {
+				field: FinishSortableFields.PRICE,
+				direction: SortDirection.ASC
+			};
+		}
+	}
 </script>
 
 <button
@@ -17,25 +50,27 @@
 <Dropdown bind:isOpen simple class="bg-light-brown">
 	<DropdownItem class="hover:bg-dark-olive"
 		><button
-			onclick={() => {
-				sortBy = sortBy === SortBy.POPULARITY_ASC ? SortBy.POPULARITY_DESC : SortBy.POPULARITY_ASC;
-			}}
+			onclick={changeSortByPopularity}
 			class="text-off-white flex h-full w-full items-center text-base"
 			>По популярности <Icon
 				icon="flowbite:arrow-up-outline"
-				rotate={sortBy === SortBy.POPULARITY_ASC ? 0 : 90}
+				rotate={sortBy.sort?.field === ListingSortableFields.VIEWS &&
+				sortBy.sort?.direction === SortDirection.ASC
+					? 0
+					: 90}
 			/></button
 		>
 	</DropdownItem>
 	<DropdownItem class="hover:bg-dark-olive">
 		<button
-			onclick={() => {
-				sortBy = sortBy === SortBy.PRICE_ASC ? SortBy.PRICE_DESC : SortBy.PRICE_ASC;
-			}}
+			onclick={changeSortByPrice}
 			class="text-off-white flex h-full w-full items-center text-base"
 			>По цене <Icon
 				icon="flowbite:arrow-up-outline"
-				rotate={sortBy === SortBy.PRICE_ASC ? 0 : 90}
+				rotate={sortBy.sort?.field === FinishSortableFields.PRICE &&
+				sortBy.sort?.direction === SortDirection.ASC
+					? 0
+					: 90}
 			/></button
 		></DropdownItem
 	>

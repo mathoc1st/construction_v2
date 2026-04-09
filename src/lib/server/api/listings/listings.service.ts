@@ -5,7 +5,11 @@ import type {
 	UpdateImageParams,
 	UpdateListingParams
 } from '$lib/types/listings/listings.service.types';
-import type { IListingsRepository } from '$lib/types/listings/listings.repository.types';
+import type {
+	AllBuildingDetailsWithTypes,
+	IListingsRepository,
+	ListingQueryOptions
+} from '$lib/types/listings/listings.repository.types';
 import type { UserId } from '../users/user.domain';
 import { Building } from '../buildings/building.domain';
 import { Finish } from '../finishes/finish.domain';
@@ -14,6 +18,7 @@ import { getListingsRepository } from './listings.repository';
 import type { IImagesService } from '$lib/types/images/images.service.types';
 import type { Image } from '../images/image.domain';
 import { getImageService } from '../images/images.service';
+import type { ConstructionType } from '$lib/types/buildings/building.domain.types';
 
 export class ListingsService implements IListingsService {
 	constructor(
@@ -77,6 +82,17 @@ export class ListingsService implements IListingsService {
 		return await this._listingRepository.save(listing, newImages);
 	}
 
+	async softDelete(id: ListingId, deletedById: UserId): Promise<void> {
+		const listing = await this._listingRepository.getById(id);
+
+		if (!listing) {
+			throw new Error(`Listing with id ${id.value} not found`);
+		}
+
+		listing.markDeleted(deletedById);
+		await this._listingRepository.save(listing, []);
+	}
+
 	async delete(id: ListingId): Promise<void> {
 		await this._listingRepository.delete(id);
 	}
@@ -94,14 +110,23 @@ export class ListingsService implements IListingsService {
 		return addedImages;
 	}
 
-	// async finalizeImages(listingId: ListingId, images: Image[]): Promise<Image[]> {
-	// 	for (const image of images) {
-	// 		await this._minioService.finalizeImage(listingId.value, image.filename);
-	// 		image.changeFolder(listingId.value);
-	// 	}
+	async find(options?: ListingQueryOptions): Promise<Listing[]> {
+		return await this._listingRepository.find(options);
+	}
 
-	// 	return images;
-	// }
+	async findAllBuildingDetailsByType(type: ConstructionType): Promise<AllBuildingDetailsWithTypes> {
+		const details = await this._listingRepository.getAllBuildingDetailsByType(type);
+		const types = await this._listingRepository.getAllFinishTypesByType(type);
+
+		return {
+			details,
+			types
+		};
+	}
+
+	async getBuildingsByTypeCount(type: ConstructionType): Promise<number> {
+		return await this._listingRepository.getBuildingsByTypeCount(type);
+	}
 }
 
 let listingsService: IListingsService | null = null;

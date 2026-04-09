@@ -185,6 +185,7 @@ export class Listing {
 
 	markDeleted(deletedById: UserId) {
 		if (this.isDeleted) throw new EntityAlreadyDeletedError(this.entityName);
+		this.building.markDeleted(deletedById);
 
 		this._deletedById = deletedById;
 		this._deletedAt = new Date();

@@ -1,13 +1,18 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import { tv } from 'tailwind-variants';
-	import { Textarea } from 'flowbite-svelte';
+	import { Textarea, Toast, ToastContainer } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { SuperValidated } from 'sveltekit-superforms/client';
 	import ImageEditor from './ImageEditor.svelte';
 	import { ConstructionType } from '$lib/types/buildings/building.domain.types';
 	import { FinishType } from '$lib/types/finishes/finish.domain.types';
-	import type { ImageDto, ListingDto } from '$lib/dtos/listing.dto';
+	import type { ListingDto } from '$lib/dtos/listing.dto';
+	import type { ImageDto } from '$lib/dtos/image.dto';
+	import { onDestroy } from 'svelte';
+	import { fly } from 'svelte/transition';
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 
 	const lable = tv({
 		variants: {
@@ -43,10 +48,92 @@
 	let { data }: Props = $props();
 
 	const { form, errors, enhance } = superForm(data.form, {
-		dataType: 'json'
+		dataType: 'json',
+		onResult: async ({ result }) => {
+			if (result.type === 'success') {
+				addToast('green');
+				setTimeout(() => {
+					goto(resolve(`/listing/${$form.id}`));
+				}, 1000);
+			} else if (result.type === 'error') {
+				addToast('red');
+			} else {
+				addToast('yellow');
+			}
+		}
 	});
 
 	let selectedFinish: FinishType = $state(FinishType.COLD);
+
+	type ToastColor = 'green' | 'red' | 'yellow' | 'blue';
+
+	interface ToastItem {
+		id: number;
+		message: string;
+		color: ToastColor;
+		timeoutId?: ReturnType<typeof setTimeout>;
+		visible: boolean;
+	}
+
+	let toasts = $state<ToastItem[]>([]);
+	let nextId = $state(1);
+
+	const messages: Record<ToastColor, string> = {
+		green: 'Сохранено!',
+		blue: 'New message received',
+		yellow: 'Неправильные данные в форме',
+		red: 'При сохранении произошла ошибка'
+	};
+
+	function addToast(color?: ToastColor, message?: string) {
+		const selectedColor =
+			color || (['green', 'blue', 'yellow', 'red'][Math.floor(Math.random() * 4)] as ToastColor);
+		const newToast: ToastItem = {
+			id: nextId,
+			message: message || messages[selectedColor],
+			color: selectedColor,
+			visible: true
+		};
+
+		// Auto-dismiss after 5 seconds
+		const timeoutId = setTimeout(() => {
+			dismissToast(newToast.id);
+		}, 5000);
+		newToast.timeoutId = timeoutId;
+
+		toasts = [...toasts, newToast];
+		nextId++;
+	}
+
+	function dismissToast(id: number) {
+		// Clear timeout if it exists
+		const toast = toasts.find((t) => t.id === id);
+		if (toast?.timeoutId) {
+			clearTimeout(toast.timeoutId);
+		}
+
+		// Set visible to false to trigger outro transition
+		toasts = toasts.map((t) => (t.id === id ? { ...t, visible: false } : t));
+
+		setTimeout(() => {
+			toasts = toasts.filter((t) => t.id !== id);
+		}, 300); // Slightly longer than transition duration
+	}
+
+	function handleClose(id: number) {
+		return () => {
+			dismissToast(id);
+		};
+	}
+
+	onDestroy(() => {
+		// Clear all pending timeouts on unmount
+		toasts.forEach((toast) => {
+			if (toast.timeoutId) {
+				clearTimeout(toast.timeoutId);
+			}
+		});
+	});
 
 	function getConstructionTypeName(type: ConstructionType): string {
 		switch (type) {
@@ -78,6 +165,22 @@
 		$form.images = imagesState;
 	});
 </script>
+
+<ToastContainer position="top-right">
+	{#each toasts as toast (toast.id)}
+		<Toast
+			color={toast.color}
+			dismissable={true}
+			transition={fly}
+			params={{ x: 200, duration: 800 }}
+			class="w-64"
+			onclose={handleClose(toast.id)}
+			bind:toastStatus={toast.visible}
+		>
+			{toast.message}
+		</Toast>
+	{/each}
+</ToastContainer>
 
 <form
 	class="mx-auto flex max-w-360 gap-6 px-5 py-20 max-[1100px]:flex-col"

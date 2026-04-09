@@ -21,14 +21,6 @@
 
 	let imageContainer: HTMLDivElement | null = $state(null);
 
-	onMount(() => {
-		const buttons = imageContainer?.querySelectorAll('button:not([type])');
-
-		buttons?.forEach((btn) => {
-			(btn as HTMLButtonElement).type = 'button';
-		});
-	});
-
 	let imageIndex = $state(0);
 	let selectedFiles = $state<FileList | null>(null);
 	let previews: { src: string }[] = $state([]);
@@ -204,6 +196,7 @@
 		>
 			{#snippet children({ image, selected, Thumbnail })}
 				<Thumbnail
+					type="button"
 					{selected}
 					{...image}
 					class="h-25 w-25 rounded-md object-contain {selected

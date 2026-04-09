@@ -15,6 +15,8 @@ export const buildingSchema = z.object({
 	finishes: z.array(finishSchema).default([])
 });
 
+export type BuildingDto = z.infer<typeof buildingSchema>;
+
 export const addBuildingSchema = z.object({
 	constructionType: z.enum(ConstructionType),
 	width: z.number().positive(),

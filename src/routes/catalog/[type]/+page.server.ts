@@ -1,17 +1,40 @@
-import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { getBuildingDetailsByType, getBuildingsByType } from '$lib/server/db/queries/building';
-import { buildingOptionsSchema } from '$lib/types';
+import {
+	ListingSortableFields,
+	type AllBuildingDetailsWithTypes
+} from '$lib/types/listings/listings.repository.types';
+import { getListingsService } from '$lib/server/api/listings/listings.service';
+import type { ConstructionType } from '$lib/types/buildings/building.domain.types';
+import { SortDirection } from '$lib/types/prisma/prisma.service.types';
+import { ListingMapper } from '$lib/server/api/listings/listing.mapper';
+import type { ListingDto } from '$lib/dtos/listing.dto';
 
 export const load: PageServerLoad = async ({ params }) => {
-	const parsedOptions = buildingOptionsSchema.safeParse({ type: params.type });
+	const details: AllBuildingDetailsWithTypes =
+		await getListingsService().findAllBuildingDetailsByType(
+			params.type.toUpperCase() as ConstructionType
+		);
+	const total = await getListingsService().getBuildingsByTypeCount(
+		params.type.toUpperCase() as ConstructionType
+	);
 
-	if (!parsedOptions.success) return error(404);
+	console.log('Details:', details);
+	const listings = await getListingsService().find({
+		filters: {
+			building: {
+				constructionType: params.type.toUpperCase() as ConstructionType
+			}
+		},
+		sort: {
+			type: 'listing',
+			sort: { field: ListingSortableFields.VIEWS, direction: SortDirection.DESC }
+		},
+		pagination: {
+			limit: 12
+		}
+	});
 
-	const { buildings, totalCount } = await getBuildingsByType(parsedOptions.data);
-	const details = await getBuildingDetailsByType(parsedOptions.data.type);
+	const listingsDto: ListingDto[] = listings.map(ListingMapper.toDtoFromDomain);
 
-	if (!buildings || !details) return error(404);
-
-	return { buildings, details, totalCount };
+	return { listings: listingsDto, details, total };
 };

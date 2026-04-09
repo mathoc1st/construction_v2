@@ -2,16 +2,15 @@ import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { getListingsService } from '$lib/server/api/listings/listings.service';
 import { ListingMapper } from '$lib/server/api/listings/listing.mapper';
+import { ListingId } from '$lib/server/api/listings/listing.domain';
 
 export const load: PageServerLoad = async ({ params }) => {
-	const id = Number.parseInt(params.id);
+	const id = params.id;
 
-	if (Number.isNaN(id)) return error(404);
+	const listing = await getListingsService().getById(new ListingId(id));
 
-	const listingWithRelations = await getListingsService().getListingWithRelations(id);
-
-	if (listingWithRelations) {
-		return ListingMapper.toDtoWithRelationsFromDomain(listingWithRelations);
+	if (listing) {
+		return ListingMapper.toDtoFromDomain(listing);
 	}
 
 	error(404, 'Not found');
