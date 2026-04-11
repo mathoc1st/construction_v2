@@ -117,7 +117,7 @@
 			{#each building.finishes.toSorted((a, b) => {
 				const order = Object.keys(FinishType);
 				return order.indexOf(a.type) - order.indexOf(b.type);
-			}) as finish}
+			}) as finish (finish.id)}
 				<TabItem
 					class="w-full"
 					classes={{
@@ -140,24 +140,9 @@
 					{/snippet}
 					<div>
 						<div class="flex flex-col gap-2">
-							<p class="flex items-start gap-2 text-lg">
-								<Icon
-									icon="ic:round-check-circle-outline"
-									class="text-dark-brown mt-1 size-6 shrink-0"
-								/>Характеристика дома
+							<p class="w-full max-w-150 wrap-break-word">
+								{finish.description || 'Описание отсутствует.'}
 							</p>
-							{#each finish.options as finishOption}
-								<p class="flex items-start gap-2 text-lg">
-									<Icon
-										icon={finishOption.isAvailable
-											? 'ic:round-check-circle-outline'
-											: 'material-symbols:cancel-outline-rounded'}
-										class="mt-1 size-6 shrink-0 {finishOption.isAvailable
-											? 'text-dark-brown'
-											: 'text-light-olive'}"
-									/>{finishOption.description}
-								</p>
-							{/each}
 						</div>
 
 						<div class="mt-6 flex flex-col gap-4 max-[1300px]:items-center">

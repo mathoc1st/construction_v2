@@ -5,8 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "src/generated/prisma"
+  provider   = "prisma-client"
+  output     = "src/generated/prisma"
   datasource = "postgresql://postgres:postgres@postgres:5432/construction"
 }
 
@@ -28,84 +28,72 @@ enum FinishType {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  username     String   @unique
+  id           Int    @id @default(autoincrement())
+  username     String @unique
   passwordHash String
 
-  sessions     Session[]
+  sessions Session[]
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Session {
-  id         Int      @id @default(autoincrement())
-  sessionID  String   @unique
-  userId     Int
-  expiresAt  DateTime
+  id        Int      @id @default(autoincrement())
+  sessionID String   @unique
+  userId    Int
+  expiresAt DateTime
 
-  user       User     @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Building {
-  id Int @id @default(autoincrement())
-  type BuildingType
-  name String
+  id            Int          @id @default(autoincrement())
+  type          BuildingType
+  name          String
   startingPrice Int
-  size String
-  length Int
-  width Int
-  floors Int
-  bathrooms Int
-  bedrooms Int
-  veranda Boolean
+  size          String
+  length        Int
+  width         Int
+  floors        Int
+  bathrooms     Int
+  bedrooms      Int
+  veranda       Boolean
 
   views Int @default(0)
-
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  images Image[]
+  images   Image[]
   finishes Finish[]
 }
 
 model Image {
-  id Int @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   filename String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  building Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+  building   Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
   buildingId Int
 }
 
 model Finish {
-  id Int @id @default(autoincrement())
-  type FinishType
+  id       Int        @id @default(autoincrement())
+  type     FinishType
   oldPrice Int?
-  price Int
-  
+  price    Int
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  options FinishOption[]
+  description String?
 
-  building Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+  building   Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
   buildingId Int
-}
-model FinishOption {
-  id Int @id @default(autoincrement())
-  description String 
-  isAvailable Boolean 
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  finish Finish @relation(fields: [finishId], references: [id], onDelete: Cascade)
-  finishId Int
 }

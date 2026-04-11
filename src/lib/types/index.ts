@@ -9,7 +9,7 @@ import type {
 
 export { BuildingType } from '../../../prisma/src/generated/prisma/enums';
 export { FinishType } from '../../../prisma/src/generated/prisma/enums';
-export type { FinishOption } from '../../../prisma/src/generated/prisma/client';
+
 export type { Building as BuildingSchema } from '../../..//prisma/src/generated/prisma/client';
 export type { Finish } from '../../../prisma/src/generated/prisma/client';
 export type { Image } from '../../../prisma/src/generated/prisma/client';
@@ -96,18 +96,11 @@ export const imageSchema = z.object({
 	filename: z.string('Название картинки не является строкой!').nonempty()
 });
 
-export const finishOptionSchema = z.object({
-	isAvailable: z.boolean('Присутствие не булево значение!'),
-	description: z.string('Описание не является строкой!')
-});
-
 export const finishSchema = z.object({
 	type: z.enum(FinishType),
 	price: z.number('Цена не является числом!').min(1, 'Цена обязательна!'),
 	oldPrice: z.number('Старая цена не является числом!').optional().nullable(),
-	options: z
-		.array(finishOptionSchema)
-		.nonempty('Должна присутствовать хотябы одна опция в комплектации!')
+	description: z.string().nonempty('Должна присутствовать хотябы одна опция в комплектации!')
 });
 
 export const buildingSchema = z.object({
@@ -130,5 +123,3 @@ export type BuildingDto = Partial<ParsedBuilding>;
 
 export type ParsedFinish = z.infer<typeof finishSchema>;
 export type FinishDto = PartialWithRequired<ParsedFinish, 'type'>;
-
-export type FinishOptionDto = z.infer<typeof finishOptionSchema>;

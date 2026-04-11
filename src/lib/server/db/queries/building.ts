@@ -61,7 +61,7 @@ export async function getBuildingsByType(options: ParsedBuildingOptions) {
 		prisma.building.findMany({
 			where,
 			include: {
-				finishes: { include: { options: true } },
+				finishes: true,
 				images: true
 			},
 			orderBy,
@@ -88,7 +88,7 @@ export async function getBuildingById(id: number) {
 	const building = await prisma.building.findUnique({
 		where: { id },
 		include: {
-			finishes: { include: { options: true } },
+			finishes: true,
 			images: true
 		}
 	});
@@ -133,20 +133,14 @@ export async function createBuilding(
 						type: finish.type,
 						price: finish.price,
 						oldPrice: finish.oldPrice,
-						options: {
-							create: finish.options
-						}
+						description: finish.description
 					};
 				})
 			}
 		},
 		include: {
 			images: true,
-			finishes: {
-				include: {
-					options: true
-				}
-			}
+			finishes: true
 		}
 	});
 
@@ -180,20 +174,14 @@ export async function updateBuilding(
 								type: finish.type,
 								price: finish.price,
 								oldPrice: finish.oldPrice,
-								options: {
-									create: finish.options
-								}
+								description: finish.description
 							};
 						})
 					}
 				},
 				include: {
 					images: true,
-					finishes: {
-						include: {
-							options: true
-						}
-					}
+					finishes: true
 				}
 			})
 		]);

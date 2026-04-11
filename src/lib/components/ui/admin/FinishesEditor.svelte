@@ -73,7 +73,7 @@
 		bind:value={selectedFinish}
 		required
 	>
-		{#each Object.values(FinishType) as finishType}
+		{#each Object.values(FinishType) as finishType (finishType)}
 			<option hidden={finishes.some((f) => f.type === finishType)} value={finishType}
 				>{getFinishTypeName(finishType)}</option
 			>
@@ -95,7 +95,7 @@
 			class="group grid w-max grid-cols-2 max-[600px]:mx-auto max-[600px]:grid-cols-1"
 			classes={{ divider: 'bg-light-olive w-full' }}
 		>
-			{#each finishes as finish, i (finish.type)}
+			{#each finishes as finish (finish.type)}
 				<FinishTabEditor
 					{finish}
 					onSaveFinish={handleSaveFinish}

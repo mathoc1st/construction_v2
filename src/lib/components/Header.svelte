@@ -55,7 +55,7 @@
 				href="https://t.me/ckrusdom1"
 				class="text-off-white hover:text-light-brown flex items-center gap-2 transition"
 			>
-				<Icon icon="ic:baseline-telegram" class="size-7 shrink-0" />+7 991 620 18 67
+				<span class="pt-0.5 pr-2 text-sm font-semibold">MAX</span> +7 991 620 18 67
 			</a>
 		</div>
 

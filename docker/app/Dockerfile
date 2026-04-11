@@ -10,7 +10,7 @@ RUN npm install -g pnpm
 RUN pnpm install
 
 COPY prisma ./prisma
-RUN npx prisma generate
+RUN npx prisma generate 
 
 # Copy source code
 COPY . .

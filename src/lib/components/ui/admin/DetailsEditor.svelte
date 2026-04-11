@@ -1,10 +1,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import { tv } from 'tailwind-variants';
-	import { BuildingType, FinishType, type BuildingDto, type FinishDto } from '$lib/types';
-	import { Label, Select } from 'flowbite-svelte';
-	import { getBuildingTypeName, getFinishTypeName } from '$lib/utils';
-	import z from 'zod';
+	import { BuildingType, type BuildingDto } from '$lib/types';
 
 	let {
 		savedBuilding,
@@ -13,7 +10,6 @@
 		$props();
 
 	let building: BuildingDto = $state(savedBuilding || {});
-	let saveError: string = $state('');
 	let isSaved: boolean = $state(savedBuilding !== null);
 
 	const lable = tv({
@@ -238,7 +234,7 @@
 			<p class="text-dark-olive flex items-center gap-1">
 				<Icon icon="ix:align-object-dimensions" class="size-8 min-w-6" /><span
 					class="max-[600px]:text-md text-lg"
-					>Габариты: {`${building.length}x${building.width}` || 'Unknown'}</span
+					>Габариты: {`${building.length}x${building.width}`}</span
 				>
 			</p>
 			<p class="text-dark-olive flex items-center gap-1">
