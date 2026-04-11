@@ -167,6 +167,9 @@ export class ListingsRepository implements IListingsRepository {
 							status: {
 								not: PrismaImageStatus.DELETED
 							}
+						},
+						orderBy: {
+							order: 'asc'
 						}
 					},
 					building: {
@@ -192,29 +195,47 @@ export class ListingsRepository implements IListingsRepository {
 	}
 
 	async find(options?: ListingQueryOptions): Promise<DomainListing[]> {
-		const orderBy =
-			options?.sort?.type === 'listing'
-				? this.buildListingOrderBy(options.sort.sort)
-				: options?.sort?.type === 'building'
-					? { building: this.buildBuildingOrderBy(options.sort.sort) }
-					: options?.sort?.type === 'finish'
-						? { building: { finishes: this.buildFinishOrderBy(options.sort.sort) } }
-						: {};
+		const finishFilter = this.buildFinishWhere(options?.filters?.finish);
+		const hasFinishFilter = !!options?.filters?.finish?.type?.length;
+
+		const finishOr = [];
+
+		if (hasFinishFilter) {
+			finishOr.push({
+				finishes: {
+					some: finishFilter
+				}
+			});
+		} else {
+			finishOr.push({
+				finishes: {
+					none: {
+						deletedAt: null
+					}
+				}
+			});
+		}
+
+		console.log(options?.sort);
 
 		const record = await PrismaService.executeOrThrow(() =>
 			this._client.listing.findMany({
 				where: {
 					...this.buildListingWhere(options?.filters?.listing),
 					building: {
-						...this.buildBuildingWhere(options?.filters?.building)
-						// finishes: {
-						// 	some: {
-						// 		...this.buildFinishWhere(options?.filters?.finish)
-						// 	}
-						// }
+						...this.buildBuildingWhere(options?.filters?.building),
+
+						// FINISHES MUST MATCH (not OR)
+						...(options?.filters?.finish?.type?.length && {
+							finishes: {
+								some: this.buildFinishWhere(options.filters.finish)
+							}
+						})
 					}
 				},
-				orderBy,
+				orderBy: {
+					...(options?.sort?.views && { views: options.sort.views })
+				},
 				include: {
 					images: true,
 					building: {
@@ -233,24 +254,76 @@ export class ListingsRepository implements IListingsRepository {
 		});
 	}
 
-	async getAllBuildingDetailsByType(type: DomainConstructionType): Promise<AllBuildingDetails> {
+	async findCount(options?: ListingQueryOptions): Promise<number> {
 		return await PrismaService.executeOrThrow(() =>
-			this._client.building.findMany({
+			this._client.listing.count({
 				where: {
-					deletedAt: null,
-					constructionType: constructionTypePrismaMap[type]
-				},
-				select: {
-					width: true,
-					length: true,
-					floors: true,
-					bedrooms: true,
-					bathrooms: true,
-					hasVeranda: true
-				},
-				distinct: ['width', 'length']
+					...this.buildListingWhere(options?.filters?.listing),
+					building: {
+						...this.buildBuildingWhere(options?.filters?.building)
+					}
+				}
 			})
 		);
+	}
+
+	async findAllBuildingDetailsByType(type: DomainConstructionType): Promise<AllBuildingDetails> {
+		const where = {
+			deletedAt: null,
+			constructionType: constructionTypePrismaMap[type]
+		};
+
+		const result = await PrismaService.executeOrThrow(async () => {
+			const [floors, dimensions, bedrooms, bathrooms, finishes] = await Promise.all([
+				this._client.building.findMany({
+					where,
+					select: { floors: true },
+					distinct: ['floors']
+				}),
+
+				this._client.building.findMany({
+					where,
+					select: { width: true, length: true },
+					distinct: ['width', 'length']
+				}),
+
+				this._client.building.findMany({
+					where,
+					select: { bedrooms: true },
+					distinct: ['bedrooms']
+				}),
+
+				this._client.building.findMany({
+					where,
+					select: { bathrooms: true },
+					distinct: ['bathrooms']
+				}),
+
+				this._client.finish.findMany({
+					where: {
+						building: where
+					},
+					select: { type: true },
+					distinct: ['type']
+				})
+			]);
+
+			return {
+				floors,
+				dimensions,
+				bedrooms,
+				bathrooms,
+				finishes
+			};
+		});
+
+		return {
+			floors: result.floors.map((f) => f.floors),
+			dimensions: result.dimensions.map((d) => ({ width: d.width, length: d.length })),
+			bedrooms: result.bedrooms.map((b) => b.bedrooms),
+			bathrooms: result.bathrooms.map((b) => b.bathrooms),
+			finishTypes: result.finishes.map((f) => finishTypePrismaMap[f.type])
+		};
 	}
 
 	async getBuildingsByTypeCount(type: DomainConstructionType): Promise<number> {
@@ -266,38 +339,36 @@ export class ListingsRepository implements IListingsRepository {
 		return buildings;
 	}
 
-	async getAllFinishTypesByType(type: DomainConstructionType): Promise<DomainFinishType[]> {
-		const buildings = await PrismaService.executeOrThrow(() =>
-			this._client.building.findFirst({
-				where: {
-					deletedAt: null,
-					constructionType: constructionTypePrismaMap[type]
-				},
-				select: {
-					finishes: {
-						select: {
-							type: true
-						},
-						distinct: ['type']
-					}
-				}
-			})
-		);
+	// async findAllFinishTypesByType(type: DomainConstructionType): Promise<DomainFinishType[]> {
+	// 	const buildings = await PrismaService.executeOrThrow(() =>
+	// 		this._client.building.findFirst({
+	// 			where: {
+	// 				deletedAt: null,
+	// 				constructionType: constructionTypePrismaMap[type]
+	// 			},
+	// 			select: {
+	// 				finishes: {
+	// 					select: {
+	// 						type: true
+	// 					},
+	// 					distinct: ['type']
+	// 				}
+	// 			}
+	// 		})
+	// 	);
 
-		if (!buildings) {
-			return [];
-		}
+	// 	if (!buildings) {
+	// 		return [];
+	// 	}
 
-		return buildings.finishes.map((f) => finishTypePrismaMap[f.type]);
-	}
+	// 	return buildings.finishes.map((f) => finishTypePrismaMap[f.type]);
+	// }
 
 	private buildListingWhere(filters?: ListingFilterOptions): Prisma.ListingWhereInput {
 		const where: Prisma.ListingWhereInput = {};
 
 		if (!filters?.includesDeleted) {
 			where.deletedAt = null;
-		} else {
-			return where;
 		}
 
 		if (filters?.title) {
@@ -310,10 +381,8 @@ export class ListingsRepository implements IListingsRepository {
 	private buildFinishWhere(filters?: FinishFilterOptions): Prisma.FinishWhereInput {
 		const where: Prisma.FinishWhereInput = {};
 
-		if (filters?.includesDeleted) {
+		if (!filters?.includesDeleted) {
 			where.deletedAt = null;
-		} else {
-			return where;
 		}
 
 		if (!filters) return where;
@@ -345,49 +414,46 @@ export class ListingsRepository implements IListingsRepository {
 		return where;
 	}
 
-	private buildBuildingWhere(filters?: BuildingFilterOptions): Prisma.BuildingWhereInput {
+	private buildBuildingWhere(buildingFilters?: BuildingFilterOptions): Prisma.BuildingWhereInput {
 		const where: Prisma.BuildingWhereInput = {};
 
-		if (filters?.includesDeleted) {
-			return where;
-		} else {
+		if (!buildingFilters?.includesDeleted) {
 			where.deletedAt = null;
 		}
 
-		if (!filters) return where;
+		if (!buildingFilters) return where;
 
-		if (filters.constructionType) {
-			where.constructionType = filters.constructionType;
+		if (buildingFilters.constructionType) {
+			where.constructionType = buildingFilters.constructionType;
 		}
 
-		if (filters.width) {
-			where.width = filters.width;
+		if (buildingFilters.dimensions?.length) {
+			where.OR = buildingFilters.dimensions.map((dim) => ({
+				width: dim.width,
+				length: dim.length
+			}));
 		}
 
-		if (filters.length) {
-			where.length = filters.length;
+		if (buildingFilters.height) {
+			where.height = buildingFilters.height;
 		}
 
-		if (filters.height) {
-			where.height = filters.height;
+		if (buildingFilters.bedrooms) {
+			where.bedrooms = buildingFilters.bedrooms;
 		}
 
-		if (filters.bedrooms) {
-			where.bedrooms = filters.bedrooms;
+		if (buildingFilters.bathrooms) {
+			where.bathrooms = buildingFilters.bathrooms;
 		}
 
-		if (filters.bathrooms) {
-			where.bathrooms = filters.bathrooms;
-		}
-
-		if (filters.floors && filters.floors.length > 0) {
+		if (buildingFilters.floors && buildingFilters.floors.length > 0) {
 			where.floors = {
-				in: filters.floors
+				in: buildingFilters.floors
 			};
 		}
 
-		if (filters.hasVeranda) {
-			where.hasVeranda = filters.hasVeranda;
+		if (buildingFilters.hasVeranda !== null && buildingFilters.hasVeranda !== undefined) {
+			where.hasVeranda = buildingFilters.hasVeranda;
 		}
 
 		return where;
@@ -438,6 +504,7 @@ export class ListingsRepository implements IListingsRepository {
 				key: image.key,
 				bucket: image.bucket,
 				status: imageStatusPrismaMap[image.status],
+				order: image.order,
 				createdAt: image.createdAt,
 				updatedAt: image.updatedAt,
 				deletedAt: image.deletedAt,

@@ -20,8 +20,18 @@ export type ImageModel = runtime.Types.Result.DefaultSelection<Prisma.$ImagePayl
 
 export type AggregateImage = {
   _count: ImageCountAggregateOutputType | null
+  _avg: ImageAvgAggregateOutputType | null
+  _sum: ImageSumAggregateOutputType | null
   _min: ImageMinAggregateOutputType | null
   _max: ImageMaxAggregateOutputType | null
+}
+
+export type ImageAvgAggregateOutputType = {
+  order: number | null
+}
+
+export type ImageSumAggregateOutputType = {
+  order: number | null
 }
 
 export type ImageMinAggregateOutputType = {
@@ -30,6 +40,7 @@ export type ImageMinAggregateOutputType = {
   key: string | null
   bucket: string | null
   status: $Enums.ImageStatus | null
+  order: number | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
@@ -45,6 +56,7 @@ export type ImageMaxAggregateOutputType = {
   key: string | null
   bucket: string | null
   status: $Enums.ImageStatus | null
+  order: number | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
@@ -60,6 +72,7 @@ export type ImageCountAggregateOutputType = {
   key: number
   bucket: number
   status: number
+  order: number
   createdAt: number
   updatedAt: number
   deletedAt: number
@@ -71,12 +84,21 @@ export type ImageCountAggregateOutputType = {
 }
 
 
+export type ImageAvgAggregateInputType = {
+  order?: true
+}
+
+export type ImageSumAggregateInputType = {
+  order?: true
+}
+
 export type ImageMinAggregateInputType = {
   id?: true
   folder?: true
   key?: true
   bucket?: true
   status?: true
+  order?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -92,6 +114,7 @@ export type ImageMaxAggregateInputType = {
   key?: true
   bucket?: true
   status?: true
+  order?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -107,6 +130,7 @@ export type ImageCountAggregateInputType = {
   key?: true
   bucket?: true
   status?: true
+  order?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -155,6 +179,18 @@ export type ImageAggregateArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: ImageAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: ImageSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: ImageMinAggregateInputType
@@ -185,6 +221,8 @@ export type ImageGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   _count?: ImageCountAggregateInputType | true
+  _avg?: ImageAvgAggregateInputType
+  _sum?: ImageSumAggregateInputType
   _min?: ImageMinAggregateInputType
   _max?: ImageMaxAggregateInputType
 }
@@ -195,6 +233,7 @@ export type ImageGroupByOutputType = {
   key: string
   bucket: string
   status: $Enums.ImageStatus
+  order: number
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
@@ -203,6 +242,8 @@ export type ImageGroupByOutputType = {
   deletedById: string | null
   listingId: string | null
   _count: ImageCountAggregateOutputType | null
+  _avg: ImageAvgAggregateOutputType | null
+  _sum: ImageSumAggregateOutputType | null
   _min: ImageMinAggregateOutputType | null
   _max: ImageMaxAggregateOutputType | null
 }
@@ -231,6 +272,7 @@ export type ImageWhereInput = {
   key?: Prisma.StringFilter<"Image"> | string
   bucket?: Prisma.StringFilter<"Image"> | string
   status?: Prisma.EnumImageStatusFilter<"Image"> | $Enums.ImageStatus
+  order?: Prisma.IntFilter<"Image"> | number
   createdAt?: Prisma.DateTimeFilter<"Image"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Image"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Image"> | Date | string | null
@@ -250,6 +292,7 @@ export type ImageOrderByWithRelationInput = {
   key?: Prisma.SortOrder
   bucket?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -272,6 +315,7 @@ export type ImageWhereUniqueInput = Prisma.AtLeast<{
   key?: Prisma.StringFilter<"Image"> | string
   bucket?: Prisma.StringFilter<"Image"> | string
   status?: Prisma.EnumImageStatusFilter<"Image"> | $Enums.ImageStatus
+  order?: Prisma.IntFilter<"Image"> | number
   createdAt?: Prisma.DateTimeFilter<"Image"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Image"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Image"> | Date | string | null
@@ -291,6 +335,7 @@ export type ImageOrderByWithAggregationInput = {
   key?: Prisma.SortOrder
   bucket?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -299,8 +344,10 @@ export type ImageOrderByWithAggregationInput = {
   deletedById?: Prisma.SortOrderInput | Prisma.SortOrder
   listingId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ImageCountOrderByAggregateInput
+  _avg?: Prisma.ImageAvgOrderByAggregateInput
   _max?: Prisma.ImageMaxOrderByAggregateInput
   _min?: Prisma.ImageMinOrderByAggregateInput
+  _sum?: Prisma.ImageSumOrderByAggregateInput
 }
 
 export type ImageScalarWhereWithAggregatesInput = {
@@ -312,6 +359,7 @@ export type ImageScalarWhereWithAggregatesInput = {
   key?: Prisma.StringWithAggregatesFilter<"Image"> | string
   bucket?: Prisma.StringWithAggregatesFilter<"Image"> | string
   status?: Prisma.EnumImageStatusWithAggregatesFilter<"Image"> | $Enums.ImageStatus
+  order?: Prisma.IntWithAggregatesFilter<"Image"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Image"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Image"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Image"> | Date | string | null
@@ -327,6 +375,7 @@ export type ImageCreateInput = {
   key: string
   bucket: string
   status?: $Enums.ImageStatus
+  order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -342,6 +391,7 @@ export type ImageUncheckedCreateInput = {
   key: string
   bucket: string
   status?: $Enums.ImageStatus
+  order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -357,6 +407,7 @@ export type ImageUpdateInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumImageStatusFieldUpdateOperationsInput | $Enums.ImageStatus
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -372,6 +423,7 @@ export type ImageUncheckedUpdateInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumImageStatusFieldUpdateOperationsInput | $Enums.ImageStatus
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -387,6 +439,7 @@ export type ImageCreateManyInput = {
   key: string
   bucket: string
   status?: $Enums.ImageStatus
+  order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -402,6 +455,7 @@ export type ImageUpdateManyMutationInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumImageStatusFieldUpdateOperationsInput | $Enums.ImageStatus
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -413,6 +467,7 @@ export type ImageUncheckedUpdateManyInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumImageStatusFieldUpdateOperationsInput | $Enums.ImageStatus
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -428,6 +483,7 @@ export type ImageCountOrderByAggregateInput = {
   key?: Prisma.SortOrder
   bucket?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -437,12 +493,17 @@ export type ImageCountOrderByAggregateInput = {
   listingId?: Prisma.SortOrder
 }
 
+export type ImageAvgOrderByAggregateInput = {
+  order?: Prisma.SortOrder
+}
+
 export type ImageMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   folder?: Prisma.SortOrder
   key?: Prisma.SortOrder
   bucket?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -458,6 +519,7 @@ export type ImageMinOrderByAggregateInput = {
   key?: Prisma.SortOrder
   bucket?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  order?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -465,6 +527,10 @@ export type ImageMinOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   deletedById?: Prisma.SortOrder
   listingId?: Prisma.SortOrder
+}
+
+export type ImageSumOrderByAggregateInput = {
+  order?: Prisma.SortOrder
 }
 
 export type ImageListRelationFilter = {
@@ -655,6 +721,7 @@ export type ImageCreateWithoutListingInput = {
   key: string
   bucket: string
   status?: $Enums.ImageStatus
+  order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -669,6 +736,7 @@ export type ImageUncheckedCreateWithoutListingInput = {
   key: string
   bucket: string
   status?: $Enums.ImageStatus
+  order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -712,6 +780,7 @@ export type ImageScalarWhereInput = {
   key?: Prisma.StringFilter<"Image"> | string
   bucket?: Prisma.StringFilter<"Image"> | string
   status?: Prisma.EnumImageStatusFilter<"Image"> | $Enums.ImageStatus
+  order?: Prisma.IntFilter<"Image"> | number
   createdAt?: Prisma.DateTimeFilter<"Image"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Image"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Image"> | Date | string | null
@@ -727,6 +796,7 @@ export type ImageCreateWithoutCreatedByInput = {
   key: string
   bucket: string
   status?: $Enums.ImageStatus
+  order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -741,6 +811,7 @@ export type ImageUncheckedCreateWithoutCreatedByInput = {
   key: string
   bucket: string
   status?: $Enums.ImageStatus
+  order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -765,6 +836,7 @@ export type ImageCreateWithoutUpdatedByInput = {
   key: string
   bucket: string
   status?: $Enums.ImageStatus
+  order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -779,6 +851,7 @@ export type ImageUncheckedCreateWithoutUpdatedByInput = {
   key: string
   bucket: string
   status?: $Enums.ImageStatus
+  order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -803,6 +876,7 @@ export type ImageCreateWithoutDeletedByInput = {
   key: string
   bucket: string
   status?: $Enums.ImageStatus
+  order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -817,6 +891,7 @@ export type ImageUncheckedCreateWithoutDeletedByInput = {
   key: string
   bucket: string
   status?: $Enums.ImageStatus
+  order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -889,6 +964,7 @@ export type ImageCreateManyListingInput = {
   key: string
   bucket: string
   status?: $Enums.ImageStatus
+  order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -903,6 +979,7 @@ export type ImageUpdateWithoutListingInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumImageStatusFieldUpdateOperationsInput | $Enums.ImageStatus
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -917,6 +994,7 @@ export type ImageUncheckedUpdateWithoutListingInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumImageStatusFieldUpdateOperationsInput | $Enums.ImageStatus
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -931,6 +1009,7 @@ export type ImageUncheckedUpdateManyWithoutListingInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumImageStatusFieldUpdateOperationsInput | $Enums.ImageStatus
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -945,6 +1024,7 @@ export type ImageCreateManyCreatedByInput = {
   key: string
   bucket: string
   status?: $Enums.ImageStatus
+  order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -959,6 +1039,7 @@ export type ImageCreateManyUpdatedByInput = {
   key: string
   bucket: string
   status?: $Enums.ImageStatus
+  order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -973,6 +1054,7 @@ export type ImageCreateManyDeletedByInput = {
   key: string
   bucket: string
   status?: $Enums.ImageStatus
+  order?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -987,6 +1069,7 @@ export type ImageUpdateWithoutCreatedByInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumImageStatusFieldUpdateOperationsInput | $Enums.ImageStatus
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1001,6 +1084,7 @@ export type ImageUncheckedUpdateWithoutCreatedByInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumImageStatusFieldUpdateOperationsInput | $Enums.ImageStatus
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1015,6 +1099,7 @@ export type ImageUncheckedUpdateManyWithoutCreatedByInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumImageStatusFieldUpdateOperationsInput | $Enums.ImageStatus
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1029,6 +1114,7 @@ export type ImageUpdateWithoutUpdatedByInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumImageStatusFieldUpdateOperationsInput | $Enums.ImageStatus
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1043,6 +1129,7 @@ export type ImageUncheckedUpdateWithoutUpdatedByInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumImageStatusFieldUpdateOperationsInput | $Enums.ImageStatus
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1057,6 +1144,7 @@ export type ImageUncheckedUpdateManyWithoutUpdatedByInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumImageStatusFieldUpdateOperationsInput | $Enums.ImageStatus
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1071,6 +1159,7 @@ export type ImageUpdateWithoutDeletedByInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumImageStatusFieldUpdateOperationsInput | $Enums.ImageStatus
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1085,6 +1174,7 @@ export type ImageUncheckedUpdateWithoutDeletedByInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumImageStatusFieldUpdateOperationsInput | $Enums.ImageStatus
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1099,6 +1189,7 @@ export type ImageUncheckedUpdateManyWithoutDeletedByInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   bucket?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumImageStatusFieldUpdateOperationsInput | $Enums.ImageStatus
+  order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1115,6 +1206,7 @@ export type ImageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   key?: boolean
   bucket?: boolean
   status?: boolean
+  order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -1134,6 +1226,7 @@ export type ImageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   key?: boolean
   bucket?: boolean
   status?: boolean
+  order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -1153,6 +1246,7 @@ export type ImageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   key?: boolean
   bucket?: boolean
   status?: boolean
+  order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -1172,6 +1266,7 @@ export type ImageSelectScalar = {
   key?: boolean
   bucket?: boolean
   status?: boolean
+  order?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -1181,7 +1276,7 @@ export type ImageSelectScalar = {
   listingId?: boolean
 }
 
-export type ImageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "folder" | "key" | "bucket" | "status" | "createdAt" | "updatedAt" | "deletedAt" | "createdById" | "updatedById" | "deletedById" | "listingId", ExtArgs["result"]["image"]>
+export type ImageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "folder" | "key" | "bucket" | "status" | "order" | "createdAt" | "updatedAt" | "deletedAt" | "createdById" | "updatedById" | "deletedById" | "listingId", ExtArgs["result"]["image"]>
 export type ImageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   updatedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1215,6 +1310,7 @@ export type $ImagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     key: string
     bucket: string
     status: $Enums.ImageStatus
+    order: number
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
@@ -1654,6 +1750,7 @@ export interface ImageFieldRefs {
   readonly key: Prisma.FieldRef<"Image", 'String'>
   readonly bucket: Prisma.FieldRef<"Image", 'String'>
   readonly status: Prisma.FieldRef<"Image", 'ImageStatus'>
+  readonly order: Prisma.FieldRef<"Image", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Image", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Image", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"Image", 'DateTime'>

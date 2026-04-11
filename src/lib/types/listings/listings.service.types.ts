@@ -4,7 +4,7 @@ import type { Listing, ListingId } from '$lib/server/api/listings/listing.domain
 import type { UserId } from '$lib/server/api/users/user.domain';
 import type { ConstructionType } from '../buildings/building.domain.types';
 import type { FinishType } from '../finishes/finish.domain.types';
-import type { AllBuildingDetailsWithTypes, ListingQueryOptions } from './listings.repository.types';
+import type { AllBuildingDetails, ListingQueryOptions } from './listings.repository.types';
 
 export type AddFinishParams = {
 	type: FinishType;
@@ -65,9 +65,7 @@ export type DeleteBuildingParams = {
 
 export type AddImageParams = {
 	id: ImageId;
-	folder: string;
-	bucket: string;
-	key: string;
+	order?: number;
 };
 
 export type UpdateImageParams = AddImageParams;
@@ -99,7 +97,8 @@ export interface IListingsService {
 	getById(id: ListingId): Promise<Listing>;
 	delete(id: ListingId): Promise<void>;
 	find(options?: ListingQueryOptions): Promise<Listing[]>;
-	findAllBuildingDetailsByType(type: ConstructionType): Promise<AllBuildingDetailsWithTypes>;
+	findCount(options?: ListingQueryOptions): Promise<number>;
+	findAllBuildingDetailsByType(type: ConstructionType): Promise<AllBuildingDetails>;
 	getBuildingsByTypeCount(type: ConstructionType): Promise<number>;
 	softDelete(id: ListingId, deletedById: UserId): Promise<void>;
 }

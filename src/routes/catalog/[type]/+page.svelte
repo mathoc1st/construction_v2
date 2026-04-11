@@ -2,22 +2,18 @@
 	import BuildingCard from '$lib/components/ui/BuildingCard.svelte';
 	import SearchFilters from '$lib/components/ui/SearchFilters.svelte';
 	import Sorting from '$lib/components/ui/Sorting.svelte';
-	import type { Snapshot } from '@sveltejs/kit';
 	import { PaginationNav } from 'flowbite-svelte';
-	import type { PageProps } from './$types';
+	import type { PageProps, Snapshot } from './$types';
 	import { SvelteURLSearchParams } from 'svelte/reactivity';
 	import type { FinishType } from '$lib/types/finishes/finish.domain.types';
 	import { getBuildingTypeName } from '$lib/utils';
 	import { ConstructionType } from '$lib/types/buildings/building.domain.types';
-	import { SortDirection } from '$lib/types/prisma/prisma.service.types';
-	import {
-		ListingSortableFields,
-		type SortOptionsUnion
-	} from '$lib/types/listings/listings.repository.types';
+	import { type SortOptionsV2 } from '$lib/types/listings/listings.repository.types';
 	import type { ListingDto } from '$lib/dtos/listing.dto';
 
 	let { data, params }: PageProps = $props();
 
+	let limit = 12;
 	let listings = $derived(data.listings);
 	let currentPage = $state(1);
 	let innerWidth = $state(0);
@@ -26,91 +22,141 @@
 		return 5;
 	});
 
-	let totalPages = $derived(Math.ceil(data.total / 12));
+	let totalPages = $derived(data.total ? Math.ceil(data.total / limit) : 0);
 
 	async function handlePageChange(page: number) {
+		if (page === currentPage) return;
 		currentPage = page;
-		refetch();
+		await refetch();
 	}
 
 	async function refetch() {
 		const urlParams = new SvelteURLSearchParams();
+
+		urlParams.append('sortBy', JSON.stringify(sortByFilter));
+		urlParams.append('limit', limit.toString());
 		urlParams.append('page', currentPage.toString());
-		urlParams.append('type', params.type);
-		urlParams.append('sortType', sortByFilter.type);
-		urlParams.append('sortField', sortByFilter.sort?.field ? sortByFilter.sort.field : '');
-		urlParams.append(
-			'sortDirection',
-			sortByFilter.sort?.direction ? sortByFilter.sort.direction : ''
-		);
-		floorsFilter.forEach((f) => {
-			urlParams.append('floor', f.toString());
+		urlParams.append('constructionType', params.type);
+		selectedFloors.forEach((f) => {
+			urlParams.append('floors', f.toString());
 		});
-		finishesFilter.forEach((f) => {
-			urlParams.append('finish', f);
+		selectedFinishes.forEach((f) => {
+			urlParams.append('finishTypes', f);
 		});
-		sizesFilter.forEach((s) => {
-			urlParams.append('size', s);
+		selectedSizes.forEach((s) => {
+			urlParams.append('dimensions', JSON.stringify(s));
 		});
-		if (verandaFilter !== null) urlParams.append('veranda', JSON.stringify(verandaFilter));
+		if (isVerandaSelected !== null) urlParams.append('veranda', JSON.stringify(isVerandaSelected));
 
 		const response = await fetch(`/api/buildings?${urlParams}`, { method: 'GET' });
 
 		if (!response.ok) return;
 
-		const result = (await response.json()) as ListingDto[];
+		const result = (await response.json()) as {
+			listings: ListingDto[];
+			total: number;
+		};
 
 		if (!result) {
 			return;
 		}
 
-		listings = result;
-		totalPages = Math.ceil(result.length / 12);
+		listings = result.listings;
+		totalPages = Math.ceil(result.total / limit);
 
 		setTimeout(() => {
 			window.scrollTo({
 				top: 0,
-				behavior: 'smooth' // scrolls smoothly
+				behavior: 'smooth'
 			});
 		}, 50);
 	}
 
-	$effect(() => {
-		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		floorsFilter;
-		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		finishesFilter;
-		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		sizesFilter;
-		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		sortByFilter;
-		refetch();
+	let selectedFloors: number[] = $state([]);
+	let selectedFinishes: FinishType[] = $state([]);
+	let selectedSizes: { width: number; length: number }[] = $state([]);
+	let isVerandaSelected: boolean | null = $state(null);
+	let sortByFilter: SortOptionsV2 = $state({
+		views: 'desc'
 	});
 
-	let floorsFilter: number[] = $state([]);
-	let finishesFilter: FinishType[] = $state([]);
-	let sizesFilter: string[] = $state([]);
-	let verandaFilter: boolean | null = $state(null);
-	let sortByFilter: SortOptionsUnion = $state({
-		type: 'listing',
-		sort: {
-			field: ListingSortableFields.VIEWS,
-			direction: SortDirection.DESC
+	async function onFloorsChanged(floor: number) {
+		if (selectedFloors.includes(floor)) {
+			selectedFloors = selectedFloors.filter((f) => f !== floor);
+		} else {
+			selectedFloors = [...selectedFloors, floor];
 		}
-	});
+		await refetch();
+	}
+
+	async function onFinishesChanged(finish: FinishType) {
+		if (selectedFinishes.includes(finish)) {
+			selectedFinishes = selectedFinishes.filter((f) => f !== finish);
+		} else {
+			selectedFinishes = [...selectedFinishes, finish];
+		}
+		await refetch();
+	}
+
+	async function onSizesChanged(size: { width: number; length: number }) {
+		if (selectedSizes.some((s) => s.width === size.width && s.length === size.length)) {
+			selectedSizes = selectedSizes.filter(
+				(s) => !(s.width === size.width && s.length === size.length)
+			);
+		} else {
+			selectedSizes = [...selectedSizes, size];
+		}
+		await refetch();
+	}
+
+	async function onVerandaChanged(veranda: boolean | null) {
+		if (isVerandaSelected === veranda) {
+			isVerandaSelected = null;
+		} else {
+			isVerandaSelected = veranda;
+		}
+		await refetch();
+	}
+
+	async function onResetFilters() {
+		selectedFloors = [];
+		selectedFinishes = [];
+		selectedSizes = [];
+		isVerandaSelected = null;
+		await refetch();
+	}
+
+	async function onSortByChanged(sort: 'views' | 'price') {
+		if (sortByFilter[sort] === 'asc') {
+			sortByFilter = { [sort]: 'desc' };
+		} else {
+			sortByFilter = { [sort]: 'asc' };
+		}
+		await refetch();
+	}
 
 	export const snapshot: Snapshot<{
 		currentPage: number;
-		floorsFilter: number[];
-		finishesFilter: FinishType[];
-		sizesFilter: string[];
+		floors: number[];
+		finishes: FinishType[];
+		sizes: { width: number; length: number }[];
+		veranda: boolean | null;
 	}> = {
-		capture: () => ({ currentPage, floorsFilter, finishesFilter, sizesFilter }),
-		restore: (value) => {
+		capture: () => ({
+			currentPage,
+			floors: selectedFloors,
+			finishes: selectedFinishes,
+			sizes: selectedSizes,
+			veranda: isVerandaSelected
+		}),
+		restore: async (value) => {
 			currentPage = value.currentPage;
-			floorsFilter = value.floorsFilter;
-			finishesFilter = value.finishesFilter;
-			sizesFilter = value.sizesFilter;
+			selectedFloors = value.floors;
+			selectedFinishes = value.finishes;
+			selectedSizes = value.sizes;
+			isVerandaSelected = value.veranda;
+
+			await refetch();
 		}
 	};
 </script>
@@ -123,12 +169,17 @@
 	<div class="mt-26 flex w-full gap-4 max-[900px]:justify-center">
 		<SearchFilters
 			details={data.details}
-			bind:floorsFilter
-			bind:finishesFilter
-			bind:sizesFilter
-			bind:verandaFilter
+			{selectedFloors}
+			{selectedFinishes}
+			{selectedSizes}
+			{isVerandaSelected}
+			{onFloorsChanged}
+			{onFinishesChanged}
+			{onSizesChanged}
+			{onVerandaChanged}
+			{onResetFilters}
 		/>
-		<Sorting bind:sortBy={sortByFilter} />
+		<!-- <Sorting sortBy={sortByFilter} {onSortByChanged} /> -->
 	</div>
 	<div
 		class="mt-12 grid grid-cols-3 gap-y-18 max-[1440px]:grid-cols-2 max-[900px]:grid-cols-1 max-[900px]:place-items-center"

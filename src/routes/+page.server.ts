@@ -1,4 +1,5 @@
 import type { ListingDto } from '$lib/dtos/listing.dto';
+import { getImageService } from '$lib/server/api/images/images.service';
 import { ListingMapper } from '$lib/server/api/listings/listing.mapper';
 import { getListingsService } from '$lib/server/api/listings/listings.service';
 import { ConstructionType } from '$lib/types/buildings/building.domain.types';
@@ -36,10 +37,43 @@ export const load: PageServerLoad = async () => {
 		})
 	]);
 
-	const popularFramesDto: ListingDto[] = popularFrames.map(ListingMapper.toDtoFromDomain);
-	const popularBarnsDto: ListingDto[] = popularBarns.map(ListingMapper.toDtoFromDomain);
-	const popularContainersDto: ListingDto[] = popularContainers.map(ListingMapper.toDtoFromDomain);
+	const popularFramesDto: ListingDto[] = await Promise.all(
+		popularFrames.map(async (listing) => ({
+			...ListingMapper.toDtoFromDomain(listing),
+			images: await Promise.all(
+				listing.images.map(async (img) => ({
+					id: img.id.value,
+					url: await getImageService().getImageUrl(img),
+					order: img.order
+				}))
+			)
+		}))
+	);
 
+	const popularBarnsDto: ListingDto[] = await Promise.all(
+		popularBarns.map(async (listing) => ({
+			...ListingMapper.toDtoFromDomain(listing),
+			images: await Promise.all(
+				listing.images.map(async (img) => ({
+					id: img.id.value,
+					url: await getImageService().getImageUrl(img),
+					order: img.order
+				}))
+			)
+		}))
+	);
+	const popularContainersDto: ListingDto[] = await Promise.all(
+		popularContainers.map(async (listing) => ({
+			...ListingMapper.toDtoFromDomain(listing),
+			images: await Promise.all(
+				listing.images.map(async (img) => ({
+					id: img.id.value,
+					url: await getImageService().getImageUrl(img),
+					order: img.order
+				}))
+			)
+		}))
+	);
 	return { popularFramesDto, popularBarnsDto, popularContainersDto };
 };
 

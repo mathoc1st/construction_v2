@@ -39,13 +39,15 @@ export enum BuildingSortableFields {
 
 export type BuildingFilterOptions = {
 	constructionType?: ConstructionType;
-	width?: number;
-	length?: number;
+	dimensions?: {
+		width: number;
+		length: number;
+	}[];
 	height?: number;
 	bedrooms?: number;
 	bathrooms?: number;
 	floors?: number[];
-	hasVeranda?: boolean;
+	hasVeranda?: boolean | null;
 	includesDeleted?: boolean;
 };
 
@@ -82,9 +84,14 @@ export type FilterOptions = {
 	finish?: FinishFilterOptions;
 };
 
+export type SortOptionsV2 = {
+	views?: 'asc' | 'desc';
+	price?: 'asc' | 'desc';
+};
+
 export type ListingQueryOptions = {
 	filters?: FilterOptions;
-	sort?: SortOptionsUnion;
+	sort?: SortOptionsV2;
 	pagination?: PaginationOptions;
 };
 
@@ -95,18 +102,14 @@ export type ListingWithBuildingAndFinishes = {
 };
 
 export type AllBuildingDetails = {
-	width: number;
-	length: number;
-	floors: number;
-	bedrooms: number;
-	bathrooms: number;
-	hasVeranda: boolean;
-	finishes: FinishType[];
-}[];
-
-export type AllBuildingDetailsWithTypes = {
-	details: AllBuildingDetails;
-	types: FinishType[];
+	dimensions: {
+		width: number;
+		length: number;
+	}[];
+	floors: number[];
+	bedrooms: number[];
+	bathrooms: number[];
+	finishTypes: FinishType[];
 };
 
 export interface IListingsRepository {
@@ -115,7 +118,7 @@ export interface IListingsRepository {
 	save(listing: Listing, newImages: Image[]): Promise<Listing>;
 	delete(id: ListingId): Promise<void>;
 	find(options?: ListingQueryOptions): Promise<Listing[]>;
-	getAllBuildingDetailsByType(type: ConstructionType): Promise<AllBuildingDetails>;
-	getAllFinishTypesByType(type: ConstructionType): Promise<FinishType[]>;
+	findCount(options?: ListingQueryOptions): Promise<number>;
+	findAllBuildingDetailsByType(type: ConstructionType): Promise<AllBuildingDetails>;
 	getBuildingsByTypeCount(type: ConstructionType): Promise<number>;
 }

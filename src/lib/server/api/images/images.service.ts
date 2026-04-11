@@ -3,6 +3,7 @@ import type { IImagesRepository } from '$lib/types/images/images.repository';
 import type { IImagesService } from '$lib/types/images/images.service.types';
 import type { UpdateImageParams } from '$lib/types/listings/listings.service.types';
 import type { IMinioService } from '$lib/types/minio/minio.service.types';
+import type { ListingId } from '../listings/listing.domain';
 import { getMinioService } from '../minio/minio.service';
 import type { UserId } from '../users/user.domain';
 import { ACTIVE_IMAGE_FOLDER, Image, IMAGE_BUCKET_NAME, TEMP_IMAGE_FOLDER } from './image.domain';
@@ -14,19 +15,44 @@ export class ImageService implements IImagesService {
 		private readonly _imagesRepository: IImagesRepository
 	) {}
 
-	async uploadImages(images: File[], uploadedBy: UserId): Promise<Image[]> {
+	async getImageUrl(image: Image): Promise<string> {
+		if (image.isDeleted) {
+			throw new Error('Cannot get URL for deleted image');
+		}
+
+		return this._minioService.generatePresignedGetUrl(image.bucket, `${image.folder}/${image.key}`);
+	}
+
+	async uploadImages(
+		imageFiles: { file: File; order: number }[],
+		uploadedBy: UserId,
+		listingId?: ListingId | null
+	): Promise<Image[]> {
+		let lastOrder = 0;
+
+		if (listingId) {
+			const order = await this._imagesRepository.findLastListingImageOrder(listingId);
+			if (order) lastOrder = order;
+		}
+
 		const uploadedImages: Image[] = [];
 
-		for (const file of images) {
-			const key = `${crypto.randomUUID()}-${file.name}`;
-			await this._minioService.uploadObject(IMAGE_BUCKET_NAME, TEMP_IMAGE_FOLDER, key, file);
+		for (const imageFile of imageFiles) {
+			const key = `${crypto.randomUUID()}-${imageFile.file.name}`;
+			await this._minioService.uploadObject(
+				IMAGE_BUCKET_NAME,
+				TEMP_IMAGE_FOLDER,
+				key,
+				imageFile.file
+			);
 
 			uploadedImages.push(
 				Image.create({
 					folder: TEMP_IMAGE_FOLDER,
 					key: key,
 					bucket: IMAGE_BUCKET_NAME,
-					createdById: uploadedBy
+					createdById: uploadedBy,
+					order: lastOrder + imageFile.order
 				})
 			);
 		}
@@ -51,6 +77,7 @@ export class ImageService implements IImagesService {
 				`${ACTIVE_IMAGE_FOLDER}/${image.key}`
 			);
 
+			// TODO: Update order
 			image.markActive(updatedBy);
 		}
 

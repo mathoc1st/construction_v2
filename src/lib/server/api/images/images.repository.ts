@@ -5,6 +5,7 @@ import type { Image, ImageId } from './image.domain';
 import { ImageMapper } from './image.mapper';
 import { ImageStatus as DomainImageStatus } from '$lib/types/images/image.domain.types';
 import { ImageStatus as PrismaImageStatus } from '../prisma/generated/client';
+import type { ListingId } from '../listings/listing.domain';
 
 const imageStatusPrismaMap: Record<PrismaImageStatus, DomainImageStatus> = {
 	TEMP: DomainImageStatus.TEMP,
@@ -70,6 +71,24 @@ export class ImagesRepository implements IImagesRepository {
 				}
 			})
 		);
+	}
+
+	async findLastListingImageOrder(listingId?: ListingId): Promise<number | null> {
+		const result = await PrismaService.executeOrThrow(() =>
+			this._prismaService.client.image.findFirst({
+				where: {
+					listingId: listingId ? listingId.value : undefined
+				},
+				orderBy: {
+					order: 'desc'
+				},
+				select: {
+					order: true
+				}
+			})
+		);
+
+		return result ? result.order : null;
 	}
 }
 

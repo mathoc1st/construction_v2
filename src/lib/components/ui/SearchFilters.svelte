@@ -1,65 +1,46 @@
 <script lang="ts">
 	import type { FinishType } from '$lib/types/finishes/finish.domain.types';
-	import type { AllBuildingDetailsWithTypes } from '$lib/types/listings/listings.repository.types';
+	import type { AllBuildingDetails } from '$lib/types/listings/listings.repository.types';
 	import { getFinishTypeName } from '$lib/utils';
-	import type { Snapshot } from '@sveltejs/kit';
 	import { Drawer, AccordionItem, Accordion } from 'flowbite-svelte';
+
+	interface Props {
+		details: AllBuildingDetails | undefined;
+		selectedFloors: number[];
+		selectedFinishes: FinishType[];
+		selectedSizes: { width: number; length: number }[];
+		isVerandaSelected: boolean | null;
+		onFloorsChanged: (floor: number) => void;
+		onFinishesChanged: (finish: FinishType) => void;
+		onSizesChanged: (size: { width: number; length: number }) => void;
+		onVerandaChanged: (veranda: boolean | null) => void;
+		onResetFilters: () => void;
+	}
 
 	let {
 		details,
-		floorsFilter = $bindable(),
-		finishesFilter = $bindable(),
-		sizesFilter = $bindable(),
-		verandaFilter = $bindable()
-	}: {
-		details: AllBuildingDetailsWithTypes;
-		floorsFilter: number[];
-		finishesFilter: FinishType[];
-		sizesFilter: string[];
-		verandaFilter: boolean | null;
-	} = $props();
-
-	$effect(() => {
-		console.log('Details changed:', details);
-	});
+		selectedFloors,
+		selectedFinishes,
+		selectedSizes,
+		isVerandaSelected,
+		onFloorsChanged,
+		onFinishesChanged,
+		onSizesChanged,
+		onVerandaChanged,
+		onResetFilters
+	}: Props = $props();
 
 	let isDrawerOpen = $state(false);
-	let floors = $derived([
-		...new Set(
-			details.details.map((b) => {
-				return b.floors;
-			})
-		)
-	]);
-
-	let finishes = $derived.by(() => {
-		const foundFinishes: FinishType[] = [];
-		for (const finish of details.types) {
-			foundFinishes.push(finish);
-		}
-
-		return [...new Set(foundFinishes)];
-	});
-
-	let sizes = $derived([
-		...new Set(
-			details.details.map((b) => {
-				return `${b.length}x${b.width}`;
-			})
-		)
-	]);
-
-	function onToggle<T>(event: Event, value: T, list: T[]) {
-		const checkbox = event.target as HTMLInputElement;
-
-		if (!checkbox.checked) {
-			const index = list.indexOf(value);
-			if (index !== -1) list.splice(index, 1);
-			return;
-		}
-
-		list.push(value);
-	}
+	let floors = $derived(details?.floors.sort((a, b) => a - b));
+	let finishes = $derived(details?.finishTypes);
+	let sizes = $derived(
+		details?.dimensions.sort((a, b) => {
+			if (a.width !== b.width) {
+				return a.width - b.width;
+			}
+			return a.length - b.length;
+		})
+	);
 
 	function isSelected<T>(value: T, list: T[]) {
 		const index = list.indexOf(value);
@@ -67,44 +48,12 @@
 		return false;
 	}
 
-	function onFloorsChanged(event: Event, floor: number) {
-		onToggle(event, floor, floorsFilter);
+	function isSelectedSize(
+		value: { width: number; length: number },
+		list: { width: number; length: number }[]
+	) {
+		return list.some((v) => v.width === value.width && v.length === value.length);
 	}
-
-	function onFinishesChanged(event: Event, finish: FinishType) {
-		onToggle(event, finish, finishesFilter);
-	}
-
-	function onSizesChanged(event: Event, size: string) {
-		onToggle(event, size, sizesFilter);
-	}
-
-	function onResetFilters() {
-		floorsFilter = [];
-		finishesFilter = [];
-		sizesFilter = [];
-		verandaFilter = null;
-	}
-
-	export const snapshot: Snapshot<{
-		floors: number[];
-		finishes: FinishType[];
-		sizes: string[];
-		veranda: boolean | null;
-	}> = {
-		capture: () => ({
-			floors: floorsFilter,
-			finishes: finishesFilter,
-			sizes: sizesFilter,
-			veranda: verandaFilter
-		}),
-		restore: (value) => {
-			floorsFilter = value.floors;
-			finishesFilter = value.finishes;
-			sizesFilter = value.sizes;
-			verandaFilter = value.veranda;
-		}
-	};
 </script>
 
 <button
@@ -132,8 +81,8 @@
 						><input
 							type="checkbox"
 							class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
-							onchange={(e) => onFloorsChanged(e, floor)}
-							checked={isSelected(floor, floorsFilter)}
+							onchange={() => onFloorsChanged(floor)}
+							checked={isSelected(floor, selectedFloors)}
 						/>
 						{floor}</label
 					>
@@ -148,8 +97,8 @@
 						><input
 							type="checkbox"
 							class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
-							onchange={(e) => onFinishesChanged(e, finish)}
-							checked={isSelected(finish, finishesFilter)}
+							onchange={() => onFinishesChanged(finish)}
+							checked={isSelected(finish, selectedFinishes)}
 						/>
 						{getFinishTypeName(finish)}</label
 					>
@@ -159,15 +108,15 @@
 		<AccordionItem>
 			{#snippet header()}<p class="text-dark-olive">Размер</p>{/snippet}
 			<div class="flex flex-col gap-2">
-				{#each sizes as size, i (i)}
+				{#each sizes as size (size.width + 'x' + size.length)}
 					<label
 						><input
 							type="checkbox"
 							class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
-							onchange={(e) => onSizesChanged(e, size)}
-							checked={isSelected(size, sizesFilter)}
+							onchange={() => onSizesChanged(size)}
+							checked={isSelectedSize(size, selectedSizes)}
 						/>
-						{size}</label
+						{size.width}x{size.length}</label
 					>
 				{/each}
 			</div>
@@ -178,28 +127,31 @@
 				<label
 					><input
 						type="radio"
-						bind:group={verandaFilter}
+						bind:group={isVerandaSelected}
 						value={true}
 						class="text-dark-brown bg-off-white form-radia"
-						checked={verandaFilter === true}
+						checked={isVerandaSelected === true}
+						onclick={() => onVerandaChanged(true)}
 					/> Есть</label
 				>
 				<label
 					><input
 						type="radio"
-						bind:group={verandaFilter}
+						bind:group={isVerandaSelected}
 						value={false}
 						class="text-dark-brown bg-off-white form-radia"
-						checked={verandaFilter === false}
+						checked={isVerandaSelected === false}
+						onclick={() => onVerandaChanged(false)}
 					/> Нет</label
 				>
 				<label
 					><input
 						type="radio"
-						bind:group={verandaFilter}
+						bind:group={isVerandaSelected}
 						value={null}
 						class="text-dark-brown bg-off-white form-radia"
-						checked={verandaFilter === null}
+						checked={isVerandaSelected === null}
+						onclick={() => onVerandaChanged(null)}
 					/> Без разницы</label
 				>
 			</div>

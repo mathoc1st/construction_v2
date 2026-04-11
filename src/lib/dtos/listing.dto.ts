@@ -5,6 +5,11 @@ import { ConstructionType } from '$lib/types/buildings/building.domain.types';
 
 import { FinishType } from '$lib/types/finishes/finish.domain.types';
 import { SortDirection } from '$lib/types/prisma/prisma.service.types';
+import {
+	BuildingSortableFields,
+	FinishSortableFields,
+	ListingSortableFields
+} from '$lib/types/listings/listings.repository.types';
 
 export const listingSchema = z.object({
 	id: z.uuidv7().optional(),
@@ -23,13 +28,52 @@ export const addListingSchema = z.object({
 	building: addBuildingSchema
 });
 
+const sortOptionsSchema = <T extends z.ZodTypeAny>(fieldEnum: T) =>
+	z.object({
+		field: fieldEnum,
+		direction: z.enum(['asc', 'desc'])
+	});
+
+const ListingSortableFieldsSchema = z.enum(ListingSortableFields);
+const BuildingSortableFieldsSchema = z.enum(BuildingSortableFields);
+const FinishSortableFieldsSchema = z.enum(FinishSortableFields);
+
+const ListingSortSchema = z.object({
+	type: z.literal('listing'),
+	sort: sortOptionsSchema(ListingSortableFieldsSchema).optional()
+});
+
+const BuildingSortSchema = z.object({
+	type: z.literal('building'),
+	sort: sortOptionsSchema(BuildingSortableFieldsSchema).optional()
+});
+
+const FinishSortSchema = z.object({
+	type: z.literal('finish'),
+	sort: sortOptionsSchema(FinishSortableFieldsSchema).optional()
+});
+
+export const SortSchema = z.discriminatedUnion('type', [
+	ListingSortSchema,
+	BuildingSortSchema,
+	FinishSortSchema
+]);
+
 export const filterListingsSchema = z.object({
 	constructionType: z.enum(ConstructionType).optional(),
+	dimensions: z
+		.array(
+			z.object({
+				width: z.number(),
+				length: z.number()
+			})
+		)
+		.optional(),
 	page: z.coerce.number().int().min(1).optional(),
 	limit: z.coerce.number().int().min(1).optional(),
 	floors: z.array(z.coerce.number().int()).optional(),
 	finishes: z.array(z.enum(FinishType)).optional(),
-	veranda: z.coerce.boolean().optional(),
+	veranda: z.coerce.boolean().nullable().optional(),
 	sortDirection: z.enum(SortDirection).optional()
 });
 

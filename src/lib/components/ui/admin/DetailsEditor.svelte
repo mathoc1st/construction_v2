@@ -1,11 +1,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import { tv } from 'tailwind-variants';
-	import { BuildingType, FinishType, type BuildingDto, type FinishDto } from '$lib/types';
-	import { Label, Select } from 'flowbite-svelte';
-	import { getBuildingTypeName, getFinishTypeName } from '$lib/utils';
-	import z from 'zod';
-
+	import { BuildingType, type BuildingDto } from '$lib/types';
 	let {
 		savedBuilding,
 		onSaveBuilding

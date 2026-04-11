@@ -3,6 +3,8 @@ import type { Actions, PageServerLoad } from './$types';
 import { getListingsService } from '$lib/server/api/listings/listings.service';
 import { ListingMapper } from '$lib/server/api/listings/listing.mapper';
 import { ListingId } from '$lib/server/api/listings/listing.domain';
+import type { ImageDto } from '$lib/dtos/image.dto';
+import { getImageService } from '$lib/server/api/images/images.service';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const id = params.id;
@@ -10,7 +12,24 @@ export const load: PageServerLoad = async ({ params }) => {
 	const listing = await getListingsService().getById(new ListingId(id));
 
 	if (listing) {
-		return ListingMapper.toDtoFromDomain(listing);
+		const images: ImageDto[] = await Promise.all(
+			listing.images.map(async (img) => {
+				const url = await getImageService().getImageUrl(img);
+
+				return {
+					id: img.id.value,
+					url,
+					order: img.order
+				};
+			})
+		);
+
+		const listingDto = ListingMapper.toDtoFromDomain(listing);
+
+		return {
+			...listingDto,
+			images
+		};
 	}
 
 	error(404, 'Not found');

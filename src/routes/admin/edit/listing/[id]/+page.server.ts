@@ -7,6 +7,8 @@ import { ListingId } from '$lib/server/api/listings/listing.domain.js';
 import { listingSchema } from '$lib/dtos/listing.dto.js';
 import { FinishId } from '$lib/server/api/finishes/finish.domain.js';
 import { ImageId } from '$lib/server/api/images/image.domain.js';
+import { getImageService } from '$lib/server/api/images/images.service.js';
+import type { ImageDto } from '$lib/dtos/image.dto.js';
 
 export const load = async ({ params }) => {
 	const id = params.id;
@@ -16,6 +18,18 @@ export const load = async ({ params }) => {
 	if (!result) {
 		throw error(404, 'Listing not found');
 	}
+
+	const images: ImageDto[] = await Promise.all(
+		result.images.map(async (img) => {
+			const url = await getImageService().getImageUrl(img);
+
+			return {
+				id: img.id.value,
+				url,
+				order: img.order
+			};
+		})
+	);
 
 	const form = await superValidate(
 		{
@@ -40,12 +54,7 @@ export const load = async ({ params }) => {
 					originalPrice: f.originalPrice
 				}))
 			},
-			images: result.images.map((img) => ({
-				id: img.id.value,
-				folder: img.folder,
-				key: img.key,
-				bucket: img.bucket
-			}))
+			images
 		},
 		zod4(listingSchema),
 		{ errors: false }
@@ -74,12 +83,7 @@ export const actions = {
 
 		await getListingsService().update(new ListingId(form.data.id), session.userId, {
 			title: form.data.title,
-			images: form.data.images.map((img) => ({
-				id: new ImageId(img.id),
-				folder: img.folder,
-				key: img.key,
-				bucket: img.bucket
-			})),
+			images: form.data.images.map((img) => ({ id: new ImageId(img.id), order: img.order })),
 			building: {
 				constructionType: form.data.building.constructionType,
 				width: form.data.building.width,

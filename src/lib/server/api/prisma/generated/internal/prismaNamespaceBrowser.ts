@@ -121,6 +121,7 @@ export const ImageScalarFieldEnum = {
   key: 'key',
   bucket: 'bucket',
   status: 'status',
+  order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',

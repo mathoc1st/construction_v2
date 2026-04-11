@@ -22,6 +22,7 @@ export class Image {
 	private _key: string;
 	private _bucket: string;
 	private _status: ImageStatus;
+	private _order: number;
 
 	private _createdAt: Date;
 	private _updatedAt: Date;
@@ -37,6 +38,7 @@ export class Image {
 		key: string;
 		bucket: string;
 		status: ImageStatus;
+		order: number;
 		createdAt: Date;
 		updatedAt: Date;
 		deletedAt: Date | null;
@@ -49,6 +51,7 @@ export class Image {
 		this._key = params.key;
 		this._bucket = params.bucket;
 		this._status = params.status;
+		this._order = params.order;
 		this._createdAt = params.createdAt;
 		this._updatedAt = params.updatedAt;
 		this._deletedAt = params.deletedAt;
@@ -62,6 +65,7 @@ export class Image {
 		key: string;
 		bucket: string;
 		createdById: UserId;
+		order: number;
 	}): Image {
 		if (!params.key || params.key.trim() === '') throw new EmptyStringError('Filename');
 		if (!params.folder || params.folder.trim() === '') throw new EmptyStringError('Folder');
@@ -75,6 +79,7 @@ export class Image {
 			key: params.key,
 			bucket: params.bucket,
 			status: ImageStatus.TEMP,
+			order: params.order,
 			createdAt: now,
 			updatedAt: now,
 			deletedAt: null,
@@ -90,6 +95,7 @@ export class Image {
 		key: string;
 		bucket: string;
 		status: ImageStatus;
+		order: number;
 		createdAt: Date;
 		updatedAt: Date;
 		deletedAt: Date | null;
@@ -103,6 +109,7 @@ export class Image {
 			key: params.key,
 			bucket: params.bucket,
 			status: params.status,
+			order: params.order,
 			createdAt: params.createdAt,
 			updatedAt: params.updatedAt,
 			deletedAt: params.deletedAt,
@@ -130,6 +137,10 @@ export class Image {
 
 	get status(): ImageStatus {
 		return this._status;
+	}
+
+	get order(): number {
+		return this._order;
 	}
 
 	get createdAt(): Date {

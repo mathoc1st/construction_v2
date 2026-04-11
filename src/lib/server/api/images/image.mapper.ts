@@ -11,6 +11,8 @@ export class ImageMapper {
 			key: image.key,
 			bucket: image.bucket,
 			status: image.status,
+			order: image.order,
+
 			createdAt: image.createdAt,
 			updatedAt: image.updatedAt,
 			deletedAt: image.deletedAt,
@@ -27,6 +29,7 @@ export class ImageMapper {
 			key: record.key,
 			bucket: record.bucket,
 			status: record.status,
+			order: record.order,
 			createdAt: record.createdAt,
 			updatedAt: record.updatedAt,
 			deletedAt: record.deletedAt,
@@ -39,9 +42,8 @@ export class ImageMapper {
 	static toDtoFromDomain(image: Image): ImageDto {
 		return {
 			id: image.id.value,
-			folder: image.folder,
-			key: image.key,
-			bucket: image.bucket
+			order: image.order,
+			url: '' // URL is not stored in the domain model, it must be fetched separately using the ImageService
 		};
 	}
 }

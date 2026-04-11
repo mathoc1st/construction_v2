@@ -1,43 +1,22 @@
 <script lang="ts">
-	import {
-		FinishSortableFields,
-		ListingSortableFields,
-		type SortOptionsUnion
-	} from '$lib/types/listings/listings.repository.types';
+	import { type SortOptionsV2 } from '$lib/types/listings/listings.repository.types';
 	import { SortDirection } from '$lib/types/prisma/prisma.service.types';
 	import Icon from '@iconify/svelte';
 	import { Dropdown, DropdownItem } from 'flowbite-svelte';
 
-	let { sortBy = $bindable() }: { sortBy: SortOptionsUnion } = $props();
+	let {
+		sortBy,
+		onSortByChanged
+	}: { sortBy: SortOptionsV2; onSortByChanged(sort: 'views' | 'price'): Promise<void> } = $props();
 
 	let isOpen: boolean = $state(false);
 
 	function changeSortByPopularity() {
-		sortBy.type = 'listing';
-
-		if (sortBy.sort?.field === ListingSortableFields.VIEWS) {
-			sortBy.sort.direction =
-				sortBy.sort.direction === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC;
-		} else {
-			sortBy.sort = {
-				field: ListingSortableFields.VIEWS,
-				direction: SortDirection.DESC
-			};
-		}
+		onSortByChanged('views');
 	}
 
 	function changeSortByPrice() {
-		sortBy.type = 'finish';
-
-		if (sortBy.sort?.field === FinishSortableFields.PRICE) {
-			sortBy.sort.direction =
-				sortBy.sort.direction === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC;
-		} else {
-			sortBy.sort = {
-				field: FinishSortableFields.PRICE,
-				direction: SortDirection.ASC
-			};
-		}
+		onSortByChanged('price');
 	}
 </script>
 
@@ -54,10 +33,7 @@
 			class="text-off-white flex h-full w-full items-center text-base"
 			>По популярности <Icon
 				icon="flowbite:arrow-up-outline"
-				rotate={sortBy.sort?.field === ListingSortableFields.VIEWS &&
-				sortBy.sort?.direction === SortDirection.ASC
-					? 0
-					: 90}
+				rotate={sortBy.views && sortBy.views === SortDirection.ASC ? 0 : 90}
 			/></button
 		>
 	</DropdownItem>
@@ -67,10 +43,7 @@
 			class="text-off-white flex h-full w-full items-center text-base"
 			>По цене <Icon
 				icon="flowbite:arrow-up-outline"
-				rotate={sortBy.sort?.field === FinishSortableFields.PRICE &&
-				sortBy.sort?.direction === SortDirection.ASC
-					? 0
-					: 90}
+				rotate={sortBy.price && sortBy.price === SortDirection.ASC ? 0 : 90}
 			/></button
 		></DropdownItem
 	>

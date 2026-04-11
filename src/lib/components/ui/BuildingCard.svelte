@@ -3,7 +3,6 @@
 	import type { ListingDto } from '$lib/dtos/listing.dto';
 	import { prettyPrice } from '$lib/utils';
 	import Icon from '@iconify/svelte';
-	import { onMount } from 'svelte';
 
 	interface Props {
 		listing: ListingDto;
@@ -19,16 +18,15 @@
 
 	let dimensions = $derived(
 		listing.building?.length && listing.building?.width
-			? `${listing.building.length}x${listing.building.width} м`
+			? `${listing.building.width}x${listing.building.length} м`
 			: null
 	);
 
-	let image: string = $state('/images/placeholder.jpg');
-
-	onMount(async () => {
+	let image: string = $derived.by(() => {
 		if (listing.images && listing.images.length > 0) {
-			image = await getImageUrl(listing.images[0]);
+			return listing.images[0].url;
 		}
+		return '/images/placeholder.jpg';
 	});
 
 	let startingPrice = $derived.by(() => {
@@ -40,12 +38,6 @@
 		}
 		return startingPrice;
 	});
-
-	async function getImageUrl(image: { folder: string; key: string }) {
-		const res = await fetch(`/api/uploads?key=${image.folder}/${image.key}`);
-		const { url } = await res.json();
-		return url;
-	}
 </script>
 
 <div

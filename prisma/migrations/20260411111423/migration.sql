@@ -54,6 +54,7 @@ CREATE TABLE "Image" (
     "key" TEXT NOT NULL,
     "bucket" TEXT NOT NULL,
     "status" "ImageStatus" NOT NULL DEFAULT 'TEMP',
+    "order" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),

@@ -8,11 +8,11 @@
 	import { ConstructionType } from '$lib/types/buildings/building.domain.types';
 	import { FinishType } from '$lib/types/finishes/finish.domain.types';
 	import type { ListingDto } from '$lib/dtos/listing.dto';
-	import type { ImageDto } from '$lib/dtos/image.dto';
 	import { onDestroy } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import type { ImageDto } from '$lib/dtos/image.dto';
 
 	const lable = tv({
 		variants: {
@@ -52,9 +52,6 @@
 		onResult: async ({ result }) => {
 			if (result.type === 'success') {
 				addToast('green');
-				setTimeout(() => {
-					goto(resolve(`/listing/${$form.id}`));
-				}, 1000);
 			} else if (result.type === 'error') {
 				addToast('red');
 			} else {
@@ -127,13 +124,52 @@
 	}
 
 	onDestroy(() => {
-		// Clear all pending timeouts on unmount
 		toasts.forEach((toast) => {
 			if (toast.timeoutId) {
 				clearTimeout(toast.timeoutId);
 			}
 		});
 	});
+
+	async function onAddImages(files: File[]) {
+		const maxOrder = $form.images.reduce(
+			(max, current) => (current.order > max ? current.order : max),
+			0
+		);
+
+		const formData = new FormData();
+
+		for (const [index, file] of files.entries()) {
+			formData.append(`file:${maxOrder + index + 1}`, file);
+		}
+
+		const uploadUrl = $form.id ? `/api/uploads?listingId=${$form.id}` : '/api/uploads';
+
+		const images: ImageDto[] = await fetch(uploadUrl, {
+			method: 'POST',
+			body: formData
+		}).then((res) => res.json());
+
+		$form.images = [
+			...$form.images,
+			...images.map((image, index) => ({ ...image, order: maxOrder + index + 1 }))
+		];
+	}
+
+	function onSetMainImage(index: number) {
+		if (!$form.images) return;
+		const newImage = $form.images[index];
+		const oldImage = $form.images[0];
+		$form.images[0] = newImage;
+		$form.images[0].order = 0;
+		$form.images[index] = oldImage;
+		$form.images[index].order = index;
+	}
+
+	function onDeleteImage(index: number) {
+		if (!$form.images) return;
+		$form.images = $form.images.filter((img, i) => i !== index);
+	}
 
 	function getConstructionTypeName(type: ConstructionType): string {
 		switch (type) {
@@ -158,12 +194,6 @@
 				return 'Теплый контур 200мм';
 		}
 	}
-
-	let imagesState = $state<ImageDto[]>($form.images ?? []);
-
-	$effect(() => {
-		$form.images = imagesState;
-	});
 </script>
 
 <ToastContainer position="top-right">
@@ -182,15 +212,15 @@
 	{/each}
 </ToastContainer>
 
-<form
-	class="mx-auto flex max-w-360 gap-6 px-5 py-20 max-[1100px]:flex-col"
-	method="POST"
-	enctype="multipart/form-data"
-	use:enhance
->
-	<ImageEditor bind:images={imagesState} />
+<div class="mx-auto flex max-w-360 gap-6 px-5 py-20 max-[1100px]:flex-col">
+	<ImageEditor images={$form.images} {onAddImages} {onSetMainImage} {onDeleteImage} />
 
-	<div class="flex basis-1/2 flex-col justify-center gap-8 max-[1300px]:items-center">
+	<form
+		method="POST"
+		enctype="multipart/form-data"
+		use:enhance
+		class="flex basis-1/2 flex-col justify-center gap-8 max-[1300px]:items-center"
+	>
 		<input
 			class={input({
 				type: 'text',
@@ -429,5 +459,5 @@
 			class="bg-dark-olive text-off-white hover:bg-light-brown mt-8 w-max rounded-2xl p-2 text-lg"
 			>Сохранить</button
 		>
-	</div>
-</form>
+	</form>
+</div>

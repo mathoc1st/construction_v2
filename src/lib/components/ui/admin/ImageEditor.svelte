@@ -11,95 +11,66 @@
 		Fileupload,
 		ControlButton
 	} from 'flowbite-svelte';
-	import { onMount } from 'svelte';
+
+	type PreviewItem = {
+		src: string;
+	};
 
 	interface Props {
-		images?: ImageDto[];
+		images: ImageDto[];
+		onAddImages?: (files: File[]) => void;
+		onDeleteImage?: (index: number) => void;
+		onSetMainImage?: (index: number) => void;
 	}
 
-	let { images = $bindable() }: Props = $props();
-
-	let imageContainer: HTMLDivElement | null = $state(null);
+	let { images, onAddImages, onDeleteImage, onSetMainImage }: Props = $props();
 
 	let imageIndex = $state(0);
 	let selectedFiles = $state<FileList | null>(null);
-	let previews: { src: string }[] = $state([]);
+	let previews: PreviewItem[] = $derived(images.map((image) => ({ src: image.url })));
 
-	$effect(() => {
-		if (!images || images.length === 0) {
-			previews = [{ src: '/images/placeholder.jpg' }];
-			return;
-		}
-
-		(async () => {
-			const newPreviews = await Promise.all(
-				images.map(async (image) => {
-					const res = await fetch(`/api/uploads?key=${image.folder}/${image.key}`);
-					const { url } = await res.json();
-
-					return { src: url };
-				})
-			);
-
-			previews = newPreviews;
-		})();
-	});
-
-	async function handleAddImages(event: Event) {
-		const input = event.target as HTMLInputElement;
-
+	function handleAddImages(event: Event) {
+		const input = event.target;
+		if (!(input instanceof HTMLInputElement)) return;
 		if (!input.files) return;
 
 		const files = Array.from(input.files);
 
 		input.value = '';
 
-		const formData = new FormData();
-
-		files.forEach((file) => {
-			formData.append('files', file);
-		});
-
-		const res = await fetch('/api/uploads', {
-			method: 'POST',
-			body: formData
-		});
-
-		const uploads: ImageDto[] = await res.json();
-
-		images = [...(images ?? []), ...uploads];
+		onAddImages?.(files);
 	}
 
-	async function onImageDelete(_: Event, index: number) {
-		if (!images || images.length === 0) return;
+	function handleDeleteImage(index: number) {
+		if (index < 0 || index >= previews.length) return;
 
-		images = images.filter((_, i) => i !== index);
-		imageIndex = Math.max(0, index - 1);
+		const image = previews[index];
+		if (!image) return;
+
+		onDeleteImage?.(index);
 	}
 
-	function onSelectedMain(event: Event, index: number) {
-		if (!images) return;
+	function handleSetMainImage(index: number) {
+		if (index < 0 || index >= previews.length) return;
 
-		const oldMain = images[0];
-		images[0] = images[index];
-		images[index] = oldMain;
+		const image = previews[index];
+		if (!image) return;
 
-		imageIndex = 0;
+		onSetMainImage?.(index);
 	}
 </script>
 
-<div bind:this={imageContainer} class="shrink-0 basis-1/2 max-[1100px]:basis-full">
+<div class="shrink-0 basis-1/2 max-[1100px]:basis-full">
 	{#key previews}
 		<Carousel
-			images={previews}
+			images={previews.length > 0 ? previews : [{ src: '/images/placeholder.png' }]}
 			bind:index={imageIndex}
 			class="mx-auto mb-6 h-112.5! max-[1100px]:max-w-175 max-[600px]:h-87.5! max-[400px]:h-75!"
 		>
 			{#snippet slide({ index, Slide })}
 				<p
-					class="bg-dark-olive text-off-white absolute top-5 left-5 z-50 hidden rounded-2xl p-3 text-sm {images &&
-					images.length > 0 &&
-					index === 0
+					class="bg-dark-olive text-off-white absolute top-5 left-5 z-50 hidden rounded-2xl p-3 text-sm {previews.length >
+						0 && index === 0
 						? 'block!'
 						: ''}"
 				>
@@ -109,10 +80,10 @@
 					<Tooltip class="bg-dark-olive text-off-white">Сделать картинку главной</Tooltip>
 					<button
 						type="button"
-						onclick={(e) => onSelectedMain(e, index)}
+						onclick={() => handleSetMainImage(index)}
 						class={[
 							'text-dark-olive hover:text-dark-brown  transition ',
-							{ hidden: !images || images.length === 0 || index === 0 }
+							{ hidden: !previews || previews.length === 0 || index === 0 }
 						]}><Icon icon="material-symbols:image-outline" class="size-8" /></button
 					>
 				</div>
@@ -123,10 +94,10 @@
 					<Tooltip class="bg-dark-olive text-off-white">Удалить картинку</Tooltip>
 					<button
 						type="button"
-						onclick={(e) => onImageDelete(e, index)}
+						onclick={() => handleDeleteImage(index)}
 						class={[
 							'hover:text-dark-brown  transition',
-							{ hidden: !images || images.length === 0 }
+							{ hidden: !previews || previews.length === 0 }
 						]}><Icon icon="tabler:trash" class="size-8" /></button
 					>
 				</div>
@@ -166,19 +137,19 @@
 		</Carousel>
 	{/key}
 	<Fileupload
-		clearableOnClick={() => {
-			images = [];
-		}}
+		// clearableOnClick={() => {
+		// 	images = [];
+		// }}
 		classes={{
 			wrapper: 'flex max-[1100px]:justify-center',
 			close: [
 				'text-off-white relative hover:text-dark-olive hidden bg-light-brown rounded-r-2xl',
-				{ block: images && images.length > 0 }
+				{ block: previews && previews.length > 0 }
 			]
 		}}
 		class={[
 			'bg-dark-olive text-off-white max-w-max rounded-2xl border-0 pr-8!',
-			{ 'rounded-r-none pr-2': images && images.length > 0 }
+			{ 'rounded-r-none pr-2': previews && previews.length > 0 }
 		]}
 		id="file"
 		name="file"

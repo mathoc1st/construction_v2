@@ -6,7 +6,7 @@ import type {
 	UpdateListingParams
 } from '$lib/types/listings/listings.service.types';
 import type {
-	AllBuildingDetailsWithTypes,
+	AllBuildingDetails,
 	IListingsRepository,
 	ListingQueryOptions
 } from '$lib/types/listings/listings.repository.types';
@@ -114,14 +114,14 @@ export class ListingsService implements IListingsService {
 		return await this._listingRepository.find(options);
 	}
 
-	async findAllBuildingDetailsByType(type: ConstructionType): Promise<AllBuildingDetailsWithTypes> {
-		const details = await this._listingRepository.getAllBuildingDetailsByType(type);
-		const types = await this._listingRepository.getAllFinishTypesByType(type);
+	async findCount(options?: ListingQueryOptions): Promise<number> {
+		return await this._listingRepository.findCount(options);
+	}
 
-		return {
-			details,
-			types
-		};
+	async findAllBuildingDetailsByType(type: ConstructionType): Promise<AllBuildingDetails> {
+		const details = await this._listingRepository.findAllBuildingDetailsByType(type);
+
+		return details;
 	}
 
 	async getBuildingsByTypeCount(type: ConstructionType): Promise<number> {

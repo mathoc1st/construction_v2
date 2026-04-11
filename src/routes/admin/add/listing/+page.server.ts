@@ -35,7 +35,7 @@ export const actions = {
 			return fail(400, { form });
 		}
 
-		await getListingsService().add(
+		const listing = await getListingsService().add(
 			{
 				title: form.data.title,
 				building: {
@@ -54,12 +54,7 @@ export const actions = {
 						originalPrice: f.originalPrice
 					}))
 				},
-				images: form.data.images.map((img) => ({
-					id: new ImageId(img.id),
-					folder: img.folder,
-					key: img.key,
-					bucket: img.bucket
-				}))
+				images: form.data.images.map((img) => ({ id: new ImageId(img.id) }))
 			},
 			session.userId
 		);

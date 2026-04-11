@@ -8,34 +8,24 @@
 		Indicator,
 		ControlButton
 	} from 'flowbite-svelte';
-	import { onMount } from 'svelte';
 
 	const { buildingImages }: { buildingImages: ImageDto[] } = $props();
 
 	let index = $state(0);
 
-	let imageUrls: { src: string }[] = $state([]);
-
-	onMount(() => {
-		buildingImages.forEach(async (image) => {
-			const res = await fetch(`/api/uploads?key=${image.folder}/${image.key}`);
-			const { url } = await res.json();
-
-			imageUrls = [...imageUrls, { src: url }];
-		});
-	});
+	// let imageUrls: { src: string }[] = $state([]);
 </script>
 
 <div class="shrink-0 basis-1/2 max-[1100px]:basis-full">
 	<Carousel
 		images={!buildingImages || buildingImages.length === 0
 			? [{ src: '/images/placeholder.jpg' }]
-			: imageUrls}
+			: buildingImages.map((img) => ({ src: img.url }))}
 		bind:index
 		class="mx-auto mb-6 h-112.5! max-[1100px]:max-w-175 max-[600px]:h-87.5! max-[400px]:h-75!"
 	>
 		<CarouselIndicators
-			hidden={imageUrls.length <= 1}
+			hidden={!buildingImages || buildingImages.length <= 1}
 			class="flex w-[80%] flex-wrap items-center justify-center gap-y-2"
 		>
 			{#snippet children({ selected })}
@@ -44,8 +34,8 @@
 			{/snippet}
 		</CarouselIndicators>
 
-		{#if imageUrls.length > 1}
-			<Controls hidden={imageUrls.length <= 1} class=" max-[600px]:hidden">
+		{#if buildingImages && buildingImages.length > 1}
+			<Controls hidden={!buildingImages || buildingImages.length <= 1} class=" max-[600px]:hidden">
 				{#snippet children(changeSlide)}
 					<ControlButton
 						name="Previous"
@@ -67,10 +57,10 @@
 		{/if}
 	</Carousel>
 
-	{#if imageUrls.length > 1}
+	{#if buildingImages && buildingImages.length > 1}
 		<Thumbnails
 			class="mt-4 flex max-w-full flex-wrap justify-start gap-2 bg-transparent max-[800px]:hidden"
-			images={imageUrls}
+			images={buildingImages.map((img) => ({ src: img.url }))}
 			bind:index
 		>
 			{#snippet children({ image, selected, Thumbnail })}

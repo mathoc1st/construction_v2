@@ -10,6 +10,7 @@ export type ImagePersistence = {
 	key: string;
 	bucket: string;
 	status: ImageStatus;
+	order: number;
 
 	createdAt: Date;
 	updatedAt: Date;
