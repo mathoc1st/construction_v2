@@ -1,0 +1,667 @@
+[15:00:24.463] [INFO] [36mInitializing Storybook[39m
+[15:00:24.590] [DEBUG] Getting package.json info for /home/mathoc1st/Projects/construction_v2/package.json...
+[15:00:24.591] [DEBUG] Getting CLI versions from NPM for storybook...
+[15:00:24.591] [DEBUG] Executing command: pnpm info storybook version
+[15:00:30.830] [INFO] Adding Storybook version 10.3.3 to your project
+[15:00:30.831] [DEBUG] Project type detected: sveltekit
+[15:00:30.831] [DEBUG] Using cached package.json for /home/mathoc1st/Projects/construction_v2/package.json...
+[15:00:30.832] [INFO] Framework detected: sveltekit
+[15:00:30.832] [DEBUG] Getting installed version for vitest...
+[15:00:30.832] [DEBUG] Executing command: pnpm list "vitest" --json --depth=99
+[15:00:31.040] [DEBUG] Installed version for vitest: null
+[15:00:31.040] [DEBUG] Getting installed version for msw...
+[15:00:31.040] [DEBUG] Executing command: pnpm list "msw" --json --depth=99
+[15:00:31.243] [DEBUG] Installed version for msw: null
+[15:01:05.805] [PROMPT] New to Storybook? {"choice":true}
+[15:01:05.806] [INFO] Storybook collects completely anonymous usage telemetry. We use it to shape Storybook's roadmap and prioritize features. You can learn more, including how to opt out, at https://storybook.js.org/telemetry
+[15:01:07.374] [INFO] base-generator-task-start: Generating Storybook configuration
+[15:01:07.374] [DEBUG] Using cached package.json for /home/mathoc1st/Projects/construction_v2/package.json...
+[15:01:07.374] [DEBUG] Using cached package.json for /home/mathoc1st/Projects/construction_v2/package.json...
+[15:01:07.374] [DEBUG] Using cached package.json for /home/mathoc1st/Projects/construction_v2/package.json...
+[15:01:07.375] [INFO] base-generator-task: - Configuring ESLint plugin
+[15:01:07.375] [DEBUG] Detected flat config at /home/mathoc1st/Projects/construction_v2/eslint.config.js
+[15:01:07.395] [DEBUG] Using cached version for storybook...
+[15:01:07.395] [DEBUG] Getting CLI versions from NPM for @storybook/sveltekit...
+[15:01:07.395] [DEBUG] Executing command: pnpm info @storybook/sveltekit version
+[15:01:07.399] [DEBUG] Getting CLI versions from NPM for @storybook/addon-svelte-csf...
+[15:01:07.399] [DEBUG] Executing command: pnpm info @storybook/addon-svelte-csf version
+[15:01:07.401] [DEBUG] Getting CLI versions from NPM for @chromatic-com/storybook...
+[15:01:07.401] [DEBUG] Executing command: pnpm info @chromatic-com/storybook version
+[15:01:07.404] [DEBUG] Getting CLI versions from NPM for @storybook/addon-vitest...
+[15:01:07.404] [DEBUG] Executing command: pnpm info @storybook/addon-vitest version
+[15:01:07.406] [DEBUG] Getting CLI versions from NPM for @storybook/addon-a11y...
+[15:01:07.406] [DEBUG] Executing command: pnpm info @storybook/addon-a11y version
+[15:01:07.409] [DEBUG] Getting CLI versions from NPM for @storybook/addon-docs...
+[15:01:07.409] [DEBUG] Executing command: pnpm info @storybook/addon-docs version
+[15:01:07.412] [DEBUG] Getting CLI versions from NPM for eslint-plugin-storybook...
+[15:01:07.412] [DEBUG] Executing command: pnpm info eslint-plugin-storybook version
+[15:01:16.286] [INFO] base-generator-task: - Configuring main.ts
+[15:01:16.287] [INFO] base-generator-task: - Configuring preview.ts
+[15:01:16.288] [INFO] base-generator-task: - Adding Storybook command to package.json
+[15:01:16.288] [DEBUG] Getting package.json info for /home/mathoc1st/Projects/construction_v2/package.json...
+[15:01:16.288] [DEBUG] Using cached package.json for /home/mathoc1st/Projects/construction_v2/package.json...
+[15:01:16.288] [DEBUG] Using cached package.json for /home/mathoc1st/Projects/construction_v2/package.json...
+[15:01:16.288] [INFO] base-generator-task: - Copying framework templates
+[15:01:16.298] [DEBUG] Executing command: npm config get registry -ws=false -iwr
+[15:01:17.291] [INFO] base-generator-task-success: Storybook configuration generated
+[15:01:17.291] [DEBUG] Using cached package.json for /home/mathoc1st/Projects/construction_v2/package.json...
+[15:01:17.291] [DEBUG] Using cached installed version for vitest...
+[15:01:17.291] [DEBUG] Getting installed version for @vitest/coverage-v8...
+[15:01:17.291] [DEBUG] Executing command: pnpm list "@vitest/coverage-v8" --json --depth=99
+[15:01:17.490] [DEBUG] Installed version for @vitest/coverage-v8: null
+[15:01:17.490] [DEBUG] Getting installed version for @vitest/coverage-istanbul...
+[15:01:17.490] [DEBUG] Executing command: pnpm list "@vitest/coverage-istanbul" --json --depth=99
+[15:01:17.686] [DEBUG] Installed version for @vitest/coverage-istanbul: null
+[15:01:17.687] [INFO] adding-dependencies-task-start: Adding dependencies to package.json
+[15:01:17.687] [INFO] adding-dependencies-task: Adding devDependencies:
+- storybook@^10.3.3
+- @storybook/sveltekit@^10.3.3
+- @storybook/addon-svelte-csf@^5.1.1
+- @chromatic-com/storybook@^5.1.1
+- @storybook/addon-vitest@^10.3.3
+- @storybook/addon-a11y@^10.3.3
+- @storybook/addon-docs@^10.3.3
+- eslint-plugin-storybook@^10.3.3
+- vitest
+- playwright
+- @vitest/browser-playwright
+- @vitest/coverage-v8
+[15:01:17.687] [DEBUG] Using cached package.json for /home/mathoc1st/Projects/construction_v2/package.json...
+[15:01:17.687] [DEBUG] Using cached version for storybook...
+[15:01:17.687] [DEBUG] Using cached version for @storybook/sveltekit...
+[15:01:17.687] [DEBUG] Using cached version for @storybook/addon-svelte-csf...
+[15:01:17.687] [DEBUG] Using cached version for @chromatic-com/storybook...
+[15:01:17.687] [DEBUG] Using cached version for @storybook/addon-vitest...
+[15:01:17.687] [DEBUG] Using cached version for @storybook/addon-a11y...
+[15:01:17.687] [DEBUG] Using cached version for @storybook/addon-docs...
+[15:01:17.687] [DEBUG] Using cached version for eslint-plugin-storybook...
+[15:01:17.687] [DEBUG] Getting CLI versions from NPM for vitest...
+[15:01:17.687] [DEBUG] Executing command: pnpm info vitest version
+[15:01:21.587] [DEBUG] Getting CLI versions from NPM for playwright...
+[15:01:21.587] [DEBUG] Executing command: pnpm info playwright version
+[15:02:34.765] [DEBUG] Getting CLI versions from NPM for @vitest/browser-playwright...
+[15:02:34.765] [DEBUG] Executing command: pnpm info @vitest/browser-playwright version
+[15:02:36.343] [DEBUG] Getting CLI versions from NPM for @vitest/coverage-v8...
+[15:02:36.343] [DEBUG] Executing command: pnpm info @vitest/coverage-v8 version
+[15:02:37.301] [DEBUG] Using cached package.json for /home/mathoc1st/Projects/construction_v2/package.json...
+[15:02:37.301] [INFO] adding-dependencies-task-success: Dependencies added to package.json
+[15:02:37.301] [INFO] Installing dependencies...
+[15:02:37.302] [INFO] install-dependencies-spinner-start: Installing dependencies...
+[15:02:37.302] [DEBUG] Executing command: pnpm install -w
+[15:02:37.549] [INFO] Installing dependencies...: Progress: resolved 0, reused 1, downloaded 0, added 0
+
+[15:02:37.549] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 0, reu
+[15:02:38.549] [INFO] Installing dependencies...: Progress: resolved 41, reused 41, downloaded 0, added 0
+
+[15:02:38.549] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 41, re
+[15:02:39.576] [INFO] Installing dependencies...: Progress: resolved 42, reused 41, downloaded 0, added 0
+
+[15:02:39.576] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 42, re
+[15:02:40.576] [INFO] Installing dependencies...: Progress: resolved 44, reused 41, downloaded 0, added 0
+
+[15:02:40.576] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 44, re
+[15:02:41.576] [INFO] Installing dependencies...: Progress: resolved 46, reused 41, downloaded 0, added 0
+
+[15:02:41.576] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 46, re
+[15:02:42.576] [INFO] Installing dependencies...: Progress: resolved 47, reused 41, downloaded 1, added 0
+
+[15:02:42.576] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 47, re
+[15:02:43.576] [INFO] Installing dependencies...: Progress: resolved 47, reused 41, downloaded 3, added 0
+
+[15:02:43.576] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 47, re
+[15:02:44.576] [INFO] Installing dependencies...: Progress: resolved 48, reused 41, downloaded 4, added 0
+
+[15:02:44.576] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 48, re
+[15:02:45.576] [INFO] Installing dependencies...: Progress: resolved 48, reused 41, downloaded 6, added 0
+
+[15:02:45.576] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 48, re
+[15:02:47.410] [INFO] Installing dependencies...: Progress: resolved 49, reused 41, downloaded 6, added 0
+
+[15:02:47.410] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 49, re
+[15:02:48.410] [INFO] Installing dependencies...: Progress: resolved 49, reused 42, downloaded 6, added 0
+
+[15:02:48.410] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 49, re
+[15:02:49.074] [INFO] Installing dependencies...:  WARN  Request took 11562ms: https://registry.npmjs.org/@chromatic-com%2Fstorybook
+
+[15:02:49.074] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  Request took 11562m
+[15:02:49.410] [INFO] Installing dependencies...: Progress: resolved 50, reused 42, downloaded 6, added 0
+
+[15:02:49.410] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 50, re
+[15:02:49.478] [INFO] Installing dependencies...:  WARN  Request took 11968ms: https://registry.npmjs.org/@storybook%2Fsveltekit
+
+[15:02:49.478] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  Request took 11968m
+[15:02:50.410] [INFO] Installing dependencies...: Progress: resolved 51, reused 42, downloaded 6, added 0
+
+[15:02:50.410] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 51, re
+[15:02:51.410] [INFO] Installing dependencies...: Progress: resolved 51, reused 42, downloaded 8, added 0
+
+[15:02:51.410] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 51, re
+[15:02:51.961] [INFO] Installing dependencies...:  WARN  Request took 14443ms: https://registry.npmjs.org/playwright
+
+[15:02:51.961] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  Request took 14443m
+[15:02:52.410] [INFO] Installing dependencies...: Progress: resolved 52, reused 42, downloaded 8, added 0
+
+[15:02:52.410] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 52, re
+[15:02:56.729] [INFO] Installing dependencies...:  WARN  Request took 19214ms: https://registry.npmjs.org/@storybook%2Faddon-docs
+
+[15:02:56.729] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  Request took 19214m
+[15:02:56.747] [INFO] Installing dependencies...: Progress: resolved 53, reused 42, downloaded 8, added 0
+
+[15:02:56.747] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 53, re
+[15:02:57.748] [INFO] Installing dependencies...: Progress: resolved 424, reused 407, downloaded 8, added 0
+
+[15:02:57.748] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 424, r
+[15:02:57.990] [INFO] Installing dependencies...:  WARN  Tarball download average speed 36 KiB/s (size 269 KiB) is below 50 KiB/s: https://registry.npmjs.org/@chromatic-com/storybook/-/storybook-5.1.1.tgz (GET)
+
+[15:02:57.990] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  Tarball download av
+[15:02:58.748] [INFO] Installing dependencies...: Progress: resolved 424, reused 407, downloaded 9, added 0
+
+[15:02:58.748] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 424, r
+[15:02:59.748] [INFO] Installing dependencies...: Progress: resolved 425, reused 408, downloaded 9, added 0
+
+[15:02:59.748] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 425, r
+[15:02:59.809] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/open error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.809] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.810] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/recast error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.810] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.811] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/semver error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.811] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.812] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/esbuild error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.812] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.813] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@storybook%2Ficons error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.813] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.813] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@storybook%2Fglobal error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.813] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.815] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/use-sync-external-store error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.815] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.815] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@testing-library%2Fjest-dom error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.815] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.816] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@testing-library%2Fuser-event error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.816] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.817] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@storybook%2Fcsf error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.817] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.818] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/dedent error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.818] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.819] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/es-toolkit error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.819] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.820] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/esrap error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.820] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.821] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/magic-string error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.821] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.822] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/svelte-ast-print error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.822] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.823] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/zimmerframe error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.823] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.823] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@neoconfetti%2Freact error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.823] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.824] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/chromatic error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.824] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.825] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/filesize error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.825] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.826] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/jsonfile error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.826] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.826] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/strip-ansi error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.826] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.826] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/axe-core error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.826] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.827] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/react error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.827] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.827] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/react-dom error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.827] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.827] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/ts-dedent error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.827] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.828] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@mdx-js%2Freact error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.828] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.828] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@typescript-eslint%2Futils error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.828] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.828] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/es-module-lexer error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.828] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.830] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/expect-type error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.830] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.830] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/obug error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.830] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.830] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/pathe error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.830] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.832] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/picomatch error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.832] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.832] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/std-env error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.832] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.832] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/tinybench error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.832] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.834] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/tinyexec error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.834] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.834] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/tinyglobby error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.834] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.834] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/tinyrainbow error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.834] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.835] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/why-is-node-running error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.835] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.836] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@storybook%2Fsvelte error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.836] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.836] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@storybook%2Fsvelte-vite error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.836] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.837] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@storybook%2Fbuilder-vite error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.837] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.838] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@storybook%2Fcsf-plugin error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.838] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.838] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@storybook%2Freact-dom-shim error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.838] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.839] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@vitest%2Fmocker error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.839] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.840] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@vitest%2Frunner error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.840] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.841] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@vitest%2Fsnapshot error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.841] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:02:59.841] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/playwright-core error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:02:59.841] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:00.748] [INFO] Installing dependencies...: Progress: resolved 426, reused 408, downloaded 10, added 0
+
+[15:03:00.748] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 426, r
+[15:03:01.748] [INFO] Installing dependencies...: Progress: resolved 438, reused 412, downloaded 16, added 0
+
+[15:03:01.748] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 438, r
+[15:03:02.748] [INFO] Installing dependencies...: Progress: resolved 446, reused 412, downloaded 17, added 0
+
+[15:03:02.748] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 446, r
+[15:03:03.749] [INFO] Installing dependencies...: Progress: resolved 452, reused 413, downloaded 17, added 0
+
+[15:03:03.749] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 452, r
+[15:03:04.750] [INFO] Installing dependencies...: Progress: resolved 454, reused 413, downloaded 19, added 0
+
+[15:03:04.750] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 454, r
+[15:03:05.750] [INFO] Installing dependencies...: Progress: resolved 461, reused 413, downloaded 19, added 0
+
+[15:03:05.750] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 461, r
+[15:03:06.751] [INFO] Installing dependencies...: Progress: resolved 467, reused 413, downloaded 19, added 0
+
+[15:03:06.751] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 467, r
+[15:03:07.750] [INFO] Installing dependencies...: Progress: resolved 520, reused 421, downloaded 19, added 0
+
+[15:03:07.750] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 520, r
+[15:03:08.751] [INFO] Installing dependencies...: Progress: resolved 521, reused 421, downloaded 19, added 0
+
+[15:03:08.751] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 521, r
+[15:03:08.783] [INFO] Installing dependencies...:  WARN  Tarball download average speed 41 KiB/s (size 374 KiB) is below 50 KiB/s: https://registry.npmjs.org/@storybook/addon-docs/-/addon-docs-10.3.3.tgz (GET)
+
+[15:03:08.783] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  Tarball download av
+[15:03:09.751] [INFO] Installing dependencies...: Progress: resolved 522, reused 421, downloaded 20, added 0
+
+[15:03:09.751] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 522, r
+[15:03:10.973] [INFO] Installing dependencies...: Progress: resolved 523, reused 421, downloaded 20, added 0
+
+[15:03:10.973] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 523, r
+[15:03:11.973] [INFO] Installing dependencies...: Progress: resolved 524, reused 423, downloaded 20, added 0
+
+[15:03:11.973] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 524, r
+[15:03:12.816] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/semver error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.816] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.817] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/esbuild error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.817] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.818] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@storybook%2Ficons error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.818] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.819] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@storybook%2Fglobal error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.819] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.819] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/use-sync-external-store error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.819] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.820] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@testing-library%2Fjest-dom error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.820] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.820] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@testing-library%2Fuser-event error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.820] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.820] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@storybook%2Fcsf error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.820] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.824] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/dedent error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.824] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.825] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/es-toolkit error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.825] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.825] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/esrap error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.825] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.825] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/magic-string error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.825] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.826] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/svelte-ast-print error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.826] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.827] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/zimmerframe error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.827] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.827] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@neoconfetti%2Freact error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.827] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.830] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/chromatic error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.830] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.830] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/filesize error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.830] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.831] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/jsonfile error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.831] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.831] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/strip-ansi error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.831] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.831] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/axe-core error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.831] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.831] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/react error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.831] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.831] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/react-dom error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.831] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.834] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/ts-dedent error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.834] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.834] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@mdx-js%2Freact error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.834] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.838] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@typescript-eslint%2Futils error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.838] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.838] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/es-module-lexer error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.838] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.838] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/expect-type error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.838] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.838] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/obug error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.838] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.838] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/pathe error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.838] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.839] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/picomatch error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.839] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.839] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/std-env error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.839] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.840] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/tinybench error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.840] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.842] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/tinyexec error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.842] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.843] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/tinyglobby error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.843] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.843] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/tinyrainbow error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.843] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.843] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/why-is-node-running error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.843] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.843] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@storybook%2Fsvelte error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.843] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.843] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@storybook%2Fsvelte-vite error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.843] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.844] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@storybook%2Fbuilder-vite error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.844] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.846] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@storybook%2Fcsf-plugin error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.846] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.846] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@storybook%2Freact-dom-shim error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.846] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.848] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@vitest%2Fmocker error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+
+[15:03:12.848] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:12.973] [INFO] Installing dependencies...: Progress: resolved 526, reused 423, downloaded 20, added 0
+
+[15:03:12.973] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 526, r
+[15:03:12.990] [INFO] Installing dependencies...:  WARN  Request took 16232ms: https://registry.npmjs.org/open
+
+[15:03:12.990] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  Request took 16232m
+[15:03:12.992] [INFO] Installing dependencies...:  WARN  Request took 16185ms: https://registry.npmjs.org/@vitest%2Frunner
+
+[15:03:12.992] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  Request took 16185m
+[15:03:13.035] [INFO] Installing dependencies...:  WARN  Request took 16228ms: https://registry.npmjs.org/@vitest%2Fsnapshot
+
+[15:03:13.035] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  Request took 16228m
+[15:03:13.973] [INFO] Installing dependencies...: Progress: resolved 530, reused 424, downloaded 20, added 0
+
+[15:03:13.973] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 530, r
+[15:03:14.973] [INFO] Installing dependencies...: Progress: resolved 530, reused 424, downloaded 22, added 0
+
+[15:03:14.973] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 530, r
+[15:03:15.973] [INFO] Installing dependencies...: Progress: resolved 531, reused 425, downloaded 22, added 0
+
+[15:03:15.973] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 531, r
+[15:03:16.693] [INFO] Installing dependencies...:  WARN  GET https://registry.npmjs.org/@napi-rs/wasm-runtime/-/wasm-runtime-0.2.12.tgz error (ERR_SOCKET_TIMEOUT). Will retry in 10 seconds. 2 retries left.
+
+[15:03:16.693] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  GET https://registr
+[15:03:16.972] [INFO] Installing dependencies...: Progress: resolved 532, reused 425, downloaded 22, added 0
+
+[15:03:16.972] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 532, r
+[15:03:17.099] [INFO] Installing dependencies...:  WARN  Request took 20339ms: https://registry.npmjs.org/recast
+
+[15:03:17.099] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  Request took 20339m
+[15:03:17.689] [INFO] Installing dependencies...:  WARN  Request took 20881ms: https://registry.npmjs.org/playwright-core
+
+[15:03:17.689] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  Request took 20881m
+[15:03:17.973] [INFO] Installing dependencies...: Progress: resolved 535, reused 426, downloaded 22, added 0
+
+[15:03:17.973] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 535, r
+[15:03:18.973] [INFO] Installing dependencies...: Progress: resolved 536, reused 427, downloaded 23, added 0
+
+[15:03:18.973] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 536, r
+[15:03:19.973] [INFO] Installing dependencies...: Progress: resolved 537, reused 427, downloaded 24, added 0
+
+[15:03:19.973] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 537, r
+[15:03:21.378] [INFO] Installing dependencies...:  WARN  Tarball download average speed 36 KiB/s (size 38 KiB) is below 50 KiB/s: https://registry.npmjs.org/@emnapi/wasi-threads/-/wasi-threads-1.2.0.tgz (GET)
+
+[15:03:21.378] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  Tarball download av
+[15:03:21.380] [INFO] Installing dependencies...: Progress: resolved 537, reused 427, downloaded 25, added 0
+
+[15:03:21.380] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 537, r
+[15:03:26.844] [INFO] Installing dependencies...:  WARN  Tarball download average speed 17 KiB/s (size 122 KiB) is below 50 KiB/s: https://registry.npmjs.org/@tybys/wasm-util/-/wasm-util-0.10.1.tgz (GET)
+
+[15:03:26.844] [INFO] install-dependencies-spinner: Installing dependencies...: WARN  Tarball download av
+[15:03:26.853] [INFO] Installing dependencies...: Progress: resolved 537, reused 427, downloaded 26, added 0
+
+[15:03:26.853] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 537, r
+[15:03:27.853] [INFO] Installing dependencies...: Progress: resolved 537, reused 427, downloaded 27, added 0
+
+[15:03:27.853] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 537, r
+[15:03:44.005] [INFO] Installing dependencies...: Progress: resolved 537, reused 427, downloaded 28, added 0
+
+[15:03:44.005] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 537, r
+[15:04:15.873] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/semver: request to https://registry.npmjs.org/semver failed, reason: 
+
+[15:04:15.873] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.873] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/@storybook%2Fglobal: request to https://registry.npmjs.org/@storybook%2Fglobal failed, reason: 
+
+[15:04:15.873] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.874] [INFO] Installing dependencies...: Progress: resolved 538, reused 427, downloaded 28, added 0
+
+[15:04:15.874] [INFO] install-dependencies-spinner: Installing dependencies...: Progress: resolved 538, r
+[15:04:15.875] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/@storybook%2Ficons: request to https://registry.npmjs.org/@storybook%2Ficons failed, reason: 
+
+[15:04:15.875] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.876] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/@storybook%2Fglobal: request to https://registry.npmjs.org/@storybook%2Fglobal failed, reason: 
+
+[15:04:15.876] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.877] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/@storybook%2Ficons: request to https://registry.npmjs.org/@storybook%2Ficons failed, reason: 
+
+[15:04:15.877] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.877] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/@storybook%2Fglobal: request to https://registry.npmjs.org/@storybook%2Fglobal failed, reason: 
+
+[15:04:15.877] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.879] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/@storybook%2Ficons: request to https://registry.npmjs.org/@storybook%2Ficons failed, reason: 
+
+[15:04:15.879] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.880] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/@testing-library%2Fjest-dom: request to https://registry.npmjs.org/@testing-library%2Fjest-dom failed, reason: 
+
+[15:04:15.880] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.883] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/@testing-library%2Fuser-event: request to https://registry.npmjs.org/@testing-library%2Fuser-event failed, reason: 
+
+[15:04:15.883] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.885] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/@storybook%2Fcsf: request to https://registry.npmjs.org/@storybook%2Fcsf failed, reason: 
+
+This error happened while installing the dependencies of @storybook/addon-svelte-csf@5.1.1
+
+[15:04:15.885] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.894] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/esbuild: request to https://registry.npmjs.org/esbuild failed, reason: 
+
+[15:04:15.894] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.915] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/strip-ansi: request to https://registry.npmjs.org/strip-ansi failed, reason: 
+
+[15:04:15.915] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.916] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/strip-ansi: request to https://registry.npmjs.org/strip-ansi failed, reason: 
+
+[15:04:15.916] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.927] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/use-sync-external-store: request to https://registry.npmjs.org/use-sync-external-store failed, reason: 
+
+[15:04:15.927] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.944] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/tinyrainbow: request to https://registry.npmjs.org/tinyrainbow failed, reason: 
+
+[15:04:15.944] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.945] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/tinyrainbow: request to https://registry.npmjs.org/tinyrainbow failed, reason: 
+
+[15:04:15.945] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.945] [INFO] Installing dependencies...:  ERR_PNPM_META_FETCH_FAIL  GET https://registry.npmjs.org/tinyrainbow: request to https://registry.npmjs.org/tinyrainbow failed, reason: 
+
+[15:04:15.945] [INFO] install-dependencies-spinner: Installing dependencies...: ERR_PNPM_META_FETCH_FAIL 
+[15:04:15.982] [ERROR] Installation of dependencies failed! {"error":"ExecaError: Command failed with exit code 1: pnpm install -w\n\nProgress: resolved 0, reused 1, downloaded 0, added 0\nProgress: resolved 41, reused 41, downloaded 0, added 0\nProgress: resolved 42, reused 41, downloaded 0, added 0\nProgress: resolved 44, reused 41, downloaded 0, added 0\nProgress: resolved 46, reused 41, downloaded 0, added 0\nProgress: resolved 47, reused 41, downloaded 1, added 0\nProgress: resolved 47, reused 41, downloaded 3, added 0\nProgress: resolved 48, reused 41, downloaded 4, added 0\nProgress: resolved 48, reused 41, downloaded 6, added 0\nProgress: resolved 49, reused 41, downloaded 6, added 0\nProgress: resolved 49, reused 42, downloaded 6, added 0\n\\u2009WARN\\u2009 Request took 11562ms: https://registry.npmjs.org/@chromatic-com%2Fstorybook\nProgress: resolved 50, reused 42, downloaded 6, added 0\n\\u2009WARN\\u2009 Request took 11968ms: https://registry.npmjs.org/@storybook%2Fsveltekit\nProgress: resolved 51, reused 42, downloaded 6, added 0\nProgress: resolved 51, reused 42, downloaded 8, added 0\n\\u2009WARN\\u2009 Request took 14443ms: https://registry.npmjs.org/playwright\nProgress: resolved 52, reused 42, downloaded 8, added 0\n\\u2009WARN\\u2009 Request took 19214ms: https://registry.npmjs.org/@storybook%2Faddon-docs\nProgress: resolved 53, reused 42, downloaded 8, added 0\nProgress: resolved 424, reused 407, downloaded 8, added 0\n\\u2009WARN\\u2009 Tarball download average speed 36 KiB/s (size 269 KiB) is below 50 KiB/s: https://registry.npmjs.org/@chromatic-com/storybook/-/storybook-5.1.1.tgz (GET)\nProgress: resolved 424, reused 407, downloaded 9, added 0\nProgress: resolved 425, reused 408, downloaded 9, added 0\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/open error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/recast error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/semver error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/esbuild error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@storybook%2Ficons error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@storybook%2Fglobal error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/use-sync-external-store error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@testing-library%2Fjest-dom error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@testing-library%2Fuser-event error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@storybook%2Fcsf error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/dedent error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/es-toolkit error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/esrap error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/magic-string error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/svelte-ast-print error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/zimmerframe error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@neoconfetti%2Freact error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/chromatic error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/filesize error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/jsonfile error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/strip-ansi error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/axe-core error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/react error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/react-dom error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/ts-dedent error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@mdx-js%2Freact error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@typescript-eslint%2Futils error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/es-module-lexer error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/expect-type error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/obug error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/pathe error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/picomatch error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/std-env error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/tinybench error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/tinyexec error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/tinyglobby error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/tinyrainbow error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/why-is-node-running error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@storybook%2Fsvelte error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@storybook%2Fsvelte-vite error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@storybook%2Fbuilder-vite error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@storybook%2Fcsf-plugin error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@storybook%2Freact-dom-shim error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@vitest%2Fmocker error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@vitest%2Frunner error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@vitest%2Fsnapshot error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/playwright-core error (ETIMEDOUT). Will retry in 10 seconds. 2 retries left.\nProgress: resolved 426, reused 408, downloaded 10, added 0\nProgress: resolved 438, reused 412, downloaded 16, added 0\nProgress: resolved 446, reused 412, downloaded 17, added 0\nProgress: resolved 452, reused 413, downloaded 17, added 0\nProgress: resolved 454, reused 413, downloaded 19, added 0\nProgress: resolved 461, reused 413, downloaded 19, added 0\nProgress: resolved 467, reused 413, downloaded 19, added 0\nProgress: resolved 520, reused 421, downloaded 19, added 0\nProgress: resolved 521, reused 421, downloaded 19, added 0\n\\u2009WARN\\u2009 Tarball download average speed 41 KiB/s (size 374 KiB) is below 50 KiB/s: https://registry.npmjs.org/@storybook/addon-docs/-/addon-docs-10.3.3.tgz (GET)\nProgress: resolved 522, reused 421, downloaded 20, added 0\nProgress: resolved 523, reused 421, downloaded 20, added 0\nProgress: resolved 524, reused 423, downloaded 20, added 0\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/semver error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/esbuild error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@storybook%2Ficons error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@storybook%2Fglobal error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/use-sync-external-store error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@testing-library%2Fjest-dom error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@testing-library%2Fuser-event error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@storybook%2Fcsf error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/dedent error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/es-toolkit error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/esrap error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/magic-string error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/svelte-ast-print error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/zimmerframe error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@neoconfetti%2Freact error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/chromatic error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/filesize error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/jsonfile error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/strip-ansi error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/axe-core error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/react error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/react-dom error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/ts-dedent error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@mdx-js%2Freact error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@typescript-eslint%2Futils error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/es-module-lexer error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/expect-type error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/obug error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/pathe error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/picomatch error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/std-env error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/tinybench error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/tinyexec error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/tinyglobby error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/tinyrainbow error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/why-is-node-running error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@storybook%2Fsvelte error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@storybook%2Fsvelte-vite error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@storybook%2Fbuilder-vite error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@storybook%2Fcsf-plugin error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@storybook%2Freact-dom-shim error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@vitest%2Fmocker error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.\nProgress: resolved 526, reused 423, downloaded 20, added 0\n\\u2009WARN\\u2009 Request took 16232ms: https://registry.npmjs.org/open\n\\u2009WARN\\u2009 Request took 16185ms: https://registry.npmjs.org/@vitest%2Frunner\n\\u2009WARN\\u2009 Request took 16228ms: https://registry.npmjs.org/@vitest%2Fsnapshot\nProgress: resolved 530, reused 424, downloaded 20, added 0\nProgress: resolved 530, reused 424, downloaded 22, added 0\nProgress: resolved 531, reused 425, downloaded 22, added 0\n\\u2009WARN\\u2009 GET https://registry.npmjs.org/@napi-rs/wasm-runtime/-/wasm-runtime-0.2.12.tgz error (ERR_SOCKET_TIMEOUT). Will retry in 10 seconds. 2 retries left.\nProgress: resolved 532, reused 425, downloaded 22, added 0\n\\u2009WARN\\u2009 Request took 20339ms: https://registry.npmjs.org/recast\n\\u2009WARN\\u2009 Request took 20881ms: https://registry.npmjs.org/playwright-core\nProgress: resolved 535, reused 426, downloaded 22, added 0\nProgress: resolved 536, reused 427, downloaded 23, added 0\nProgress: resolved 537, reused 427, downloaded 24, added 0\n\\u2009WARN\\u2009 Tarball download average speed 36 KiB/s (size 38 KiB) is below 50 KiB/s: https://registry.npmjs.org/@emnapi/wasi-threads/-/wasi-threads-1.2.0.tgz (GET)\nProgress: resolved 537, reused 427, downloaded 25, added 0\n\\u2009WARN\\u2009 Tarball download average speed 17 KiB/s (size 122 KiB) is below 50 KiB/s: https://registry.npmjs.org/@tybys/wasm-util/-/wasm-util-0.10.1.tgz (GET)\nProgress: resolved 537, reused 427, downloaded 26, added 0\nProgress: resolved 537, reused 427, downloaded 27, added 0\nProgress: resolved 537, reused 427, downloaded 28, added 0\n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/semver: request to https://registry.npmjs.org/semver failed, reason: \n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/@storybook%2Fglobal: request to https://registry.npmjs.org/@storybook%2Fglobal failed, reason: \nProgress: resolved 538, reused 427, downloaded 28, added 0\n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/@storybook%2Ficons: request to https://registry.npmjs.org/@storybook%2Ficons failed, reason: \n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/@storybook%2Fglobal: request to https://registry.npmjs.org/@storybook%2Fglobal failed, reason: \n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/@storybook%2Ficons: request to https://registry.npmjs.org/@storybook%2Ficons failed, reason: \n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/@storybook%2Fglobal: request to https://registry.npmjs.org/@storybook%2Fglobal failed, reason: \n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/@storybook%2Ficons: request to https://registry.npmjs.org/@storybook%2Ficons failed, reason: \n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/@testing-library%2Fjest-dom: request to https://registry.npmjs.org/@testing-library%2Fjest-dom failed, reason: \n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/@testing-library%2Fuser-event: request to https://registry.npmjs.org/@testing-library%2Fuser-event failed, reason: \n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/@storybook%2Fcsf: request to https://registry.npmjs.org/@storybook%2Fcsf failed, reason: \n\nThis error happened while installing the dependencies of @storybook/addon-svelte-csf@5.1.1\n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/esbuild: request to https://registry.npmjs.org/esbuild failed, reason: \n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/strip-ansi: request to https://registry.npmjs.org/strip-ansi failed, reason: \n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/strip-ansi: request to https://registry.npmjs.org/strip-ansi failed, reason: \n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/use-sync-external-store: request to https://registry.npmjs.org/use-sync-external-store failed, reason: \n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/tinyrainbow: request to https://registry.npmjs.org/tinyrainbow failed, reason: \n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/tinyrainbow: request to https://registry.npmjs.org/tinyrainbow failed, reason: \n\\u2009ERR_PNPM_META_FETCH_FAIL\\u2009 GET https://registry.npmjs.org/tinyrainbow: request to https://registry.npmjs.org/tinyrainbow failed, reason: \n    at getFinalError (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-NQBOIYE4.js:13109:10)\n    at makeError (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-NQBOIYE4.js:14645:15)\n    at getAsyncResult (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-NQBOIYE4.js:17291:158)\n    at handlePromise (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-NQBOIYE4.js:17277:162)\n    at async Object.executeTaskWithSpinner (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-AV2LSJTV.js:3683:11)\n    at async PNPMProxy.installDependencies (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-NQBOIYE4.js:11258:5)\n    at async DependencyInstallationCommand.execute (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/create-storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/create-storybook/dist/_node-chunks/chunk-NLJKUZRJ.js:2118:9)\n    at async doInitiate (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/create-storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/create-storybook/dist/_node-chunks/chunk-NLJKUZRJ.js:2894:38)\n    at async file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/create-storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/create-storybook/dist/_node-chunks/chunk-NLJKUZRJ.js:2928:20\n    at async withTelemetry (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-6PADJQ3N.js:218:12)"}
+[15:04:15.983] [ERROR] install-dependencies-spinner-error: [31mInstallation of dependencies failed![39m
+[15:04:15.984] [INFO] configure-addons-task-start: Configuring addons...
+[15:04:15.984] [INFO] configure-addons-task: Configuring @chromatic-com/storybook...
+[15:04:15.985] [INFO] configure-addons-task: @chromatic-com/storybook configured
+
+[15:04:15.985] [INFO] configure-addons-task: Configuring @storybook/addon-vitest...
+[15:04:15.985] [DEBUG] Getting package.json info for /home/mathoc1st/Projects/construction_v2/package.json...
+[15:04:15.985] [DEBUG] Using cached package.json for /home/mathoc1st/Projects/construction_v2/package.json...
+[15:04:15.985] [DEBUG] Using cached installed version for vitest...
+[15:04:15.985] [DEBUG] Vitest version specifier: 4.1.2
+[15:04:16.045] [DEBUG] Using cached installed version for vitest...
+[15:04:16.045] [DEBUG] Using cached installed version for msw...
+[15:04:16.053] [INFO] Updating your Vite config file:
+[15:04:16.053] [INFO]   /home/mathoc1st/Projects/construction_v2/vite.config.ts
+[15:04:16.059] [INFO] Setting up a11y addon for @storybook/addon-vitest
+[15:04:16.059] [INFO] Setting up a11y addon for @storybook/addon-vitest
+[15:04:16.059] [DEBUG] Executing command: pnpm dlx storybook@10.3.3 automigrate addon-a11y-addon-test --loglevel silent --yes --skip-doctor --package-manager pnpm --skip-install
+[15:09:04.056] [INFO] a11y addon setup successfully
+[15:09:04.056] [INFO] [32ma11y addon setup successfully[39m
+[15:09:04.056] [INFO] [32m@storybook/addon-vitest setup completed successfully[39m
+[15:09:04.056] [INFO] @storybook/addon-vitest is now configured and you're ready to run your tests!
+Here are a couple of tips to get you started:
+
+• You can run tests with "[36mnpx vitest --project=storybook[39m"
+• Vitest IDE extension shows all stories as tests in your editor!
+
+Check the documentation for more information about its features and options at:
+https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
+[15:09:04.057] [INFO] configure-addons-task: @storybook/addon-vitest configured
+
+[15:09:04.057] [INFO] configure-addons-task: Configuring @storybook/addon-a11y...
+[15:09:04.057] [DEBUG] Executing command: pnpm dlx storybook@10.3.3 automigrate addon-a11y-addon-test --loglevel silent --skip-doctor --yes --package-manager pnpm --config-dir .storybook
+[15:11:28.929] [DEBUG] {
+  "shortMessage": "Command failed with exit code 1: pnpm dlx 'storybook@10.3.3' automigrate addon-a11y-addon-test --loglevel silent --skip-doctor --yes --package-manager pnpm --config-dir .storybook",
+  "command": "pnpm dlx storybook@10.3.3 automigrate addon-a11y-addon-test --loglevel silent --skip-doctor --yes --package-manager pnpm --config-dir .storybook",
+  "escapedCommand": "pnpm dlx 'storybook@10.3.3' automigrate addon-a11y-addon-test --loglevel silent --skip-doctor --yes --package-manager pnpm --config-dir .storybook",
+  "cwd": "/home/mathoc1st/Projects/construction_v2",
+  "durationMs": 144872.62577,
+  "failed": true,
+  "timedOut": false,
+  "isCanceled": false,
+  "isGracefullyCanceled": false,
+  "isTerminated": false,
+  "isMaxBuffer": false,
+  "isForcefullyTerminated": false,
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "",
+  "stdio": [
+    null,
+    "",
+    ""
+  ],
+  "ipcOutput": [],
+  "pipedFrom": []
+}
+[15:11:28.930] [INFO] configure-addons-task: Configuring @storybook/addon-docs...
+[15:11:28.931] [INFO] configure-addons-task: @storybook/addon-docs configured
+
+[15:11:28.931] [ERROR] configure-addons-task-error: Failed to configure addons
+[15:11:28.931] [INFO] [2m✅ @chromatic-com/storybook[22m
+[15:11:28.932] [INFO] [2m✅ @storybook/addon-vitest[22m
+[15:11:28.932] [INFO] [2m❌ @storybook/addon-a11y[22m
+[15:11:28.932] [INFO] [2m✅ @storybook/addon-docs[22m
+[15:11:28.932] [INFO] Playwright browser binaries are necessary for @storybook/addon-vitest. The download can take some time. If you don't want to wait, you can skip the installation and run the following command manually later:
+[36mpnpm exec playwright install chromium[39m
+[15:13:09.640] [PROMPT] Do you want to install Playwright with Chromium now? {"choice":true}
+[15:13:09.640] [INFO] Installing Playwright browser binaries (press "c" to abort)
+[15:13:09.641] [INFO] playwright-installation-spinner-start: Installing Playwright browser binaries (press "c" to abort)
+[15:13:09.641] [DEBUG] Executing command: pnpm exec playwright install chromium
+[15:13:09.767] [INFO] Installing Playwright browser binaries (press "c" to abort): undefined
+
+[15:13:09.767] [INFO] playwright-installation-spinner: Installing Playwright browser binaries (press "c" to abort): undefined
+[15:13:09.767] [INFO] Installing Playwright browser binaries (press "c" to abort):  ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command "playwright" not found
+
+[15:13:09.767] [INFO] playwright-installation-spinner: Installing Playwright browser binaries (press "c" to abort): ERR_PNPM_RECURSIVE_EXEC_F
+[15:13:09.792] [ERROR] An error occurred while installing Playwright browser binaries. Please run the following command later: pnpm exec playwright install chromium {"error":"ExecaError: Command failed with exit code 254: pnpm exec playwright install chromium\n\nundefined\n\\u2009ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL\\u2009 Command \"playwright\" not found\n    at getFinalError (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-NQBOIYE4.js:13109:10)\n    at makeError (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-NQBOIYE4.js:14645:15)\n    at getAsyncResult (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-NQBOIYE4.js:17291:158)\n    at handlePromise (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-NQBOIYE4.js:17277:162)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async Object.executeTaskWithSpinner (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-AV2LSJTV.js:3683:11)\n    at async AddonVitestService.installPlaywright (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/storybook/dist/_node-chunks/chunk-7FOO4VZY.js:5858:17)\n    at async AddonConfigurationCommand.execute (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/create-storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/create-storybook/dist/_node-chunks/chunk-NLJKUZRJ.js:2015:26)\n    at async doInitiate (file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/create-storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/create-storybook/dist/_node-chunks/chunk-NLJKUZRJ.js:2900:38)\n    at async file:///home/mathoc1st/.cache/pnpm/dlx/bd4e9fb977eff3b29c6ae6cfab1b0ca93c72a56be5b4015327407ee1cbe5fd23/19d2f295a1b-4fc5/node_modules/.pnpm/create-storybook@10.3.3_@testing-library+dom@10.4.1_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/create-storybook/dist/_node-chunks/chunk-NLJKUZRJ.js:2928:20"}
+[15:13:09.792] [ERROR] playwright-installation-spinner-error: [31mAn error occurred while installing Playwright browser binaries. Please run the following command later: pnpm exec playwright install chromium[39m
+[15:13:15.816] [WARN] Storybook setup completed, but some non-blocking errors occurred. Please check the log file below for details.
+[15:13:15.816] [INFO] To run Storybook manually, run [36mpnpm run storybook[39m. CTRL+C to stop.
+[15:13:15.816] [INFO] Want to learn more about Storybook? [36mhttps://storybook.js.org/[39m
+Having trouble or want to chat? [36mhttps://discord.gg/storybook/[39m
