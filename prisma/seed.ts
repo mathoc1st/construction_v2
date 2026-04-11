@@ -12,7 +12,7 @@ const prisma = new PrismaClient({ adapter });
 
 async function main() {
 	const adminUsername = 'admin';
-	const adminPassword = 'admin123';
+	const adminPassword = 'pcJ|cR5t4i!8';
 
 	const existing = await prisma.user.findUnique({
 		where: { username: adminUsername }
