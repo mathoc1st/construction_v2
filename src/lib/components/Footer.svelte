@@ -36,6 +36,9 @@
 			</p>
 		</div>
 		<div class="flex flex-col gap-1">
+			<p class="text-off-white flex items-center gap-2">
+				<img src="/images/Max_logo.svg" alt="" class="size-8 pl-1" />+7 991 620 18 67
+			</p>
 			<a
 				href="https://t.me/ckrusdom1"
 				class="text-off-white hover:text-light-brown flex items-center gap-2 transition"

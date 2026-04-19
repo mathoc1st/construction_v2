@@ -9,32 +9,53 @@ cleanup() {
 # Only run cleanup on errors
 trap cleanup ERR
 
+ENV="dev"
+COMPOSE_FILE="docker-compose.dev.yml"
+
+for arg in "$@"; do
+  case $arg in
+    --env=*)
+      ENV="${arg#*=}"
+      ;;
+  esac
+done
+
+if [ "$ENV" = "prod" ]; then
+  COMPOSE_FILE="docker-compose.yml"
+  set -a
+  source .env.prod
+  set +a
+else
+  set -a
+  source .env.dev
+  set +a
+fi
+
+echo "Using env: $ENV"
+echo "Using compose file: $COMPOSE_FILE"
+
+
 if [ ! -f "./wait-for-postgres.sh" ]; then
   echo "Error: wait-for-postgres.sh not found"
   exit 1
 fi
 
-echo "Starting up the postgres container..."
-docker compose up postgres -d 
+echo "Starting postgres..."
+docker compose -f "$COMPOSE_FILE" up postgres -d
 
-echo "Waiting for Postgres to be ready..."
-# Run the wait-for-postgres script
-./wait-for-postgres.sh
+echo "Waiting for Postgres..."
+./wait-for-postgres.sh --env="$ENV"
 
-echo "Applying prisma migrations..."
-docker compose up --build -d prisma-migrate
-docker compose run --rm prisma-migrate
+if [ "$ENV" = "prod" ]; then
+  echo "Starting backup service..."
+  docker compose -f "$COMPOSE_FILE" up pgbackups -d
+fi
 
-echo "Starting up the postgres backup container..."
-docker compose up pgbackups -d
+echo "Building app..."
+docker compose -f "$COMPOSE_FILE" build app
 
-echo "Building the app..."
-docker compose build app 
+echo "Starting app..."
+docker compose -f "$COMPOSE_FILE" up app -d
 
-echo "Starting the app..."
-docker compose up app -d
-
-echo "Deployment successfully finished"
-
-# Remove trap so it doesn’t run on normal exit
 trap - ERR
+echo "Deployment successfully finished"

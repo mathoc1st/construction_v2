@@ -103,19 +103,15 @@
 			</div>
 			<h4 class="mt-6 flex w-max flex-col rounded-2xl text-xl font-medium">Описание</h4>
 
-			<div class="flex w-full flex-col gap-4">
-				<div class="flex flex-col gap-2">
 					<Textarea
-						divClass="w-3/4 max-[450px]:w-[90%] min-h-64 *:w-full *:h-full"
+						divClass="w-full min-h-64 *:w-full *:h-full"
 						bind:value={finish.description}
 						name="description"
 					></Textarea>
-				</div>
-			</div>
 		</div>
 	{:else}
 		<div>
-			<p class="w-full max-w-150 wrap-break-word">
+			<p class="w-full max-w-150 wrap-break-word whitespace-pre-wrap text-dark-olive font-medium">
 				{finish.description || 'Описание отсутствует.'}
 			</p>
 

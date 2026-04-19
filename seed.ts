@@ -10,15 +10,19 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-	const adminUsername = 'admin';
-	const adminPassword = `!G5QOpA11&yrRF2'XT^N5!?T7`;
+	const adminUsername = process.env.ADMIN_USERNAME;
+	const adminPassword = process.env.ADMIN_PASSWORD;
+
+	if (!adminUsername || !adminPassword) {
+		console.error('ADMIN_USERNAME and ADMIN_PASSWORD must be set in the environment');
+		process.exit(1);
+	}
 
 	const existing = await prisma.user.findUnique({
 		where: { username: adminUsername }
 	});
 
 	const passwordHash = await hash(adminPassword, {
-		// recommended minimum parameters
 		memoryCost: 19456,
 		timeCost: 2,
 		outputLen: 32,

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import './layout.css';
 	import '../app.css';
-	import favicon from '$lib/assets/favicon.svg';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import type { LayoutProps } from './$types';
@@ -10,7 +9,7 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href="images/logo.jpg" />
+	<link rel="icon" href="/images/logo.jpg" />
 </svelte:head>
 
 <Header isAdmin={data.isAdmin}></Header>

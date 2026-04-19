@@ -6,6 +6,7 @@
 	import Icon from '@iconify/svelte';
 
 	import { Tabs, TabItem, Modal, Dropdown, DropdownItem } from 'flowbite-svelte';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 
 	const {
 		building,
@@ -20,7 +21,7 @@
 
 	async function removeBuilding(id: number) {
 		isDeleteError = false;
-		const params = new URLSearchParams();
+		const params = new SvelteURLSearchParams();
 		params.append('id', id.toString());
 
 		const response = await fetch(`/api/building?${params}`, { method: 'DELETE' });
@@ -139,11 +140,9 @@
 						</div>
 					{/snippet}
 					<div>
-						<div class="flex flex-col gap-2">
-							<p class="w-full max-w-150 wrap-break-word">
+						<p class="w-full max-w-150 wrap-break-word whitespace-pre-wrap text-dark-olive text-lg">
 								{finish.description || 'Описание отсутствует.'}
-							</p>
-						</div>
+						</p>
 
 						<div class="mt-6 flex flex-col gap-4 max-[1300px]:items-center">
 							<h4 class="w-max rounded-2xl text-xl font-medium">

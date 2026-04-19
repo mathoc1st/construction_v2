@@ -52,10 +52,10 @@
 		</nav>
 		<div class="text-off-white flex h-full items-center gap-2 max-[1200px]:hidden">
 			<a
-				href="https://t.me/ckrusdom1"
+				href="/"
 				class="text-off-white hover:text-light-brown flex items-center gap-2 transition"
 			>
-				<span class="pt-0.5 pr-2 text-sm font-semibold">MAX</span> +7 991 620 18 67
+				<img src="/images/Max_logo.svg" alt="" class="size-6"> +7 991 620 18 67
 			</a>
 		</div>
 
@@ -78,37 +78,49 @@
 	<img src="/images/leaf.svg" alt="" class="absolute top-5 -z-10" />
 </header>
 <Drawer placement="top" bind:open={isDrawerOpen} class="backdrop:bg-off-white bg-dark-olive py-8">
-	<nav class="h-full">
-		<ul class="flex h-full flex-col items-center gap-6">
-			<li class={navLi({ device: 'mobile' })}>
-				<a href="/" class={navLink()} onclick={() => (isDrawerOpen = false)}>Главная</a>
-			</li>
-			<li class={navLi({ device: 'mobile' })}>
-				<a href="/catalog" class={navLink()} onclick={() => (isDrawerOpen = false)}>Каталог</a>
-			</li>
-			<li class={navLi({ device: 'mobile' })}>
-				<a href="/#contacts" class={navLink()} onclick={() => (isDrawerOpen = false)}>Контакты</a>
-			</li>
-			{#if isAdmin}<li class={navLi({ device: 'mobile' })}>
-					<a
-						href="/admin/modify/new"
-						data-sveltekit-reload
-						class={navLink()}
-						onclick={() => (isDrawerOpen = false)}>Добавить</a
-					>
+	<div class="flex h-full flex-col justify-between">
+		
+		<!-- NAV -->
+		<nav class="mb-6">
+			<ul class="flex flex-col items-center gap-6">
+				<li class={navLi({ device: 'mobile' })}>
+					<a href="/" class={navLink()} onclick={() => (isDrawerOpen = false)}>Главная</a>
 				</li>
-			{/if}
-		</ul>
-	</nav>
-	<div class="text-off-white mt-14 flex items-center justify-center gap-2">
-		<a
-			href="https://t.me/ckrusdom1"
-			class="text-off-white hover:text-light-brown flex items-center gap-2 transition"
-		>
-			<Icon icon="ic:baseline-telegram" class="size-7 shrink-0" />+7 991 620 18 67
-		</a>
+				<li class={navLi({ device: 'mobile' })}>
+					<a href="/catalog" class={navLink()} onclick={() => (isDrawerOpen = false)}>Каталог</a>
+				</li>
+				<li class={navLi({ device: 'mobile' })}>
+					<a href="/#contacts" class={navLink()} onclick={() => (isDrawerOpen = false)}>Контакты</a>
+				</li>
+
+				{#if isAdmin}
+					<li class={navLi({ device: 'mobile' })}>
+						<a
+							href="/admin/modify/new"
+							data-sveltekit-reload
+							class={navLink()}
+							onclick={() => (isDrawerOpen = false)}
+						>
+							Добавить
+						</a>
+					</li>
+				{/if}
+			</ul>
+		</nav>
+
+		<!-- FOOTER CONTACT -->
+		<div class="text-off-white flex items-center justify-center gap-2 pt-6">
+			<a
+				href="/"
+				class="text-off-white hover:text-light-brown flex items-center gap-2 transition"
+			>
+				<img src="/images/Max_logo.svg" alt="" class="size-6" />
+				+7 991 620 18 67
+			</a>
+		</div>
+
+		{#if isAdmin}
+			<p class="text-center text-lg font-medium text-red-400 pt-4">Admin</p>
+		{/if}
 	</div>
-	{#if isAdmin}
-		<p class="mt-8 text-center text-lg font-medium text-red-400">Admin</p>
-	{/if}
 </Drawer>

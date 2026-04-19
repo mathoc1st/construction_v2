@@ -1,25 +1,28 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Environment variables
 POSTGRES_HOST="${POSTGRES_HOST:-localhost}"
 POSTGRES_PORT="${POSTGRES_PORT:-5432}"
 POSTGRES_USER="${POSTGRES_USER:-construction_user}"
 POSTGRES_DB="${POSTGRES_DB:-construction}"
 
-# Healthcheck parameters
-RETRIES=5
-INTERVAL=10
-START_PERIOD=10
+RETRIES=10
+INTERVAL=5
+START_PERIOD=5
 
-sleep $START_PERIOD
+echo "Waiting for Postgres $POSTGRES_DB at $POSTGRES_HOST:$POSTGRES_PORT..."
 
-for i in $(seq 1 $RETRIES); do
-  if pg_isready -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d "$POSTGRES_DB" > /dev/null 2>&1; then
+sleep "$START_PERIOD"
+
+for i in $(seq 1 "$RETRIES"); do
+  if pg_isready -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DB" > /dev/null 2>&1; then
     echo "Postgres is ready!"
     exit 0
-  else
-    echo "Postgres is not ready yet. Retrying ($i/$RETRIES)..."
-    sleep $INTERVAL
   fi
+
+  echo "Postgres not ready yet ($i/$RETRIES)"
+  sleep "$INTERVAL"
 done
+
+echo "ERROR: Postgres did not become ready after $RETRIES attempts."
+exit 1

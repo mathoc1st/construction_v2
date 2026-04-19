@@ -4,14 +4,16 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "dotenv -e .env.dev -- vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
-		"lint": "prettier --check . && eslint ."
+		"lint": "prettier --check . && eslint .",
+		"seed:dev": "dotenv -e .env.dev -- prisma db seed",
+    	"seed:prod": "dotenv -e .env.production -- prisma db seed"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.4.0",
@@ -25,6 +27,7 @@
 		"@tailwindcss/vite": "^4.1.17",
 		"@types/node": "^24",
 		"@types/pg": "^8.15.6",
+		"dotenv-cli": "^11.0.0",
 		"eslint": "^9.39.1",
 		"eslint-plugin-svelte": "^3.13.0",
 		"flowbite": "^4.0.1",

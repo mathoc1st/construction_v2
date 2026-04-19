@@ -2,26 +2,23 @@ services:
   app:
     build:
       context: .
-      dockerfile: ./docker/app/Dockerfile
+      args:
+        DATABASE_URL: postgres://construction_user:construction_password@postgres:5432/construction_production
     ports:
       - '3000:3000'
     volumes:
       - ./logs:/app/logs
       - ../uploads:/app/uploads
-    environment:
-      ORIGIN: 'https://skrusdom.ru'
-      DATABASE_URL: postgres://construction_user:construction_password@postgres:5432/construction
-      BODY_SIZE_LIMIT: 200000000
+    env_file:
+      - .env.production
     networks:
       - construction
 
   postgres:
     image: postgres:17
     container_name: construction-postgres
-    environment:
-      POSTGRES_USER: construction_user
-      POSTGRES_PASSWORD: construction_password
-      POSTGRES_DB: construction
+    env_file:
+      - .env.production
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
@@ -46,18 +43,6 @@ services:
       - BACKUP_ON_START=TRUE
       - BACKUP_KEEP_WEEKS=2
       - HEALTHCHECK_PORT=8080
-    networks:
-      - construction
-
-  prisma-migrate:
-    container_name: prisma-migrate
-    build:
-      context: .
-      dockerfile: ./docker/prisma/Dockerfile
-    volumes:
-      - ./prisma:/migration/prisma
-    depends_on:
-      - postgres
     networks:
       - construction
 

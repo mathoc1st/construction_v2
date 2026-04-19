@@ -1,0 +1,36 @@
+services:
+  app:
+    build:
+      context: .
+      args:
+        DATABASE_URL: postgres://construction_user:construction_password@postgres:5432/construction_dev
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./logs:/app/logs
+      - ../uploads:/app/uploads
+    environment:
+      DATABASE_URL: postgres://construction_user:construction_password@postgres:5432/construction_dev
+    env_file:
+      - .env.dev
+    networks:
+      - construction_dev
+
+  postgres:
+    image: postgres:17
+    container_name: construction-postgres-dev
+    env_file:
+      - .env.dev
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - construction_dev
+
+volumes:
+  pgdata:
+
+networks:
+  construction_dev:
+    driver: bridge
