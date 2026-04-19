@@ -23,7 +23,7 @@ done
 if [ "$ENV" = "prod" ]; then
   COMPOSE_FILE="docker-compose.yml"
   set -a
-  source .env.prod
+  source .env.production
   set +a
 else
   set -a
