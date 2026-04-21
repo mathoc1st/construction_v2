@@ -1,9 +1,9 @@
 <script>
 	import CatalogCard from '$lib/components/ui/CatalogCard.svelte';
-	import Searchbar from '$lib/components/ui/Searchbar.svelte';
+	//import Searchbar from '$lib/components/ui/Searchbar.svelte';
 	import { BuildingType } from '$lib/types';
 
-	let search = $state('');
+	//let search = $state('');
 </script>
 
 <section class="mx-auto mt-26 mb-32 max-w-[1440px] px-5">

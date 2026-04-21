@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 </script>
 
 <section class="mx-auto mt-46 mb-46 max-w-[1440px] px-5">
@@ -14,7 +15,7 @@
 				Быстрое строительство каркасных домов из лучших материалов с вниманием к каждой детали.
 			</h2>
 			<a
-				href="/catalog"
+				href={resolve('/catalog')}
 				class="bg-dark-brown text-off-white hover:bg-dark-olive w-max rounded-2xl px-9 py-3 text-2xl transition max-[1200px]:mx-auto max-[600px]:text-xl"
 				>Наш каталог</a
 			>

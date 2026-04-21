@@ -1,108 +1,44 @@
 <script lang="ts">
-	import type { getBuildingDetailsByType } from '$lib/server/db/queries/building';
-	import { FinishType, type Building, type Finish } from '$lib/types';
+	import { FinishType } from '$lib/types';
 	import { getFinishTypeName } from '$lib/utils';
-	import type { Snapshot } from '@sveltejs/kit';
 	import { Drawer, AccordionItem, Accordion } from 'flowbite-svelte';
 
+	interface Props {
+		options: {
+			floors: number[];
+			finishTypes: FinishType[];
+			sizes: string[];
+		};
+		filters: {
+			floors: number[];
+			finishTypes: FinishType[];
+			sizes: string[];
+			hasVeranda: boolean | null;
+		};
+		onFloorsChanged: (value: number) => void;
+		onFinishTypesChanged: (value: FinishType) => void;
+		onSizesChanged: (value: string) => void;
+		onSelectChanged: (value: boolean | null) => void;
+		onResetFilters: () => void;
+	}
+
 	let {
-		details,
-		floorsFilter = $bindable(),
-		finishesFilter = $bindable(),
-		sizesFilter = $bindable(),
-		verandaFilter = $bindable()
-	}: {
-		details: Awaited<ReturnType<typeof getBuildingDetailsByType>>;
-		floorsFilter: number[];
-		finishesFilter: FinishType[];
-		sizesFilter: string[];
-		verandaFilter: boolean | null;
-	} = $props();
+		options,
+		filters,
+		onFloorsChanged,
+		onFinishTypesChanged,
+		onSizesChanged,
+		onSelectChanged,
+		onResetFilters
+	}: Props = $props();
 
 	let isDrawerOpen = $state(false);
-	let floors = $derived([
-		...new Set(
-			details.map((b) => {
-				return b.floors;
-			})
-		)
-	]);
-
-	let finishes = $derived.by(() => {
-		const foundFinishes: FinishType[] = [];
-		for (const detail of details) {
-			for (const finish of detail.finishes) {
-				foundFinishes.push(finish.type);
-			}
-		}
-
-		return [...new Set(foundFinishes)];
-	});
-
-	let sizes = $derived([
-		...new Set(
-			details.map((b) => {
-				return b.size;
-			})
-		)
-	]);
-
-	function onToggle<T>(event: Event, value: T, list: T[]) {
-		const checkbox = event.target as HTMLInputElement;
-
-		if (!checkbox.checked) {
-			const index = list.indexOf(value);
-			if (index !== -1) list.splice(index, 1);
-			return;
-		}
-
-		list.push(value);
-	}
 
 	function isSelected<T>(value: T, list: T[]) {
 		const index = list.indexOf(value);
 		if (index !== -1) return true;
 		return false;
 	}
-
-	function onFloorsChanged(event: Event, floor: number) {
-		onToggle(event, floor, floorsFilter);
-	}
-
-	function onFinishesChanged(event: Event, finish: FinishType) {
-		onToggle(event, finish, finishesFilter);
-	}
-
-	function onSizesChanged(event: Event, size: string) {
-		onToggle(event, size, sizesFilter);
-	}
-
-	function onResetFilters() {
-		floorsFilter = [];
-		finishesFilter = [];
-		sizesFilter = [];
-		verandaFilter = null;
-	}
-
-	export const snapshot: Snapshot<{
-		floors: number[];
-		finishes: FinishType[];
-		sizes: string[];
-		veranda: boolean | null;
-	}> = {
-		capture: () => ({
-			floors: floorsFilter,
-			finishes: finishesFilter,
-			sizes: sizesFilter,
-			veranda: verandaFilter
-		}),
-		restore: (value) => {
-			floorsFilter = value.floors;
-			finishesFilter = value.finishes;
-			sizesFilter = value.sizes;
-			verandaFilter = value.veranda;
-		}
-	};
 </script>
 
 <button
@@ -125,13 +61,13 @@
 		<AccordionItem>
 			{#snippet header()}<p class="text-dark-olive">Этажность</p>{/snippet}
 			<div class="flex flex-col gap-2">
-				{#each floors as floor, i (i)}
+				{#each options.floors as floor, i (i)}
 					<label
 						><input
 							type="checkbox"
 							class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
-							onchange={(e) => onFloorsChanged(e, floor)}
-							checked={isSelected(floor, floorsFilter)}
+							onchange={() => onFloorsChanged(floor)}
+							checked={isSelected(floor, filters.floors)}
 						/>
 						{floor}</label
 					>
@@ -141,15 +77,15 @@
 		<AccordionItem>
 			{#snippet header()}<p class="text-dark-olive">Комплектация</p>{/snippet}
 			<div class="flex flex-col gap-2">
-				{#each finishes as finish, i (i)}
+				{#each options.finishTypes as type, i (i)}
 					<label
 						><input
 							type="checkbox"
 							class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
-							onchange={(e) => onFinishesChanged(e, finish)}
-							checked={isSelected(finish, finishesFilter)}
+							onchange={() => onFinishTypesChanged(type)}
+							checked={isSelected(type, filters.finishTypes)}
 						/>
-						{getFinishTypeName(finish)}</label
+						{getFinishTypeName(type)}</label
 					>
 				{/each}
 			</div>
@@ -157,13 +93,13 @@
 		<AccordionItem>
 			{#snippet header()}<p class="text-dark-olive">Размер</p>{/snippet}
 			<div class="flex flex-col gap-2">
-				{#each sizes as size, i (i)}
+				{#each options.sizes as size, i (i)}
 					<label
 						><input
 							type="checkbox"
 							class="text-dark-brown bg-off-white border-light-brown form-checkbox rounded"
-							onchange={(e) => onSizesChanged(e, size)}
-							checked={isSelected(size, sizesFilter)}
+							onchange={() => onSizesChanged(size)}
+							checked={isSelected(size, filters.sizes)}
 						/>
 						{size}</label
 					>
@@ -176,28 +112,28 @@
 				<label
 					><input
 						type="radio"
-						bind:group={verandaFilter}
 						value={true}
-						class="text-dark-brown bg-off-white form-radia"
-						checked={verandaFilter === true}
+						class="text-dark-brown bg-off-white form-radio"
+						checked={filters.hasVeranda === true}
+						onchange={() => onSelectChanged(true)}
 					/> Есть</label
 				>
 				<label
 					><input
 						type="radio"
-						bind:group={verandaFilter}
 						value={false}
-						class="text-dark-brown bg-off-white form-radia"
-						checked={verandaFilter === false}
+						class="text-dark-brown bg-off-white form-radio"
+						checked={filters.hasVeranda === false}
+						onchange={() => onSelectChanged(false)}
 					/> Нет</label
 				>
 				<label
 					><input
 						type="radio"
-						bind:group={verandaFilter}
 						value={null}
-						class="text-dark-brown bg-off-white form-radia"
-						checked={verandaFilter === null}
+						class="text-dark-brown bg-off-white form-radio"
+						checked={filters.hasVeranda === null}
+						onchange={() => onSelectChanged(null)}
 					/> Без разницы</label
 				>
 			</div>

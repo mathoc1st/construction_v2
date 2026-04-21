@@ -36,7 +36,9 @@ export async function handleGetBuildingsByType(
 	const floors = url.searchParams.getAll('floor');
 	const finishes = url.searchParams.getAll('finish');
 	const sizes = url.searchParams.getAll('size');
-	const veranda = url.searchParams.get('veranda');
+	const verandaJson = url.searchParams.get('veranda');
+
+	const veranda = JSON.parse(verandaJson ?? 'null');
 
 	const parsedOptionsResult = buildingOptionsSchema.safeParse({
 		type,

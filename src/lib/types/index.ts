@@ -83,11 +83,7 @@ export const buildingOptionsSchema = z.object({
 				})
 		)
 		.nullish(),
-	veranda: z
-		.string()
-		.regex(/^(true|false|1|0)$/i)
-		.transform((v) => v === 'true' || v === '1')
-		.nullish()
+	veranda: z.coerce.boolean().nullish()
 });
 
 export type ParsedBuildingOptions = z.infer<typeof buildingOptionsSchema>;

@@ -8,53 +8,63 @@
 	import {
 		BuildingType,
 		SortBy,
-		type ApiResponse,
 		type FinishType,
 		type GetBuildingsByTypeResponse
 	} from '$lib/types';
-	import type { getBuildingsByType } from '$lib/server/db/queries/building';
 	import { getBuildingTypeName } from '$lib/utils';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 
 	let { data, params }: PageProps = $props();
 
 	let buildings = $derived(data.buildings);
-	let currentPage = $state(1);
-	let innerWidth = $state(0);
+
+	let totalPages = $derived(Math.ceil(data.totalCount / 12));
 	let visiblePages = $derived.by(() => {
 		if (innerWidth < 600) return 3;
 		return 5;
 	});
+	let currentPage = $state(1);
 
-	let totalPages = $derived(Math.ceil(data.totalCount / 12));
+	let innerWidth = $state(0);
 
 	async function handlePageChange(page: number) {
 		currentPage = page;
 		refetch();
 	}
 
+	// Filters state
+	let selectedFloors: number[] = $state([]);
+	let selectedFinishTypes: FinishType[] = $state([]);
+	let selectedSizes: string[] = $state([]);
+	let selectedVeranda: boolean | null = $state(null);
+
 	async function refetch() {
-		const urlParams = new URLSearchParams();
+		const urlParams = new SvelteURLSearchParams();
 		urlParams.append('page', currentPage.toString());
 		urlParams.append('type', params.type);
 		urlParams.append('sortBy', sortByFilter);
-		floorsFilter.forEach((f) => {
+		selectedFloors.forEach((f) => {
 			urlParams.append('floor', f.toString());
 		});
-		finishesFilter.forEach((f) => {
+		selectedFinishTypes.forEach((f) => {
 			urlParams.append('finish', f);
 		});
-		sizesFilter.forEach((s) => {
+		selectedSizes.forEach((s) => {
 			urlParams.append('size', s);
 		});
-		if (verandaFilter !== null) urlParams.append('veranda', JSON.stringify(verandaFilter));
+		if (selectedVeranda !== null) urlParams.append('veranda', JSON.stringify(selectedVeranda));
 
 		const response = await fetch(`/api/building?${urlParams}`, { method: 'GET' });
 
-		if (!response.ok) return;
+		if (!response.ok) {
+			console.error('Network response was not ok:', response.statusText);
+			return;
+		}
 
 		const result = (await response.json()) as GetBuildingsByTypeResponse;
 
 		if (!result.success) {
+			console.error('Failed to fetch buildings:', result);
 			return;
 		}
 
@@ -69,18 +79,6 @@
 		}, 50);
 	}
 
-	$effect(() => {
-		floorsFilter;
-		finishesFilter;
-		sizesFilter;
-		sortByFilter;
-		refetch();
-	});
-
-	let floorsFilter: number[] = $state([]);
-	let finishesFilter: FinishType[] = $state([]);
-	let sizesFilter: string[] = $state([]);
-	let verandaFilter: boolean | null = $state(null);
 	let sortByFilter: SortBy = $state(SortBy.POPULARITY_DESC);
 
 	export const snapshot: Snapshot<{
@@ -88,15 +86,72 @@
 		floorsFilter: number[];
 		finishesFilter: FinishType[];
 		sizesFilter: string[];
+		verandaFilter: boolean | null;
 	}> = {
-		capture: () => ({ currentPage, floorsFilter, finishesFilter, sizesFilter }),
+		capture: () => ({
+			currentPage,
+			floorsFilter: selectedFloors,
+			finishesFilter: selectedFinishTypes,
+			sizesFilter: selectedSizes,
+			verandaFilter: selectedVeranda
+		}),
 		restore: (value) => {
 			currentPage = value.currentPage;
-			floorsFilter = value.floorsFilter;
-			finishesFilter = value.finishesFilter;
-			sizesFilter = value.sizesFilter;
+			selectedFloors = value.floorsFilter;
+			selectedFinishTypes = value.finishesFilter;
+			selectedSizes = value.sizesFilter;
+			selectedVeranda = value.verandaFilter;
 		}
 	};
+
+	async function onFloorsChanged(value: number) {
+		const index = selectedFloors.findIndex((f) => f === value);
+		if (index === -1) {
+			selectedFloors = [...selectedFloors, value];
+		} else {
+			selectedFloors = selectedFloors.filter((f) => f !== value);
+		}
+		await refetch();
+	}
+
+	async function onFinishTypesChanged(value: FinishType) {
+		const index = selectedFinishTypes.findIndex((f) => f === value);
+		if (index === -1) {
+			selectedFinishTypes = [...selectedFinishTypes, value];
+		} else {
+			selectedFinishTypes = selectedFinishTypes.filter((f) => f !== value);
+		}
+		await refetch();
+	}
+
+	async function onSizesChanged(value: string) {
+		const index = selectedSizes.findIndex((s) => s === value);
+		if (index === -1) {
+			selectedSizes = [...selectedSizes, value];
+		} else {
+			selectedSizes = selectedSizes.filter((s) => s !== value);
+		}
+		await refetch();
+	}
+
+	async function onSelectChanged(value: boolean | null) {
+		selectedVeranda = value;
+		await refetch();
+	}
+
+	async function onResetFilters() {
+		selectedFloors = [];
+		selectedFinishTypes = [];
+		selectedSizes = [];
+		selectedVeranda = null;
+
+		await refetch();
+	}
+
+	async function onSortByChanged(value: SortBy) {
+		sortByFilter = value;
+		await refetch();
+	}
 </script>
 
 <svelte:window bind:innerWidth />
@@ -106,18 +161,29 @@
 	</h1>
 	<div class="mt-26 flex w-full gap-4 max-[900px]:justify-center">
 		<SearchFilters
-			details={data.details}
-			bind:floorsFilter
-			bind:finishesFilter
-			bind:sizesFilter
-			bind:verandaFilter
+			options={{
+				floors: data.details.floors,
+				finishTypes: data.details.finishes,
+				sizes: data.details.sizes
+			}}
+			filters={{
+				floors: selectedFloors,
+				finishTypes: selectedFinishTypes,
+				sizes: selectedSizes,
+				hasVeranda: selectedVeranda
+			}}
+			{onFloorsChanged}
+			{onFinishTypesChanged}
+			{onSizesChanged}
+			{onSelectChanged}
+			{onResetFilters}
 		/>
-		<Sorting bind:sortBy={sortByFilter} />
+		<Sorting {onSortByChanged} />
 	</div>
 	<div
 		class="mt-12 grid grid-cols-3 gap-y-18 max-[1440px]:grid-cols-2 max-[900px]:grid-cols-1 max-[900px]:place-items-center"
 	>
-		{#each buildings as building, i (building.id)}
+		{#each buildings as building (building.id)}
 			<BuildingCard {building} />
 		{/each}
 	</div>

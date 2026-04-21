@@ -44,9 +44,7 @@ export async function getBuildingsByType(options: ParsedBuildingOptions) {
 		};
 	}
 
-	if (options.veranda) {
-		where.veranda = options.veranda;
-	}
+	where.veranda = options.veranda !== null ? options.veranda : undefined;
 
 	const orderBy: BuildingOrderByWithRelationInput = {};
 
@@ -103,15 +101,28 @@ export async function getBuildingById(id: number) {
 }
 
 export async function getBuildingDetailsByType(type: BuildingType) {
-	return prisma.building.findMany({
+	const buildings = await prisma.building.findMany({
 		where: { type },
 		select: {
 			floors: true,
 			size: true,
-			finishes: true
+			finishes: {
+				select: {
+					type: true
+				}
+			}
 		}
 	});
+
+	const sizes = [...new Set(buildings.map((b) => b.size))];
+
+	const floors = [...new Set(buildings.flatMap((b) => b.floors))];
+
+	const finishes = [...new Set(buildings.flatMap((b) => b.finishes.map((f) => f.type)))];
+
+	return { sizes, floors, finishes };
 }
+
 export async function createBuilding(
 	building: ParsedBuilding,
 	images: string[],

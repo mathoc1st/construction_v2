@@ -2,15 +2,13 @@
 	import { BuildingType, type Building, type Image } from '$lib/types';
 	import BuildingCard from './ui/BuildingCard.svelte';
 
-	let {
-		popularFrame,
-		popularBarn,
-		popularContainer
-	}: {
-		popularFrame: (Building & { images: Image[] })[];
-		popularBarn: (Building & { images: Image[] })[];
-		popularContainer: (Building & { images: Image[] })[];
-	} = $props();
+	interface Props {
+		popularFrames: (Building & { images: Image[] })[];
+		popularBarns: (Building & { images: Image[] })[];
+		popularContainers: (Building & { images: Image[] })[];
+	}
+
+	let { popularFrames, popularBarns, popularContainers }: Props = $props();
 
 	let selectedType: BuildingType = $state(BuildingType.FRAME);
 
@@ -19,7 +17,7 @@
 	}
 </script>
 
-<section class="mx-auto mt-46 mb-46 max-w-[1440px] px-5">
+<section class="mx-auto mt-46 mb-46 max-w-360 px-5">
 	<h1 class="text-dark-olive mb-18 text-center text-5xl font-medium max-[600px]:text-4xl">
 		Популярные проекты
 	</h1>
@@ -61,17 +59,17 @@
 	</ul>
 	<div class="mt-12 flex flex-wrap justify-center gap-4">
 		{#if selectedType === BuildingType.FRAME}
-			{#each popularFrame as building, i (building.id)}
+			{#each popularFrames as building (building.id)}
 				<BuildingCard {building} />
 			{/each}
 		{/if}
 		{#if selectedType === BuildingType.BARN}
-			{#each popularBarn as building, i (building.id)}
+			{#each popularBarns as building (building.id)}
 				<BuildingCard {building} />
 			{/each}
 		{/if}
 		{#if selectedType === BuildingType.CONTAINER}
-			{#each popularContainer as building, i (building.id)}
+			{#each popularContainers as building (building.id)}
 				<BuildingCard {building} />
 			{/each}
 		{/if}

@@ -14,24 +14,24 @@
 	<div class="mt-40 flex flex-wrap justify-center gap-6">
 		<TestimonyCard
 			text={firstTestimony}
-			name={'Ольга'}
-			date={'16 сентября'}
-			building={'Каркасный дом 9х8 с террасой'}
-			picture={'https://randomuser.me/api/portraits/women/31.jpg'}
+			name="Ольга"
+			date="16 сентября"
+			building="Каркасный дом 9х8 с террасой"
+			picture="https://randomuser.me/api/portraits/women/31.jpg"
 		/>
 		<TestimonyCard
 			text={secondTestimony}
-			name={'Андрей Юрьевич'}
-			date={'7 октября'}
-			building={'Каркасный дом шале 9х7 с утеплением под ключ'}
-			picture={'https://randomuser.me/api/portraits/men/23.jpg'}
+			name="Андрей Юрьевич"
+			date="7 октября"
+			building="Каркасный дом шале 9х7 с утеплением под ключ"
+			picture="https://randomuser.me/api/portraits/men/23.jpg"
 		/>
 		<TestimonyCard
 			text={thirdTestimony}
-			name={'Виталий'}
-			date={'21 ноября'}
-			building={'Каркасный дом 9х9'}
-			picture={'https://randomuser.me/api/portraits/men/76.jpg'}
+			name="Виталий"
+			date="21 ноября"
+			building="Каркасный дом 9х9"
+			picture="https://randomuser.me/api/portraits/men/76.jpg"
 		/>
 	</div>
 </section>

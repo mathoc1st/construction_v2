@@ -1,10 +1,14 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import type { Building, Image } from '$lib/types';
+	import { resolve } from '$app/paths';
 	import { prettyPrice } from '$lib/utils';
+	import type { Building, Image } from '$lib/types';
 	import Icon from '@iconify/svelte';
 
-	let { building }: { building: Building & { images: Image[] | undefined } } = $props();
+	interface Props {
+		building: Building & { images: Image[] | undefined };
+	}
+
+	let { building }: Props = $props();
 </script>
 
 <div
@@ -19,7 +23,7 @@
 			const img = e.target as HTMLImageElement;
 			img.src = '/images/placeholder.jpg';
 		}}
-		class="h-[230px]! rounded-2xl"
+		class="h-57.5! rounded-2xl"
 	/>
 	<h4 class="mt-6 text-xl font-medium max-[600px]:text-lg">{building?.name || 'Untitled'}</h4>
 	<div class="border-light-olive mt-2 h-px w-24 border"></div>
@@ -52,7 +56,7 @@
 		От {prettyPrice.format(building.startingPrice)}
 	</p>
 	<a
-		href={`/building/${building.id}`}
+		href={resolve(`/building/${building.id}`)}
 		class="bg-dark-brown text-off-white hover:bg-dark-olive mt-4 inline-block rounded-2xl px-8 py-2 transition"
 		>Подробнее</a
 	>

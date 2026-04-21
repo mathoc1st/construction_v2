@@ -25,7 +25,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	log.debug('Got following data from building GET request');
 	log.debug('%s', JSON.stringify(getBuildingsResult.result));
 
-	return json({ data: getBuildingsResult.result }, { status: 200 });
+	return json({ data: getBuildingsResult.result, success: true }, { status: 200 });
 };
 
 export const POST: RequestHandler = async ({ request, url, cookies }) => {

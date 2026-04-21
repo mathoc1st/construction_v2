@@ -11,16 +11,13 @@
 		Fileupload,
 		ControlButton
 	} from 'flowbite-svelte';
-	import type { ClassValue } from 'svelte/elements';
 
 	let {
 		uploadedImages,
-		onChangeImages,
-		class: className
+		onChangeImages
 	}: {
 		uploadedImages: File[];
 		onChangeImages: (file: File[]) => void;
-		class?: ClassValue;
 	} = $props();
 
 	let images: File[] = $derived(uploadedImages);
@@ -129,7 +126,7 @@
 				hidden={previews.length <= 1}
 				class="flex w-[80%] flex-wrap items-center justify-center gap-y-2"
 			>
-				{#snippet children({ selected, index })}
+				{#snippet children({ selected })}
 					<Indicator class="bg-dark-brown h-3 w-3  {selected ? 'opacity-100' : 'opacity-30'}"
 					></Indicator>
 				{/snippet}

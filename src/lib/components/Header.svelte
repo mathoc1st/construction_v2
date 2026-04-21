@@ -2,6 +2,7 @@
 	import Icon from '@iconify/svelte';
 	import { tv } from 'tailwind-variants';
 	import { Drawer } from 'flowbite-svelte';
+	import { resolve } from '$app/paths';
 
 	let { isAdmin }: { isAdmin: boolean } = $props();
 
@@ -25,37 +26,39 @@
 	<div
 		class="mx-auto flex h-full max-w-[1440px] justify-around overflow-hidden px-5 max-[1200px]:justify-between"
 	>
-		<a href="/" class="flex h-full items-center gap-2">
+		<a href={resolve('/')} class="flex h-full items-center gap-2">
 			<img src="/images/logo.jpg" alt="" class="w-14" />
 			<span class="text-off-white text-lg font-semibold">СК РУС ДОМ</span>
 		</a>
 		<nav class="h-full max-[1200px]:hidden">
 			<ul class="flex h-full items-center gap-[clamp(0rem,1vw,2rem)]">
 				<li class={navLi()}>
-					<a href="/" class={navLink()}>Главная</a>
+					<a href={resolve('/')} class={navLink()}>Главная</a>
 				</li>
 				<li class={navLi()}>
-					<a href="/catalog" class={navLink()}>Каталог</a>
+					<a href={resolve('/catalog')} class={navLink()}>Каталог</a>
 				</li>
 				<!-- <li class={navLi()}>
-					<a href="/works" class={navLink()}>Наши работы</a>
+					<a href={resolve('/works')} class={navLink()}>Наши работы</a>
 				</li> -->
 
 				<li class={navLi()}>
-					<a href="/#contacts" class={navLink()}>Контакты</a>
+					<a href="#contacts" class={navLink()}>Контакты</a>
 				</li>
 				{#if isAdmin}<li class={navLi()}>
-						<a href="/admin/modify/new" class={navLink()} data-sveltekit-reload>Добавить</a>
+						<a href={resolve('/admin/modify/new')} class={navLink()} data-sveltekit-reload
+							>Добавить</a
+						>
 					</li>
 				{/if}
 			</ul>
 		</nav>
 		<div class="text-off-white flex h-full items-center gap-2 max-[1200px]:hidden">
 			<a
-				href="/"
+				href={resolve('/')}
 				class="text-off-white hover:text-light-brown flex items-center gap-2 transition"
 			>
-				<img src="/images/Max_logo.svg" alt="" class="size-6"> +7 991 620 18 67
+				<img src="/images/Max_logo.svg" alt="" class="size-6" /> +7 991 620 18 67
 			</a>
 		</div>
 
@@ -79,24 +82,26 @@
 </header>
 <Drawer placement="top" bind:open={isDrawerOpen} class="backdrop:bg-off-white bg-dark-olive py-8">
 	<div class="flex h-full flex-col justify-between">
-		
 		<!-- NAV -->
 		<nav class="mb-6">
 			<ul class="flex flex-col items-center gap-6">
 				<li class={navLi({ device: 'mobile' })}>
-					<a href="/" class={navLink()} onclick={() => (isDrawerOpen = false)}>Главная</a>
+					<a href={resolve('/')} class={navLink()} onclick={() => (isDrawerOpen = false)}>Главная</a
+					>
 				</li>
 				<li class={navLi({ device: 'mobile' })}>
-					<a href="/catalog" class={navLink()} onclick={() => (isDrawerOpen = false)}>Каталог</a>
+					<a href={resolve('/catalog')} class={navLink()} onclick={() => (isDrawerOpen = false)}
+						>Каталог</a
+					>
 				</li>
 				<li class={navLi({ device: 'mobile' })}>
-					<a href="/#contacts" class={navLink()} onclick={() => (isDrawerOpen = false)}>Контакты</a>
+					<a href="#contacts" class={navLink()} onclick={() => (isDrawerOpen = false)}>Контакты</a>
 				</li>
 
 				{#if isAdmin}
 					<li class={navLi({ device: 'mobile' })}>
 						<a
-							href="/admin/modify/new"
+							href={resolve('/admin/modify/new')}
 							data-sveltekit-reload
 							class={navLink()}
 							onclick={() => (isDrawerOpen = false)}
@@ -111,7 +116,7 @@
 		<!-- FOOTER CONTACT -->
 		<div class="text-off-white flex items-center justify-center gap-2 pt-6">
 			<a
-				href="/"
+				href={resolve('/')}
 				class="text-off-white hover:text-light-brown flex items-center gap-2 transition"
 			>
 				<img src="/images/Max_logo.svg" alt="" class="size-6" />
@@ -120,7 +125,7 @@
 		</div>
 
 		{#if isAdmin}
-			<p class="text-center text-lg font-medium text-red-400 pt-4">Admin</p>
+			<p class="pt-4 text-center text-lg font-medium text-red-400">Admin</p>
 		{/if}
 	</div>
 </Drawer>

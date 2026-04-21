@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { FinishType, type GetBuildingResult } from '$lib/types';
 	import { getFinishTypeName, getTabIcon, prettyPrice } from '$lib/utils';
 	import Icon from '@iconify/svelte';
@@ -32,7 +33,7 @@
 			return;
 		}
 
-		goto(`/catalog/${building.type.toLowerCase()}`);
+		goto(resolve(`/catalog/${building.type.toLowerCase()}`));
 	}
 </script>
 
@@ -45,7 +46,7 @@
 		<Dropdown simple class="bg-dark-olive ">
 			<DropdownItem class="hover:bg-light-brown transition"
 				><a
-					href={`/admin/modify/${building.id}`}
+					href={resolve(`/admin/modify/${building.id}`)}
 					class="text-off-white flex items-center gap-1 text-base"
 					><Icon icon="solar:pen-linear" class="size-5" />Редактировать</a
 				></DropdownItem
@@ -140,8 +141,8 @@
 						</div>
 					{/snippet}
 					<div>
-						<p class="w-full max-w-150 wrap-break-word whitespace-pre-wrap text-dark-olive text-lg">
-								{finish.description || 'Описание отсутствует.'}
+						<p class="text-dark-olive w-full max-w-150 text-lg wrap-break-word whitespace-pre-wrap">
+							{finish.description || 'Описание отсутствует.'}
 						</p>
 
 						<div class="mt-6 flex flex-col gap-4 max-[1300px]:items-center">

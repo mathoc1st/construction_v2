@@ -3,7 +3,12 @@
 	import Icon from '@iconify/svelte';
 	import { Dropdown, DropdownItem } from 'flowbite-svelte';
 
-	let { sortBy = $bindable() }: { sortBy: SortBy } = $props();
+	interface Props {
+		onSortByChanged: (value: SortBy) => void;
+	}
+
+	let { onSortByChanged }: Props = $props();
+	let sortBy: SortBy = $state(SortBy.POPULARITY_ASC);
 
 	let isOpen: boolean = $state(false);
 </script>
@@ -19,6 +24,7 @@
 		><button
 			onclick={() => {
 				sortBy = sortBy === SortBy.POPULARITY_ASC ? SortBy.POPULARITY_DESC : SortBy.POPULARITY_ASC;
+				onSortByChanged(sortBy);
 			}}
 			class="text-off-white flex h-full w-full items-center text-base"
 			>По популярности <Icon
@@ -31,6 +37,7 @@
 		<button
 			onclick={() => {
 				sortBy = sortBy === SortBy.PRICE_ASC ? SortBy.PRICE_DESC : SortBy.PRICE_ASC;
+				onSortByChanged(sortBy);
 			}}
 			class="text-off-white flex h-full w-full items-center text-base"
 			>По цене <Icon

@@ -23,12 +23,10 @@
 	let finish: FinishDto = $derived(ffinish);
 	let isSaved: boolean = $state(
 		ffinish !== null &&
-			ffinish.description &&
-			ffinish.price !== undefined &&
-			ffinish.description.length > 0
+			ffinish.description !== undefined &&
+			ffinish.description.length > 0 &&
+			ffinish.price !== undefined
 	);
-	// let isOptionAvailable: boolean = $state(false);
-	// let description: string = $state('');
 
 	function handleSaveFinish() {
 		const priceInput = document.getElementById('price') as HTMLInputElement;
@@ -52,12 +50,6 @@
 	function handleEditFinish() {
 		isSaved = false;
 	}
-
-	// function handleDeleteOption(option: FinishOptionDto) {
-	// 	if (!finish.options) return;
-
-	// 	finish.options = finish.options.filter((o) => o !== option);
-	// }
 
 	function handleDeleteFinish(finishType: FinishType) {
 		onDeleteFinish(finishType);
@@ -103,15 +95,15 @@
 			</div>
 			<h4 class="mt-6 flex w-max flex-col rounded-2xl text-xl font-medium">Описание</h4>
 
-					<Textarea
-						divClass="w-full min-h-64 *:w-full *:h-full"
-						bind:value={finish.description}
-						name="description"
-					></Textarea>
+			<Textarea
+				divClass="w-full min-h-64 *:w-full *:h-full"
+				bind:value={finish.description}
+				name="description"
+			></Textarea>
 		</div>
 	{:else}
 		<div>
-			<p class="w-full max-w-150 wrap-break-word whitespace-pre-wrap text-dark-olive font-medium">
+			<p class="text-dark-olive w-full max-w-150 wrap-break-word whitespace-pre-wrap">
 				{finish.description || 'Описание отсутствует.'}
 			</p>
 
