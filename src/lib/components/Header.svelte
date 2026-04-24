@@ -45,6 +45,23 @@
 				<li class={navLi()}>
 					<a href="#contacts" class={navLink()}>Контакты</a>
 				</li>
+				<li class={[navLi(), 'group relative']}>
+					<a
+						href="https://www.avito.ru/user/e13ba7d820a2d4ab88fbcde844eec82c/profile?src=sharing"
+						target="_blank"
+						class={navLink()}
+						>Профиль<img
+							src="/images/avito.svg"
+							alt="avito"
+							class="absolute right-0 -bottom-3 size-11 group-hover:opacity-0"
+						/>
+						<img
+							src="/images/avito_hover.svg"
+							alt="avito"
+							class="absolute right-0 -bottom-3 size-11 opacity-0 group-hover:opacity-100"
+						/></a
+					>
+				</li>
 				{#if isAdmin}<li class={navLi()}>
 						<a href={resolve('/admin/modify/new')} class={navLink()} data-sveltekit-reload
 							>Добавить</a
@@ -97,9 +114,20 @@
 				<li class={navLi({ device: 'mobile' })}>
 					<a href="#contacts" class={navLink()} onclick={() => (isDrawerOpen = false)}>Контакты</a>
 				</li>
-
+				<li class={[navLi({ device: 'mobile' }), 'relative']}>
+					<a
+						href="https://www.avito.ru/user/e13ba7d820a2d4ab88fbcde844eec82c/profile?src=sharing"
+						target="_blank"
+						class={navLink()}
+						>Профиль<img
+							src="/images/avito.svg"
+							alt="avito"
+							class="absolute -right-2 -bottom-7 size-11"
+						/></a
+					>
+				</li>
 				{#if isAdmin}
-					<li class={navLi({ device: 'mobile' })}>
+					<li class={[navLi({ device: 'mobile' }), 'mt-3']}>
 						<a
 							href={resolve('/admin/modify/new')}
 							data-sveltekit-reload
