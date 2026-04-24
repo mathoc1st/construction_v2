@@ -4,9 +4,9 @@ import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
 	const [popularFrames, popularBarns, popularContainers] = await Promise.all([
-		getBuildingsByType({ type: BuildingType.FRAME, sortBy: SortBy.POPULARITY_DESC }),
-		getBuildingsByType({ type: BuildingType.BARN, sortBy: SortBy.POPULARITY_DESC }),
-		getBuildingsByType({ type: BuildingType.CONTAINER, sortBy: SortBy.POPULARITY_DESC })
+		getBuildingsByType({ type: BuildingType.FRAME, sortBy: SortBy.POPULARITY_DESC, limit: 3 }),
+		getBuildingsByType({ type: BuildingType.BARN, sortBy: SortBy.POPULARITY_DESC, limit: 3 }),
+		getBuildingsByType({ type: BuildingType.CONTAINER, sortBy: SortBy.POPULARITY_DESC, limit: 3 })
 	]);
 
 	return { popularFrames, popularBarns, popularContainers };
